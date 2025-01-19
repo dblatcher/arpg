@@ -1,16 +1,7 @@
-import { BaseGameState } from "@dblatcher/sprite-canvas"
 import { Reducer } from "react"
+import { runCycle } from "./run-cycle"
+import { GameState, InputState } from "./types"
 
-export type GameState = BaseGameState & {
-    x: number,
-    y: number,
-    paused: boolean,
-}
-
-export type InputState = {
-    xd: number,
-    yd: number,
-}
 
 export type GameStateAction = {
     type: 'tick'
@@ -20,17 +11,12 @@ export type GameStateAction = {
     value: boolean,
 }
 
+
 export const myReducer: Reducer<GameState, GameStateAction> = (prevState: GameState, action: GameStateAction) => {
 
     switch (action.type) {
         case "tick": {
-            const { inputs } = action;
-            return {
-                ...prevState,
-                cycleNumber: prevState.cycleNumber + 1,
-                x: prevState.x + inputs.xd,
-                y: Math.min(prevState.y + inputs.yd, prevState.mapHeight - 30)
-            }
+            return runCycle(prevState, action.inputs)
         }
         case "pause":
             return {
@@ -41,9 +27,17 @@ export const myReducer: Reducer<GameState, GameStateAction> = (prevState: GameSt
 }
 
 export const makeInitalState = (): GameState => ({
-    x: 5, y: 5,
+    player: {
+        direction: 'Down',
+        x: 5, y: 5,
+        vector: {
+            xd: 0, yd: 0
+        }
+    },
     mapHeight: 250,
-    mapWidth: 150,
+    mapWidth: 300,
     cycleNumber: 0,
     paused: false,
 })
+
+export * from './types'
