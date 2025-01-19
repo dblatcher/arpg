@@ -29,6 +29,10 @@ export const Game = ({ mode }: Props) => {
         const { current: old } = inputsRef;
         inputsRef.current = { ...old, xd }
     }
+    const changeYInput = (yd: number) => {
+        const { current: old } = inputsRef;
+        inputsRef.current = { ...old, yd }
+    }
 
     useSchedule(() => {
         if (state.paused) { return }
@@ -38,6 +42,7 @@ export const Game = ({ mode }: Props) => {
 
     return <div>
         <h2>Game {mode ?? 'normal'}</h2>
+        <button onClick={() => dispatch({ type: 'pause', value: !state.paused })}>pause</button>
         <div>
             <canvas
                 style={{
@@ -48,10 +53,17 @@ export const Game = ({ mode }: Props) => {
                 width={state.mapWidth}></canvas>
         </div>
 
-        <button onClick={() => changeXInput(-.2)}>L</button>
-        <button onClick={() => changeXInput(.2)}>R</button>
-        <button onClick={() => dispatch({ type: 'pause', value: !state.paused })}>p</button>
-        <span>{state.cycleNumber}</span>
+
+        <button onClick={() => changeYInput(-.2)}>U</button>
+        <div>
+            <button onClick={() => changeXInput(-.2)}>L</button>
+            <button onClick={() => {
+                changeXInput(0)
+                changeYInput(0)
+            }}>-</button>
+            <button onClick={() => changeXInput(.2)}>R</button>
+        </div>
+        <button onClick={() => changeYInput(.2)}>D</button>
     </div>
 
 }
