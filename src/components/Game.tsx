@@ -3,9 +3,28 @@ import { useAssets } from "../context/asset-context"
 import { GameState, GameStateAction, InputState, makeInitalState, myReducer } from "../game-state"
 import { useSchedule } from "../hooks/use-schedule"
 import { drawSceneFunction } from "../drawing"
+import { useKeyBoard } from "../hooks/use-keyboard"
 
 interface Props {
     mode?: string
+}
+
+const updateInputsByKeyboard = (inputState: InputState, keyboard: Record<string, boolean>): InputState => {
+
+    const [
+        leftKey = false, 
+        rightKey = false,
+        upKey = false,
+        downKey = false,
+    ] = [
+        keyboard['KeyA'], 
+        keyboard['KeyD'],
+        keyboard['KeyW'],
+        keyboard['KeyS'],
+    ]
+    const xd = leftKey == rightKey ? 0 : leftKey ? -.2 : rightKey ? .2 : inputState.xd
+    const yd = upKey == downKey ? 0 : upKey ? -.2 : downKey ? .2 : inputState.yd
+    return { ...inputState, xd, yd }
 }
 
 export const Game = ({ mode }: Props) => {
@@ -15,6 +34,7 @@ export const Game = ({ mode }: Props) => {
         xd: 0,
         yd: .1,
     })
+    const keyMapRef = useRef<Record<string, boolean>>({})
     const [state, dispatch] = useReducer<Reducer<GameState, GameStateAction>>(
         myReducer,
         makeInitalState(),
@@ -33,16 +53,25 @@ export const Game = ({ mode }: Props) => {
         const { current: old } = inputsRef;
         inputsRef.current = { ...old, yd }
     }
+    const togglePaused = () => dispatch({ type: 'pause', value: !state.paused })
 
     useSchedule(() => {
         if (state.paused) { return }
+        inputsRef.current = updateInputsByKeyboard(inputsRef.current, keyMapRef.current)
         dispatch({ type: 'tick', inputs: inputsRef.current })
         requestAnimationFrame(() => drawScene(canvasRef.current))
     }, 10)
 
+    useKeyBoard([
+        {
+            key: 'p',
+            handler: togglePaused,
+        }
+    ], keyMapRef)
+
     return <div>
         <h2>Game {mode ?? 'normal'}</h2>
-        <button onClick={() => dispatch({ type: 'pause', value: !state.paused })}>pause</button>
+        <button onClick={togglePaused}>pause</button>
         <div>
             <canvas
                 style={{
