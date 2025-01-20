@@ -41,6 +41,9 @@ export const drawSceneFunction: DrawToCanvasFunction<GameState, AssetKey> = (sta
         ...ranger.getFrame(animation, player.direction, frameIndex),
         x: player.x,
         y: player.y,
+        width: animation === 'attack' ? 60 : 40,
+        center: true,
+        height: animation === 'attack' ? 70 : 70,
     })
 
 }
