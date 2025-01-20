@@ -15,7 +15,7 @@ const CHARACTER_SPEED = .75
 
 
 export const runCycle = (prevState: GameState, inputs: InputState): GameState => {
-    const { xd, yd } = inputs;
+    const { xd = 0, yd = 0 } = inputs;
     const { player } = prevState
     const direction = xd || yd ? getDirection(xd, yd) : player.direction;
 

@@ -16,6 +16,6 @@ export type GameState = BaseGameState & {
 }
 
 export type InputState = {
-    xd: number,
-    yd: number,
+    xd?: number,
+    yd?: number,
 }
