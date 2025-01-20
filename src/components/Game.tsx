@@ -1,10 +1,11 @@
 import { Reducer, useCallback, useReducer, useRef } from "react"
 import { useAssets } from "../context/asset-context"
-import { GameState, GameStateAction, InputState, makeInitalState, myReducer } from "../game-state"
+import { GameState, GameStateAction, makeInitalState, myReducer } from "../game-state"
 import { useSchedule } from "../hooks/use-schedule"
 import { drawSceneFunction } from "../drawing"
 import { useKeyBoard } from "../hooks/use-keyboard"
-import { keyBoardToInputs } from "../game-state/keyboard-inputs"
+import { gamepadToInputs, keyBoardToInputs } from "../game-state/process-inputs"
+import { useGamepad } from "../hooks/use-gamepad"
 
 interface Props {
     mode?: string
@@ -15,6 +16,7 @@ export const Game = ({ mode }: Props) => {
     const assets = useAssets();
     const canvasRef = useRef<HTMLCanvasElement>(null)
     const keyMapRef = useRef<Record<string, boolean>>({})
+    const gamePadRef = useRef<Record<number, Gamepad>>({})
     const [state, dispatch] = useReducer<Reducer<GameState, GameStateAction>>(
         myReducer,
         makeInitalState(),
@@ -30,12 +32,21 @@ export const Game = ({ mode }: Props) => {
     useSchedule(() => {
         if (state.paused) { return }
         // to do - gamepad state
+
+        // console.log(gamePadRef.current)
+
+        const gamePadIndex = Number(Object.keys(gamePadRef.current ?? {})[0])
+
+        const gamePad = navigator.getGamepads()[gamePadIndex] ?? undefined
+
         dispatch({
             type: 'tick', inputs: {
-                ...keyBoardToInputs(keyMapRef.current)
+                ...keyBoardToInputs(keyMapRef.current),
+                ...gamepadToInputs(gamePad)
             }
         })
-        requestAnimationFrame(() => drawScene(canvasRef.current))
+        requestAnimationFrame(() => {
+            drawScene(canvasRef.current)})
     }, 10)
 
     useKeyBoard([
@@ -44,6 +55,8 @@ export const Game = ({ mode }: Props) => {
             handler: togglePaused,
         }
     ], keyMapRef)
+
+    useGamepad(gamePadRef)
 
     return <div>
         <h2>Game {mode ?? 'normal'}</h2>
