@@ -4,6 +4,10 @@ import { GameState } from "../game-state";
 import { ranger } from "./sprites";
 
 
+const progressionFrame = ({ duration, remaining }: { duration: number, remaining: number }): number => {
+    return Math.round(((duration - remaining) / duration) * 3)
+}
+
 export const drawSceneFunction: DrawToCanvasFunction<GameState, AssetKey> = (state, assets, viewport = fullViewPort(state)) => (canvas) => {
     const ctx = canvas?.getContext('2d');
     if (!ctx) { return }
@@ -22,15 +26,19 @@ export const drawSceneFunction: DrawToCanvasFunction<GameState, AssetKey> = (sta
     })
 
     const speed = Math.abs(player.vector.xd) + Math.abs(player.vector.yd)
-    const animation = speed <= 0
+    const animation = player.attack ? 'attack' : speed <= 0
         ? 'idle'
         : speed < .6
             ? 'walk'
             : 'run'
 
+    const frameIndex = player.attack
+        ? progressionFrame(player.attack)
+        : Math.floor(state.cycleNumber / 25) % 4;
+
     drawSprite({
         key: 'RANGER_IDLE',
-        ...ranger.getFrame(animation, player.direction, Math.floor(state.cycleNumber / 25) % 4),
+        ...ranger.getFrame(animation, player.direction, frameIndex),
         x: player.x,
         y: player.y,
     })

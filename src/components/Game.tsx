@@ -31,14 +31,8 @@ export const Game = ({ mode }: Props) => {
 
     useSchedule(() => {
         if (state.paused) { return }
-        // to do - gamepad state
-
-        // console.log(gamePadRef.current)
-
         const gamePadIndex = Number(Object.keys(gamePadRef.current ?? {})[0])
-
         const gamePad = navigator.getGamepads()[gamePadIndex] ?? undefined
-
         dispatch({
             type: 'tick', inputs: {
                 ...keyBoardToInputs(keyMapRef.current),

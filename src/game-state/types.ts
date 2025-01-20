@@ -7,6 +7,10 @@ export type GameCharacter = {
     vector: {
         xd: number,
         yd: number,
+    },
+    attack?: {
+        remaining: number
+        duration: number
     }
 }
 
@@ -18,4 +22,5 @@ export type GameState = BaseGameState & {
 export type InputState = {
     xd?: number,
     yd?: number,
+    attackButton?: boolean,
 }

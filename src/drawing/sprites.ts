@@ -15,6 +15,12 @@ const animationFrames = (key: AssetKey) => ({
     Down: frameRow(key, 2),
     Right: frameRow(key, 3)
 })
+const animationFrames2 = (key: AssetKey) => ({
+    Down: frameRow(key, 0),
+    Left: frameRow(key, 1),
+    Up: frameRow(key, 2),
+    Right: frameRow(key, 3)
+})
 
 export const ranger = new Sprite('Down', {
     'idle': {
@@ -25,5 +31,8 @@ export const ranger = new Sprite('Down', {
     },
     'run': {
         frames: animationFrames('RANGER_RUN')
+    },
+    'attack': {
+        frames: animationFrames2('RANGER_ATTACK')
     }
 }, assetParams)

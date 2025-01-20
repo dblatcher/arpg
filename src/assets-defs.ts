@@ -3,6 +3,7 @@ import miscPng from "./assets/misc.png"
 import rangerIdle from "./assets/NES_Ranger_Idle_Sheet_4way.png"
 import rangerWalk from "./assets/NES_Ranger_Walk_Sheet_4way.png"
 import rangerRun from "./assets/NES_Ranger_Run_Sheet_4way.png"
+import rangerAttack from "./assets/NES_Ranger_Attack_Sheet_4way.png"
 
 const MISC: AssetData = {
     src: miscPng,
@@ -29,9 +30,15 @@ const RANGER_RUN: AssetData = {
         cols: 4, rows: 4,
     }
 }
+const RANGER_ATTACK: AssetData = {
+    src: rangerAttack,
+    sprites: {
+        cols: 4, rows: 4,
+    }
+}
 
 export const assetParams = {
-    MISC, RANGER_IDLE, RANGER_WALK, RANGER_RUN
+    MISC, RANGER_IDLE, RANGER_WALK, RANGER_RUN, RANGER_ATTACK
 }
 
 export type AssetKey = keyof typeof assetParams;
