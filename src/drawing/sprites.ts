@@ -22,5 +22,8 @@ export const ranger = new Sprite('Down', {
     },
     'walk': {
         frames: animationFrames('RANGER_WALK')
+    },
+    'run': {
+        frames: animationFrames('RANGER_RUN')
     }
 }, assetParams)

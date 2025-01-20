@@ -11,7 +11,10 @@ const getDirection = (xd: number, yd: number): Direction => {
     return xd > 0 ? 'Right' : 'Left'
 }
 
-export const runCycle = (prevState:GameState, inputs:InputState ):GameState => {
+const CHARACTER_SPEED = .75
+
+
+export const runCycle = (prevState: GameState, inputs: InputState): GameState => {
     const { xd, yd } = inputs;
     const { player } = prevState
     const direction = xd || yd ? getDirection(xd, yd) : player.direction;
@@ -21,8 +24,8 @@ export const runCycle = (prevState:GameState, inputs:InputState ):GameState => {
         cycleNumber: prevState.cycleNumber + 1,
         player: {
             ...player,
-            x: player.x + xd,
-            y: Math.min(player.y + yd, prevState.mapHeight - 30),
+            x: player.x + xd * CHARACTER_SPEED,
+            y: Math.min(player.y + yd * CHARACTER_SPEED, prevState.mapHeight - 30),
             direction: direction,
             vector: { xd, yd },
         }

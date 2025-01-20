@@ -9,21 +9,31 @@ interface Props {
     mode?: string
 }
 
+const DIAGONAL_UNIT = Math.cos(45);
 const updateInputsByKeyboard = (inputState: InputState, keyboard: Record<string, boolean>): InputState => {
 
     const [
-        leftKey = false, 
+        leftKey = false,
         rightKey = false,
         upKey = false,
         downKey = false,
+        runKey = false,
     ] = [
-        keyboard['KeyA'], 
-        keyboard['KeyD'],
-        keyboard['KeyW'],
-        keyboard['KeyS'],
-    ]
-    const xd = leftKey == rightKey ? 0 : leftKey ? -.2 : rightKey ? .2 : inputState.xd
-    const yd = upKey == downKey ? 0 : upKey ? -.2 : downKey ? .2 : inputState.yd
+            keyboard['KeyA'],
+            keyboard['KeyD'],
+            keyboard['KeyW'],
+            keyboard['KeyS'],
+            keyboard['ShiftLeft'],
+        ]
+
+
+    const xSign = leftKey == rightKey ? 0 : leftKey ? -1 : 1;
+    const ySign = upKey == downKey ? 0 : upKey ? -1 : 1;
+
+    const normalisedSpeed = (xSign && ySign ? DIAGONAL_UNIT : 1) * (runKey ? 1 : .5)
+
+    const xd = xSign * normalisedSpeed 
+    const yd = ySign * normalisedSpeed
     return { ...inputState, xd, yd }
 }
 

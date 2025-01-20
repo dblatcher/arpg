@@ -13,7 +13,7 @@ export const drawSceneFunction: DrawToCanvasFunction<GameState, AssetKey> = (sta
     const drawSprite = drawSpriteFunc(drawingMethods, assets, assetParams)
 
     const { player } = state
-    
+
     drawSprite({
         key: 'MISC',
         fx: 0, fy: 0,
@@ -21,7 +21,13 @@ export const drawSceneFunction: DrawToCanvasFunction<GameState, AssetKey> = (sta
         y: 100,
     })
 
-    const animation = player.vector.xd || player.vector.yd ? 'walk' : 'idle'
+    const speed = Math.abs(player.vector.xd) + Math.abs(player.vector.yd)
+    const animation = speed <= 0
+        ? 'idle'
+        : speed < .6
+            ? 'walk'
+            : 'run'
+
     drawSprite({
         key: 'RANGER_IDLE',
         ...ranger.getFrame(animation, player.direction, Math.floor(state.cycleNumber / 25) % 4),
