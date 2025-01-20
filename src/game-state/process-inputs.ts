@@ -54,6 +54,11 @@ export const gamepadToInputs = (gamepad?: Gamepad): InputState => {
         return {}
     }
 
+    const [leftRight, upDown] = gamepad.axes;
+    if (Math.abs(leftRight) > .15 || Math.abs(upDown) > .15) {
+        return { xd: leftRight, yd: upDown }
+    }
+
     const [
         leftKey = false,
         rightKey = false,
@@ -68,6 +73,5 @@ export const gamepadToInputs = (gamepad?: Gamepad): InputState => {
             gamepad.buttons[4]?.pressed,
         ]
 
-    // TO DO - if axis used, read instead of d-pad
     return digitalKeysToInput(leftKey, rightKey, upKey, downKey, runKey)
 }

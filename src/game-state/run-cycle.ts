@@ -2,13 +2,10 @@ import { Direction } from "@dblatcher/sprite-canvas"
 import { GameState, InputState } from "./types"
 
 const getDirection = (xd: number, yd: number): Direction => {
-    if (yd > 0) {
-        return 'Down'
-    }
-    if (yd < 0) {
-        return 'Up'
-    }
-    return xd > 0 ? 'Right' : 'Left'
+    if (Math.abs(xd)> Math.abs(yd)) {
+        return xd > 0 ? 'Right' : 'Left'
+    } 
+    return yd > 0 ? 'Down' : 'Up'
 }
 
 const CHARACTER_SPEED = .75
