@@ -1,16 +1,38 @@
 import { Reducer, useCallback, useReducer, useRef } from "react"
 import { useAssets } from "../context/asset-context"
-import { GameState, GameStateAction, makeInitalState, myReducer } from "../game-state"
+import { GameState, InputState, makeInitalState, } from "../game-state"
 import { useSchedule } from "../hooks/use-schedule"
 import { drawSceneFunction } from "../drawing"
 import { useKeyBoard } from "../hooks/use-keyboard"
-import { gamepadToInputs, keyBoardToInputs } from "../game-state/process-inputs"
+import { gamepadToInputs, keyBoardToInputs } from "../game-state"
 import { useGamepad } from "../hooks/use-gamepad"
+import { runCycle } from "../game-state/run-cycle"
 
 interface Props {
     mode?: string
 }
 
+type GameStateAction = {
+    type: 'tick'
+    inputs: InputState
+} | {
+    type: 'pause',
+    value: boolean,
+}
+
+
+const myReducer: Reducer<GameState, GameStateAction> = (prevState: GameState, action: GameStateAction) => {
+    switch (action.type) {
+        case "tick": {
+            return runCycle(prevState, action.inputs)
+        }
+        case "pause":
+            return {
+                ...prevState,
+                paused: action.value,
+            }
+    }
+}
 
 export const Game = ({ mode }: Props) => {
     const assets = useAssets();

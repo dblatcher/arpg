@@ -1,30 +1,5 @@
-import { Reducer } from "react"
-import { runCycle } from "./run-cycle"
-import { GameState, InputState } from "./types"
+import { GameState } from "./types"
 
-
-export type GameStateAction = {
-    type: 'tick'
-    inputs: InputState
-} | {
-    type: 'pause',
-    value: boolean,
-}
-
-
-export const myReducer: Reducer<GameState, GameStateAction> = (prevState: GameState, action: GameStateAction) => {
-
-    switch (action.type) {
-        case "tick": {
-            return runCycle(prevState, action.inputs)
-        }
-        case "pause":
-            return {
-                ...prevState,
-                paused: action.value,
-            }
-    }
-}
 
 export const makeInitalState = (): GameState => ({
     player: {
@@ -41,3 +16,4 @@ export const makeInitalState = (): GameState => ({
 })
 
 export * from './types'
+export * from './process-inputs'
