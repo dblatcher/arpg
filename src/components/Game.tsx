@@ -59,9 +59,7 @@ export const Game = ({ mode }: Props) => {
             type: 'tick',
             inputs: inputsToInputState(keyMapRef.current, gamePad),
         })
-        requestAnimationFrame(() => {
-            drawScene(canvasRef.current)
-        })
+        drawScene(canvasRef.current)
     }, 10)
 
     useKeyBoard([

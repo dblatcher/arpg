@@ -8,21 +8,30 @@ const progressionFrame = ({ duration, remaining }: { duration: number, remaining
     return Math.round(((duration - remaining) / duration) * 3)
 }
 
+const SHOW_HITBOX = true as boolean;
+
 export const drawSceneFunction: DrawToCanvasFunction<GameState, AssetKey> = (state, assets, viewport = fullViewPort(state)) => (canvas) => {
     const ctx = canvas?.getContext('2d');
     if (!ctx) { return }
-
-    ctx.clearRect(0, 0, viewport.width, viewport.height)
     const drawingMethods = makeDrawingMethods(ctx, viewport)
     const drawSprite = drawSpriteFunc(drawingMethods, assets, assetParams)
+    const { player, obstacles } = state
 
-    const { player } = state
+    ctx.beginPath()
+    ctx.clearRect(0, 0, viewport.width, viewport.height)
 
-    drawSprite({
-        key: 'MISC',
-        fx: 0, fy: 0,
-        x: 30,
-        y: 100,
+    obstacles.forEach(({ x, y, width, height }) => {
+        drawSprite({
+            key: 'MISC',
+            fx: 0, fy: 0,
+            x,
+            y,
+            width, height
+        })
+        if (SHOW_HITBOX) {
+            drawingMethods.rect(x, y, width, height)
+            ctx.stroke()
+        }
     })
 
     const speed = Math.abs(player.vector.xd) + Math.abs(player.vector.yd)
@@ -39,11 +48,15 @@ export const drawSceneFunction: DrawToCanvasFunction<GameState, AssetKey> = (sta
     drawSprite({
         key: 'RANGER_IDLE',
         ...ranger.getFrame(animation, player.direction, frameIndex),
-        x: player.x,
-        y: player.y,
-        width: animation === 'attack' ? 60 : 40,
+        x: player.x + player.width / 2,
+        y: player.y + player.height / 2,
+        width: animation === 'attack' ? 2 * player.width : (4 / 3) * player.width,
         center: true,
-        height: animation === 'attack' ? 70 : 70,
+        height: player.height,
     })
 
+    if (SHOW_HITBOX) {
+        drawingMethods.rect(player.x, player.y, player.width, player.height)
+        ctx.stroke()
+    }
 }
