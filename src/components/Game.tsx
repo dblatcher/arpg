@@ -4,7 +4,7 @@ import { GameState, InputState, makeInitalState, } from "../game-state"
 import { useSchedule } from "../hooks/use-schedule"
 import { drawSceneFunction } from "../drawing"
 import { useKeyBoard } from "../hooks/use-keyboard"
-import { gamepadToInputs, keyBoardToInputs } from "../game-state"
+import { inputsToInputState } from "../game-state"
 import { useGamepad } from "../hooks/use-gamepad"
 import { runCycle } from "../game-state/run-cycle"
 
@@ -56,13 +56,12 @@ export const Game = ({ mode }: Props) => {
         const gamePadIndex = Number(Object.keys(gamePadRef.current ?? {})[0])
         const gamePad = navigator.getGamepads()[gamePadIndex] ?? undefined
         dispatch({
-            type: 'tick', inputs: {
-                ...keyBoardToInputs(keyMapRef.current),
-                ...gamepadToInputs(gamePad)
-            }
+            type: 'tick',
+            inputs: inputsToInputState(keyMapRef.current, gamePad),
         })
         requestAnimationFrame(() => {
-            drawScene(canvasRef.current)})
+            drawScene(canvasRef.current)
+        })
     }, 10)
 
     useKeyBoard([

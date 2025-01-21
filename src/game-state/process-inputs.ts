@@ -9,10 +9,9 @@ const digitalKeysToInput = (
     downKey = false,
     runKey = false,
     attackButton = false,
-):InputState => {
+): InputState => {
     const xSign = leftKey == rightKey ? 0 : leftKey ? -1 : 1;
     const ySign = upKey == downKey ? 0 : upKey ? -1 : 1;
-    // if no input, return empty so previous inputs not overren
     if (!xSign && !ySign) {
         return { attackButton }
     }
@@ -20,29 +19,6 @@ const digitalKeysToInput = (
     const xd = xSign * normalisedSpeed
     const yd = ySign * normalisedSpeed
     return { xd, yd, attackButton }
-}
-
-// TO DO - put functions together or merge results so keyboard attack button works
-
-export const keyBoardToInputs = (keyboard: Record<string, boolean>): InputState => {
-
-    const [
-        leftKey = false,
-        rightKey = false,
-        upKey = false,
-        downKey = false,
-        runKey = false,
-        attackKey = false,
-    ] = [
-            keyboard['KeyA'],
-            keyboard['KeyD'],
-            keyboard['KeyW'],
-            keyboard['KeyS'],
-            keyboard['ShiftLeft'],
-            keyboard['KeyJ'],
-        ]
-
-    return digitalKeysToInput(leftKey, rightKey, upKey, downKey, runKey, attackKey)
 }
 
 // TO DO - figure out how mapping works
@@ -53,16 +29,9 @@ export const keyBoardToInputs = (keyboard: Record<string, boolean>): InputState 
 // right = 15
 // left-shoulder = 4
 
-export const gamepadToInputs = (gamepad?: Gamepad): InputState => {
 
-    if (!gamepad) {
-        return {}
-    }
+export const inputsToInputState = (keyboard: Record<string, boolean>, gamepad?: Gamepad): InputState => {
 
-    const [leftRight, upDown] = gamepad.axes;
-    if (Math.abs(leftRight) > .15 || Math.abs(upDown) > .15) {
-        return { xd: leftRight, yd: upDown }
-    }
 
     const [
         leftKey = false,
@@ -70,15 +39,23 @@ export const gamepadToInputs = (gamepad?: Gamepad): InputState => {
         upKey = false,
         downKey = false,
         runKey = false,
-        attackKey = false,
+        attackButton = false,
     ] = [
-            gamepad.buttons[14]?.pressed,
-            gamepad.buttons[15]?.pressed,
-            gamepad.buttons[12]?.pressed,
-            gamepad.buttons[13]?.pressed,
-            gamepad.buttons[4]?.pressed,
-            gamepad.buttons[1]?.pressed,
+            keyboard['KeyA'] || gamepad?.buttons[14]?.pressed,
+            keyboard['KeyD'] || gamepad?.buttons[15]?.pressed,
+            keyboard['KeyW'] || gamepad?.buttons[12]?.pressed,
+            keyboard['KeyS'] || gamepad?.buttons[13]?.pressed,
+            keyboard['ShiftLeft'] || gamepad?.buttons[4]?.pressed,
+            keyboard['KeyJ'] || gamepad?.buttons[1]?.pressed,
         ]
 
-    return digitalKeysToInput(leftKey, rightKey, upKey, downKey, runKey, attackKey)
+    if (gamepad?.axes) {
+        const [leftRight, upDown] = gamepad.axes;
+        if (Math.abs(leftRight) > .15 || Math.abs(upDown) > .15) {
+            return { xd: leftRight, yd: upDown, attackButton }
+        }
+    }
+
+    return digitalKeysToInput(leftKey, rightKey, upKey, downKey, runKey, attackButton)
 }
+
