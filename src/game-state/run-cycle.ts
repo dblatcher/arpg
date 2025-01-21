@@ -23,16 +23,17 @@ const updatePlayer = (player: GameCharacter, prevState: GameState, inputs: Input
     }
 
     const { xd = 0, yd = 0, attackButton } = inputs;
+    const direction = xd || yd ? getDirection(xd, yd) : player.direction;
     if (attackButton && !player.attack) {
         return {
             ...player,
+            direction,
             attack: {
                 duration: 100,
                 remaining: 100,
             }
         }
     }
-    const direction = xd || yd ? getDirection(xd, yd) : player.direction;
     return {
         ...player,
         x: player.x + xd * CHARACTER_SPEED,
