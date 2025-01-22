@@ -5,8 +5,8 @@ export const makeInitalState = (): GameState => ({
     player: {
         direction: 'Down',
         x: 5, y: 5,
-        width: 30,
-        height: 70,
+        width: 40,
+        height: 40,
         speed: .75,
         vector: {
             xd: 0, yd: 0
@@ -14,7 +14,7 @@ export const makeInitalState = (): GameState => ({
     },
     obstacles: [
         {
-            x: 120,
+            x: 170,
             y: 30,
             width: 30,
             height: 100,

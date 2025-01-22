@@ -25,6 +25,34 @@ const attemptMove = (character: GameCharacter, state: GameState): { character: G
     return { character }
 }
 
+export const directionToUnitVector = (direction: Direction) => {
+    switch (direction) {
+        case "Up":
+            return { xd: 0, yd: -1 }
+        case "Down":
+            return { xd: 0, yd: 1 }
+        case "Left":
+            return { xd: -1, yd: 0 }
+        case "Right":
+            return { xd: 1, yd: 0 }
+    }
+}
+
+export const getAttackZone = (character: GameCharacter): Rect | undefined => {
+    const { attack, direction } = character
+    if (!attack) {
+        return undefined
+    }
+    const attackVector = directionToUnitVector(direction)
+
+    return {
+        left: character.x + (character.width * attackVector.xd),
+        right: character.x + character.width + (character.width * attackVector.xd),
+        top: character.y + (character.height * attackVector.yd),
+        bottom: character.y + character.height + (character.height * attackVector.yd),
+    }
+
+}
 
 const updatePlayer = (player: GameCharacter, prevState: GameState, inputs: InputState): GameCharacter => {
     if (player.attack) {

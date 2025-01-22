@@ -2,6 +2,7 @@ import { drawSpriteFunc, DrawToCanvasFunction, fullViewPort, makeDrawingMethods 
 import { AssetKey, assetParams } from "../assets-defs";
 import { GameState } from "../game-state";
 import { ranger } from "./sprites";
+import { getAttackZone } from "../game-state/run-cycle";
 
 
 const progressionFrame = ({ duration, remaining }: { duration: number, remaining: number }): number => {
@@ -57,6 +58,11 @@ export const drawSceneFunction: DrawToCanvasFunction<GameState, AssetKey> = (sta
 
     if (SHOW_HITBOX) {
         drawingMethods.rect(player.x, player.y, player.width, player.height)
+        
+        const attackVector = getAttackZone(player)
+        if (attackVector) {
+            drawingMethods.rect(attackVector.left, attackVector.top, player.width, player.height)
+        } 
         ctx.stroke()
     }
 }
