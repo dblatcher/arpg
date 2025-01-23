@@ -24,6 +24,7 @@ export type GameState = BaseGameState & {
     paused: boolean;
     player: GameCharacter;
     obstacles: Obstable[];
+    npcs: GameCharacter[];
 }
 
 export type InputState = {

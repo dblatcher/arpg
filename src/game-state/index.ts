@@ -26,8 +26,30 @@ export const makeInitalState = (): GameState => ({
             height: 30,
         }
     ],
-    mapHeight: 250,
-    mapWidth: 300,
+    npcs:[
+        {
+            direction: 'Down',
+            x: 55, y: 135,
+            width: 40,
+            height: 40,
+            speed: .75,
+            vector: {
+                xd: 0, yd: 0
+            },
+        },
+        {
+            direction: 'Down',
+            x: 85, y: 75,
+            width: 40,
+            height: 40,
+            speed: .75,
+            vector: {
+                xd: 0, yd: 0
+            },
+        },
+    ],
+    mapHeight: 350,
+    mapWidth: 400,
     cycleNumber: 0,
     paused: false,
 })

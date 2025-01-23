@@ -18,7 +18,8 @@ const attemptMove = (character: GameCharacter, state: GameState): { character: G
     }
     const newPositionRect = obstacleToRect({ ...character, ...newPosition })
     const collidedObstacle = state.obstacles.find(obstacle => doRectsIntersect(obstacleToRect(obstacle), newPositionRect))
-    if (!collidedObstacle) {
+    const collidedNpc = state.npcs.find(npc => doRectsIntersect(obstacleToRect(npc), newPositionRect))
+    if (!collidedObstacle && !collidedNpc) {
         character.x = newPosition.x;
         character.y = newPosition.y;
     }
