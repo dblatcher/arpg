@@ -18,6 +18,8 @@ type GameStateAction = {
 } | {
     type: 'pause',
     value: boolean,
+} | {
+    type: 'reset'
 }
 
 
@@ -31,6 +33,9 @@ const myReducer: Reducer<GameState, GameStateAction> = (prevState: GameState, ac
                 ...prevState,
                 paused: action.value,
             }
+        case "reset": {
+            return makeInitalState()
+        }
     }
 }
 
@@ -50,6 +55,7 @@ export const Game = ({ mode }: Props) => {
     )
 
     const togglePaused = () => dispatch({ type: 'pause', value: !state.paused })
+    const reset = () => dispatch({ type: 'reset' })
 
     useSchedule(() => {
         if (state.paused) { return }
@@ -66,7 +72,11 @@ export const Game = ({ mode }: Props) => {
         {
             key: 'p',
             handler: togglePaused,
-        }
+        },
+        {
+            key: 'o',
+            handler: reset,
+        },
     ], keyMapRef)
 
     useGamepad(gamePadRef)
@@ -74,6 +84,7 @@ export const Game = ({ mode }: Props) => {
     return <div>
         <h2>Game {mode ?? 'normal'}</h2>
         <button onClick={togglePaused}>pause</button>
+        <button onClick={reset}>reset</button>
         <div>
             <canvas
                 style={{
