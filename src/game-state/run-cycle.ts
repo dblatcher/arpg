@@ -14,15 +14,24 @@ const reelVector = (character: GameCharacter): XY => {
     if (!reeling) {
         return { x: 0, y: 0 }
     }
-    const unit = directionToUnitVector(reeling.direction);
     const speed = BASE_REEL_SPEED * (reeling.remaining) / reeling.duration
     return {
-        x: unit.xd * speed,
-        y: unit.yd * speed,
+        x: reeling.vector.x * speed,
+        y: reeling.vector.y * speed,
     }
 }
 
 const attemptMove = (character: GameCharacter, state: GameState): { character: GameCharacter } => {
+
+    // game thinking
+    // characters don't move while attacking
+    // might want to revise that or have other types
+    // of attack that involve movement (charge?)
+    if (character.attack && !character.reeling) {
+        return {
+            character
+        }
+    }
 
     const vector = character.reeling
         ? reelVector(character)
@@ -54,10 +63,10 @@ export const getAttackZone = (character: GameCharacter): Rect | undefined => {
     const attackVector = directionToUnitVector(direction)
     // TO DO - shouldn't always be square or the same size as the character
     return {
-        left: character.x + (character.width * attackVector.xd),
-        right: character.x + character.width + (character.width * attackVector.xd),
-        top: character.y + (character.height * attackVector.yd),
-        bottom: character.y + character.height + (character.height * attackVector.yd),
+        left: character.x + (character.width * attackVector.x),
+        right: character.x + character.width + (character.width * attackVector.x),
+        top: character.y + (character.height * attackVector.y),
+        bottom: character.y + character.height + (character.height * attackVector.y),
     }
 }
 
@@ -82,8 +91,7 @@ const progressReelingAndAttack = (character: GameCharacter) => {
 }
 
 const updatePlayer = (player: GameCharacter, inputs: InputState): GameCharacter => {
-    const hadAttackOrReeling = progressReelingAndAttack(player)
-    if (hadAttackOrReeling) {
+    if (player.attack || player.reeling) {
         return player
     }
 
@@ -102,19 +110,16 @@ const updatePlayer = (player: GameCharacter, inputs: InputState): GameCharacter 
 
 
 const findNpcsHitByPlayerAttack = (npcs: GameCharacter[], attackZone: Rect): GameCharacter[] => {
-
-    // TO DO - filter out npcs alread hit by the attack
     // TO DO - check doRectsIntersect works for exact matches
     // MAYBE - use find instead of filter as minor optimisation - don't need to catch every npc on first cycle?
-
     return npcs.filter(npc => !npc.reeling && doRectsIntersect(attackZone, obstacleToRect(npc)))
-
 }
 
 const handlePlayerAttackHits = (npc: GameCharacter, state: GameState): GameCharacter => {
     console.log('hit', state.cycleNumber, state.player.direction)
     npc.reeling = {
         direction: state.player.direction,
+        vector: directionToUnitVector(state.player.direction),
         duration: REEL_DURATION,
         remaining: REEL_DURATION,
     }
@@ -125,9 +130,8 @@ export const runCycle = (prevState: GameState, inputs: InputState): GameState =>
     const { player, npcs } = prevState
 
     updatePlayer(player, inputs)
-    if (!player.attack) {
-        attemptMove(player, prevState)
-    }
+    progressReelingAndAttack(player)
+    attemptMove(player, prevState)
 
     const attackZone = getAttackZone(player)
     if (attackZone) {

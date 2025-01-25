@@ -1,4 +1,5 @@
 import { BaseGameState, Direction } from "@dblatcher/sprite-canvas"
+import { XY } from "../lib/geometry"
 
 export type Obstable = {
     x: number,
@@ -22,6 +23,7 @@ export type GameCharacter = Obstable & {
         remaining: number,
         duration: number,
         direction: Direction,
+        vector: XY,
     }
 }
 

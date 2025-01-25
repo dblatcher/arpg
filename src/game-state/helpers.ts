@@ -1,5 +1,5 @@
 import { Direction } from "@dblatcher/sprite-canvas";
-import { Rect } from "../lib/geometry";
+import { Rect, XY } from "../lib/geometry";
 import { Obstable } from "./types";
 
 export const obstacleToRect = (o: Obstable): Rect => ({ top: o.y, left: o.x, bottom: o.y + o.height, right: o.x + o.width })
@@ -10,15 +10,15 @@ export const getDirection = (xd: number, yd: number): Direction => {
     }
     return yd > 0 ? 'Down' : 'Up'
 }
-export const directionToUnitVector = (direction: Direction) => {
+export const directionToUnitVector = (direction: Direction):XY => {
     switch (direction) {
         case "Up":
-            return { xd: 0, yd: -1 }
+            return { x: 0, y: -1 }
         case "Down":
-            return { xd: 0, yd: 1 }
+            return { x: 0, y: 1 }
         case "Left":
-            return { xd: -1, yd: 0 }
+            return { x: -1, y: 0 }
         case "Right":
-            return { xd: 1, yd: 0 }
+            return { x: 1, y: 0 }
     }
 }
