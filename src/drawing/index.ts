@@ -31,10 +31,10 @@ export const drawSceneFunction: DrawToCanvasFunction<GameState, AssetKey> = (sta
         }
     })
 
-    drawCharacter(player, state, drawSprite)
+    drawCharacter(player, state, drawSprite, ctx)
 
     state.npcs.forEach(character => {
-        drawCharacter(character, state, drawSprite)
+        drawCharacter(character, state, drawSprite, ctx)
     })
 
     if (SHOW_HITBOX) {
