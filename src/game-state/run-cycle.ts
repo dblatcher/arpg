@@ -1,4 +1,4 @@
-import { doRectsIntersect, Rect, toUnitVector, translate, XY } from "../lib/geometry"
+import { doRectsIntersect, getVectorFrom, Rect, toUnitVector, translate, XY } from "../lib/geometry"
 import { directionToUnitVector, getDirection, obstacleToRect } from "./helpers"
 import { GameCharacter, GameState, InputState } from "./types"
 
@@ -113,6 +113,35 @@ const updatePlayer = (player: GameCharacter, inputs: InputState): GameCharacter 
     return player
 }
 
+const updateNpc = (npc: GameCharacter, state: GameState): GameCharacter => {
+    if (state.cycleNumber % 200 === 0) {
+        switch (Math.floor(Math.random() * 5)) {
+            case 0: {
+                npc.vector = { xd: .3, yd: 0 };
+                break;
+            }
+            case 1: {
+                npc.vector = { xd: -.3, yd: 0 };
+                break;
+            }
+            case 2: {
+                npc.vector = { xd: 0, yd: .3};
+                break;
+            }
+            case 3: {
+                npc.vector = { xd: 0, yd: -.3 };
+                break;
+            }
+        }
+    }
+    if (state.cycleNumber % 200 === 50) {
+        npc.vector = {
+            xd: 0, yd: 0
+        }
+    }
+    npc.direction = getDirection(npc.vector.xd, npc.vector.yd)
+    return npc
+}
 
 const findNpcsHitByPlayerAttack = (npcs: GameCharacter[], attackZone: Rect): GameCharacter[] => {
     // TO DO - check doRectsIntersect works for exact matches
@@ -140,11 +169,12 @@ export const runCycle = (prevState: GameState, inputs: InputState): GameState =>
     const { collidedNpc } = attemptMove(player, prevState)
 
     if (collidedNpc && !player.reeling) {
+        const unitVector =  toUnitVector(getVectorFrom( collidedNpc, player)) 
         player.reeling = {
             duration: REEL_DURATION / 2,
             remaining: REEL_DURATION / 2,
             direction: 'Up',
-            unitVector: toUnitVector({ x: -player.vector.xd, y: -player.vector.yd })
+            unitVector,
         }
         player.health.current = player.health.current - 1
     }
@@ -158,6 +188,7 @@ export const runCycle = (prevState: GameState, inputs: InputState): GameState =>
 
     npcs.forEach(npc => {
         progressReelingAndAttack(npc)
+        updateNpc(npc, prevState)
         attemptMove(npc, prevState)
     })
 
