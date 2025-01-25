@@ -7,6 +7,7 @@ import { useKeyBoard } from "../hooks/use-keyboard"
 import { inputsToInputState } from "../game-state"
 import { useGamepad } from "../hooks/use-gamepad"
 import { runCycle } from "../game-state/run-cycle"
+import { HealthBar } from "./HealthBar"
 
 interface Props {
     mode?: string
@@ -86,6 +87,7 @@ export const Game = ({ mode }: Props) => {
         <button onClick={togglePaused}>pause</button>
         <button onClick={reset}>reset</button>
         <div>
+            <HealthBar current={state.player.health.current} max={state.player.health.max}/>
             <canvas
                 style={{
                     border: '5px double black'

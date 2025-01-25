@@ -95,6 +95,11 @@ const updatePlayer = (player: GameCharacter, inputs: InputState): GameCharacter 
         return player
     }
 
+    if (player.health.current <= 0) {
+        player.vector = { xd: 0, yd: 0 }
+        return player
+    }
+
     const { xd = 0, yd = 0, attackButton } = inputs;
     player.direction = xd || yd ? getDirection(xd, yd) : player.direction;
     if (attackButton) {
@@ -123,6 +128,7 @@ const handlePlayerAttackHits = (npc: GameCharacter, state: GameState): GameChara
         duration: REEL_DURATION,
         remaining: REEL_DURATION,
     }
+    npc.health.current = npc.health.current - 1
     return npc
 }
 
@@ -140,7 +146,9 @@ export const runCycle = (prevState: GameState, inputs: InputState): GameState =>
             direction: 'Up',
             unitVector: toUnitVector({ x: -player.vector.xd, y: -player.vector.yd })
         }
+        player.health.current = player.health.current - 1
     }
+    // TO DO - how does the application react to player death?
 
     const attackZone = getAttackZone(player)
     if (attackZone) {
@@ -157,6 +165,6 @@ export const runCycle = (prevState: GameState, inputs: InputState): GameState =>
         ...prevState,
         cycleNumber: prevState.cycleNumber + 1,
         player,
-        npcs,
+        npcs: npcs.filter(npc => npc.health.current > 0), // TO DO add a 'dying' state, do not remove until animation finished / body fades
     }
 }

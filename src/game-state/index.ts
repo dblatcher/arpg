@@ -11,6 +11,10 @@ export const makeInitalState = (): GameState => ({
         vector: {
             xd: 0, yd: 0
         },
+        health: {
+            max: 10,
+            current: 10
+        }
     },
     obstacles: [
         {
@@ -26,7 +30,7 @@ export const makeInitalState = (): GameState => ({
             height: 30,
         }
     ],
-    npcs:[
+    npcs: [
         {
             direction: 'Down',
             x: 55, y: 135,
@@ -35,6 +39,10 @@ export const makeInitalState = (): GameState => ({
             speed: .75,
             vector: {
                 xd: 0, yd: 0
+            },
+            health: {
+                max: 3,
+                current: 3,
             },
         },
         {
@@ -45,6 +53,10 @@ export const makeInitalState = (): GameState => ({
             speed: .75,
             vector: {
                 xd: 0, yd: 0
+            },
+            health: {
+                max: 3,
+                current: 3,
             },
         },
     ],

@@ -9,21 +9,25 @@ export type Obstable = {
 }
 
 export type GameCharacter = Obstable & {
-    direction: Direction,
-    speed: number,
+    direction: Direction;
+    speed: number;
     vector: {
-        xd: number,
-        yd: number,
+        xd: number;
+        yd: number;
     },
     attack?: {
-        remaining: number
-        duration: number
+        remaining: number;
+        duration: number;
     }
     reeling? : {
-        remaining: number,
-        duration: number,
-        direction: Direction,
-        unitVector: XY,
+        remaining: number;
+        duration: number;
+        direction: Direction;
+        unitVector: XY;
+    }
+    health: {
+        max: number;
+        current: number;
     }
 }
 

@@ -14,7 +14,7 @@ export const drawCharacter = (
     ctx: CanvasRenderingContext2D,
 ) => {
     const speed = Math.abs(character.vector.xd) + Math.abs(character.vector.yd)
-    const animation = character.reeling ? 'reel' : character.attack ? 'attack' : speed <= 0
+    const animation = (character.health.current <= 0 || character.reeling) ? 'reel' : character.attack ? 'attack' : speed <= 0
         ? 'idle'
         : speed < .6
             ? 'walk'
@@ -24,7 +24,7 @@ export const drawCharacter = (
         ? progressionFrame(character.attack)
         : Math.floor(state.cycleNumber / 25) % 4;
 
-    const blink = animation === 'reel' && state.cycleNumber % 25 <= 10
+    const blink = character.health.current <= 0 || animation === 'reel' && state.cycleNumber % 25 <= 10
     // safari doesn't support filter
     // produces a pinky red on the ranger sprite
     ctx.filter = blink ? "brightness(400%) hue-rotate(310deg) saturate(490%)" : 'none'
