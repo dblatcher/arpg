@@ -34,5 +34,13 @@ export const ranger = new Sprite('Down', {
     },
     'attack': {
         frames: animationFrames2('RANGER_ATTACK')
+    },
+    'reel': {
+        frames: {
+            Down: [{ key: 'RANGER_HIT', fy: 0, fx: 3 }],
+            Left: [{ key: 'RANGER_HIT', fy: 0, fx: 1 }],
+            Right: [{ key: 'RANGER_HIT', fy: 0, fx: 0 }],
+            Up: [{ key: 'RANGER_HIT', fy: 0, fx: 2 }],
+        }
     }
 }, assetParams)

@@ -13,7 +13,7 @@ export const drawCharacter = (
     drawSprite: DrawSpriteFunction<AssetKey>
 ) => {
     const speed = Math.abs(character.vector.xd) + Math.abs(character.vector.yd)
-    const animation = character.attack ? 'attack' : speed <= 0
+    const animation = character.reeling ? 'reel' : character.attack ? 'attack' : speed <= 0
         ? 'idle'
         : speed < .6
             ? 'walk'
@@ -23,9 +23,14 @@ export const drawCharacter = (
         ? progressionFrame(character.attack)
         : Math.floor(state.cycleNumber / 25) % 4;
 
+    const blink = animation === 'reel' && state.cycleNumber % 20 <= 10
+    if (blink) {
+        return
+    }
+
     drawSprite({
         key: 'RANGER_IDLE',
-        ...ranger.getFrame(animation, character.direction, frameIndex),
+        ...ranger.getFrame(animation, character.reeling?.direction ?? character.direction, frameIndex),
         x: character.x + character.width / 2,
         y: character.y + character.height / 2,
         width: animation === 'attack' ? 2 * character.width : (4 / 3) * character.width,

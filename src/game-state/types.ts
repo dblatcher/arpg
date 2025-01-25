@@ -18,6 +18,11 @@ export type GameCharacter = Obstable & {
         remaining: number
         duration: number
     }
+    reeling? : {
+        remaining: number,
+        duration: number,
+        direction: Direction,
+    }
 }
 
 export type GameState = BaseGameState & {
