@@ -23,7 +23,7 @@ export const drawCharacter = (
         ? progressionFrame(character.attack)
         : Math.floor(state.cycleNumber / 25) % 4;
 
-    const blink = animation === 'reel' && state.cycleNumber % 30 <= 15
+    const blink = animation === 'reel' && state.cycleNumber % 25 <= 5
     if (blink) {
         return
     }
