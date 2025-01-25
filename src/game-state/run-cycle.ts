@@ -1,4 +1,4 @@
-import { doRectsIntersect, Rect, translate, XY } from "../lib/geometry"
+import { doRectsIntersect, Rect, toUnitVector, translate, XY } from "../lib/geometry"
 import { directionToUnitVector, getDirection, obstacleToRect } from "./helpers"
 import { GameCharacter, GameState, InputState } from "./types"
 
@@ -16,12 +16,12 @@ const reelVector = (character: GameCharacter): XY => {
     }
     const speed = BASE_REEL_SPEED * (reeling.remaining) / reeling.duration
     return {
-        x: reeling.vector.x * speed,
-        y: reeling.vector.y * speed,
+        x: reeling.unitVector.x * speed,
+        y: reeling.unitVector.y * speed,
     }
 }
 
-const attemptMove = (character: GameCharacter, state: GameState): { character: GameCharacter } => {
+const attemptMove = (character: GameCharacter, state: GameState): { character: GameCharacter, collidedNpc?: GameCharacter } => {
 
     // game thinking
     // characters don't move while attacking
@@ -51,7 +51,7 @@ const attemptMove = (character: GameCharacter, state: GameState): { character: G
         character.x = newPosition.x;
         character.y = newPosition.y;
     }
-    return { character }
+    return { character, collidedNpc }
 }
 
 
@@ -119,7 +119,7 @@ const handlePlayerAttackHits = (npc: GameCharacter, state: GameState): GameChara
     console.log('hit', state.cycleNumber, state.player.direction)
     npc.reeling = {
         direction: state.player.direction,
-        vector: directionToUnitVector(state.player.direction),
+        unitVector: directionToUnitVector(state.player.direction),
         duration: REEL_DURATION,
         remaining: REEL_DURATION,
     }
@@ -131,7 +131,16 @@ export const runCycle = (prevState: GameState, inputs: InputState): GameState =>
 
     updatePlayer(player, inputs)
     progressReelingAndAttack(player)
-    attemptMove(player, prevState)
+    const { collidedNpc } = attemptMove(player, prevState)
+
+    if (collidedNpc && !player.reeling) {
+        player.reeling = {
+            duration: REEL_DURATION / 2,
+            remaining: REEL_DURATION / 2,
+            direction: 'Up',
+            unitVector: toUnitVector({ x: -player.vector.xd, y: -player.vector.yd })
+        }
+    }
 
     const attackZone = getAttackZone(player)
     if (attackZone) {

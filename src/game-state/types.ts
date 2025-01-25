@@ -23,7 +23,7 @@ export type GameCharacter = Obstable & {
         remaining: number,
         duration: number,
         direction: Direction,
-        vector: XY,
+        unitVector: XY,
     }
 }
 

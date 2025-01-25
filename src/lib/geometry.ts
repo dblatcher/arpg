@@ -25,6 +25,13 @@ export const getHeading = (vector: XY): number => {
     return (y > 0) ? Math.atan(x / y) : Math.PI + Math.atan(x / y)
 }
 
+export const toUnitVector = (xy: XY): XY => {
+    const magnitude = Math.sqrt((xy.x ** 2) + (xy.y ** 2))
+    return {
+        x: xy.x / magnitude,
+        y: xy.y / magnitude,
+    }
+}
 
 export const normaliseHeading = (h: number): number => {
     const hr = h % (_360_DEG)
