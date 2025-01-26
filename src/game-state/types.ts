@@ -31,10 +31,10 @@ export type GameCharacter = Obstable & {
     }
 }
 
+type FeedbackEventEventType = 'attack' | 'npc-hit' | 'attack-end' | 'reel-end' | 'player-death'
 export type FeedbackEvent = {
-    type: string;
+    type: FeedbackEventEventType;
     cycleNumber: number;
-
 }
 
 export type GameState = BaseGameState & {

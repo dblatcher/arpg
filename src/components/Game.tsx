@@ -10,9 +10,11 @@ import { useGamepad } from "../hooks/use-gamepad"
 import { runCycle } from "../game-state"
 import { HealthBar } from "./HealthBar"
 import { rumble } from "../lib/feedback"
+import { SoundDeck } from "sound-deck"
 
 interface Props {
     mode?: string
+    soundDeck: SoundDeck
 }
 
 type GameStateAction = {
@@ -24,7 +26,8 @@ type GameStateAction = {
 } | {
     type: 'reset'
 } | {
-    type: 'clear-feedback'
+    type: 'set-feedback',
+    events: FeedbackEvent[]
 }
 
 
@@ -33,8 +36,8 @@ const myReducer: Reducer<GameState, GameStateAction> = (prevState: GameState, ac
         case "tick": {
             return runCycle(prevState, action.inputs)
         }
-        case 'clear-feedback': {
-            return { ...prevState, feedbackEvents: [] }
+        case 'set-feedback': {
+            return { ...prevState, feedbackEvents: action.events }
         }
         case "pause":
             return {
@@ -47,7 +50,7 @@ const myReducer: Reducer<GameState, GameStateAction> = (prevState: GameState, ac
     }
 }
 
-export const Game = ({ mode }: Props) => {
+export const Game = ({ mode, soundDeck }: Props) => {
     const assets = useAssets();
     const canvasRef = useRef<HTMLCanvasElement>(null)
     const keyMapRef = useRef<Record<string, boolean>>({})
@@ -66,27 +69,28 @@ export const Game = ({ mode }: Props) => {
     const reset = () => dispatch({ type: 'reset' })
 
     const handleFeedback = useCallback((feedback: FeedbackEvent[]) => {
-
         const gamePadIndex = Number(Object.keys(gamePadRef.current ?? {})[0])
         const gamePad = navigator.getGamepads()[gamePadIndex] ?? undefined
 
         feedback.forEach(event => {
-            console.log('handle', event)
             if (event.type === 'attack') {
                 rumble(gamePad, { duration: 200, strongMagnitude: .2 })
+                soundDeck.playTone({ duration: .2, frequency: 400 }, { volume: .1 })
+            }
+            if (event.type === 'npc-hit') {
+                soundDeck.playNoise({ duration: .1, frequency: 800 }, { volume: .2 })
             }
         })
 
-        dispatch({ type: 'clear-feedback' })
-    }, [dispatch, gamePadRef])
+        dispatch({ type: 'set-feedback', events: [] })
+    }, [dispatch, gamePadRef, soundDeck])
 
     useSchedule(() => {
         if (state.paused) { return }
-
+        handleFeedback(state.feedbackEvents)
         const keyMap = keyMapRef.current;
         const gamePadIndex = Number(Object.keys(gamePadRef.current ?? {})[0])
         const gamePad = navigator.getGamepads()[gamePadIndex] ?? undefined
-        handleFeedback(state.feedbackEvents)
         const inputState = inputsToInputState(keyMap, gamePad)
         dispatch({
             type: 'tick',
@@ -110,7 +114,7 @@ export const Game = ({ mode }: Props) => {
 
     return <div>
         <h2>Game {mode ?? 'normal'}</h2>
-        <button onClick={togglePaused}>pause</button>
+        <button onClick={togglePaused}>{state.paused ? 'resume' : 'pause'}</button>
         <button onClick={reset}>reset</button>
         <div>
             <HealthBar current={state.player.health.current} max={state.player.health.max} />

@@ -10,9 +10,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@dblatcher/sprite-canvas": "file:../../sprite-canvas",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "@dblatcher/sprite-canvas": "file:../../sprite-canvas"
+    "sound-deck": "^0.0.3"
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",

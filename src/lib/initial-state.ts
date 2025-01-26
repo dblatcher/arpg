@@ -34,7 +34,7 @@ export const makeInitalState = (): GameState => ({
     npcs: [
         {
             direction: 'Down',
-            x: 55, y: 135,
+            x: 20, y: 100,
             width: 40,
             height: 40,
             speed: .75,
@@ -48,7 +48,7 @@ export const makeInitalState = (): GameState => ({
         },
         {
             direction: 'Down',
-            x: 85, y: 75,
+            x: 65, y: 100,
             width: 40,
             height: 40,
             speed: .75,

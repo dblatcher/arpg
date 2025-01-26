@@ -47,7 +47,6 @@ const updatePlayer = (player: GameCharacter, inputs: InputState, cycleNumber: nu
             remaining: ATTACK_DURATION,
         }
         newEvents.push({ type: 'attack', cycleNumber })
-        newEvents.push({ type: 'attack2', cycleNumber })
         return
     }
     player.vector = { xd, yd }
@@ -59,9 +58,10 @@ export const runCycle = (state: GameState, inputs: InputState): GameState => {
     const newEvents: FeedbackEvent[] = []
     const player = structuredClone(state.player)
     const npcs = structuredClone(state.npcs)
+    const cycleNumber = state.cycleNumber
 
-    updatePlayer(player, inputs, state.cycleNumber, newEvents)
-    progressReelingAndAttack(player, state.cycleNumber, newEvents)
+    updatePlayer(player, inputs, cycleNumber, newEvents)
+    progressReelingAndAttack(player, cycleNumber, newEvents)
     const { collidedNpc } = attemptMove(player, state)
 
     if (collidedNpc && !player.reeling) {
@@ -73,18 +73,21 @@ export const runCycle = (state: GameState, inputs: InputState): GameState => {
             unitVector,
         }
         player.health.current = player.health.current - 1
-        newEvents.push({ type: 'player-death', cycleNumber: state.cycleNumber })
+        newEvents.push({ type: 'player-death', cycleNumber })
     }
     // TO DO - how does the application react to player death?
 
     const attackZone = getAttackZone(player)
     if (attackZone) {
         const hitNpcs = findNpcsHitByPlayerAttack(npcs, attackZone)
-        hitNpcs.forEach(npc => handlePlayerAttackHits(npc, state))
+        hitNpcs.forEach(npc => {
+            handlePlayerAttackHits(npc, state)
+            newEvents.push({ type: 'npc-hit', cycleNumber })
+        })
     }
 
     npcs.forEach(npc => {
-        progressReelingAndAttack(npc, state.cycleNumber, newEvents)
+        progressReelingAndAttack(npc, cycleNumber, newEvents)
         updateNpc(npc, state)
         attemptMove(npc, state)
     })
@@ -94,7 +97,7 @@ export const runCycle = (state: GameState, inputs: InputState): GameState => {
     return {
         ...state,
         feedbackEvents,
-        cycleNumber: state.cycleNumber + 1,
+        cycleNumber: cycleNumber + 1,
         player,
         npcs: npcs.filter(npc => npc.health.current > 0), // TO DO add a 'dying' state, do not remove until animation finished / body fades
     }
