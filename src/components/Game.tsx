@@ -1,12 +1,13 @@
 import { Reducer, useCallback, useReducer, useRef } from "react"
 import { useAssets } from "../context/asset-context"
-import { GameState, InputState, makeInitalState, } from "../game-state"
+import { GameState, InputState, } from "../game-state"
+import { makeInitalState } from "../lib/initial-state"
 import { useSchedule } from "../hooks/use-schedule"
 import { drawSceneFunction } from "../drawing"
 import { useKeyBoard } from "../hooks/use-keyboard"
 import { inputsToInputState } from "../game-state"
 import { useGamepad } from "../hooks/use-gamepad"
-import { runCycle } from "../game-state/run-cycle"
+import { runCycle } from "../game-state"
 import { HealthBar } from "./HealthBar"
 
 interface Props {

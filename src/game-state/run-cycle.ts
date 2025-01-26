@@ -1,74 +1,11 @@
-import { doRectsIntersect, getVectorFrom, Rect, toUnitVector, translate, XY } from "../lib/geometry"
-import { directionToUnitVector, getDirection, obstacleToRect } from "./helpers"
+import { getVectorFrom, toUnitVector } from "../lib/geometry"
+import { ATTACK_DURATION, REEL_DURATION } from "./constants"
+import { getDirection } from "./helpers"
+import { attemptMove } from "./operations/movement"
+import { updateNpc } from "./operations/npc-automation"
+import { findNpcsHitByPlayerAttack, getAttackZone, handlePlayerAttackHits } from "./operations/player-attacks"
 import { GameCharacter, GameState, InputState } from "./types"
 
-// game thinking:
-// reel should move the target far back enough to be 
-// out of range of an attack from the same position
-const BASE_REEL_SPEED = .95
-const REEL_DURATION = 100
-const ATTACK_DURATION = 40
-
-const reelVector = (character: GameCharacter): XY => {
-    const { reeling } = character
-    if (!reeling) {
-        return { x: 0, y: 0 }
-    }
-    const speed = BASE_REEL_SPEED * (reeling.remaining) / reeling.duration
-    return {
-        x: reeling.unitVector.x * speed,
-        y: reeling.unitVector.y * speed,
-    }
-}
-
-const attemptMove = (character: GameCharacter, state: GameState): { character: GameCharacter, collidedNpc?: GameCharacter } => {
-
-    // game thinking
-    // characters don't move while attacking
-    // might want to revise that or have other types
-    // of attack that involve movement (charge?)
-    if (character.attack && !character.reeling) {
-        return {
-            character
-        }
-    }
-
-    const vector = character.reeling
-        ? reelVector(character)
-        : {
-            x: character.vector.xd * character.speed,
-            y: character.vector.yd * character.speed
-        }
-
-    const newPosition = translate(character, vector);
-    // TO DO - bind new position by edge of map? 
-    // detect player walking off to next screen?
-
-    const newPositionRect = obstacleToRect({ ...character, ...newPosition })
-    const collidedObstacle = state.obstacles.find(obstacle => doRectsIntersect(obstacleToRect(obstacle), newPositionRect))
-    const collidedNpc = state.npcs.find(npc => doRectsIntersect(obstacleToRect(npc), newPositionRect))
-    if (!collidedObstacle && !collidedNpc) {
-        character.x = newPosition.x;
-        character.y = newPosition.y;
-    }
-    return { character, collidedNpc }
-}
-
-
-export const getAttackZone = (character: GameCharacter): Rect | undefined => {
-    const { attack, direction } = character
-    if (!attack) {
-        return undefined
-    }
-    const attackVector = directionToUnitVector(direction)
-    // TO DO - shouldn't always be square or the same size as the character
-    return {
-        left: character.x + (character.width * attackVector.x),
-        right: character.x + character.width + (character.width * attackVector.x),
-        top: character.y + (character.height * attackVector.y),
-        bottom: character.y + character.height + (character.height * attackVector.y),
-    }
-}
 
 const progressReelingAndAttack = (character: GameCharacter) => {
     if (character.reeling) {
@@ -113,53 +50,6 @@ const updatePlayer = (player: GameCharacter, inputs: InputState): GameCharacter 
     return player
 }
 
-const updateNpc = (npc: GameCharacter, state: GameState): GameCharacter => {
-    if (state.cycleNumber % 200 === 0) {
-        switch (Math.floor(Math.random() * 5)) {
-            case 0: {
-                npc.vector = { xd: .3, yd: 0 };
-                break;
-            }
-            case 1: {
-                npc.vector = { xd: -.3, yd: 0 };
-                break;
-            }
-            case 2: {
-                npc.vector = { xd: 0, yd: .3};
-                break;
-            }
-            case 3: {
-                npc.vector = { xd: 0, yd: -.3 };
-                break;
-            }
-        }
-    }
-    if (state.cycleNumber % 200 === 50) {
-        npc.vector = {
-            xd: 0, yd: 0
-        }
-    }
-    npc.direction = getDirection(npc.vector.xd, npc.vector.yd)
-    return npc
-}
-
-const findNpcsHitByPlayerAttack = (npcs: GameCharacter[], attackZone: Rect): GameCharacter[] => {
-    // TO DO - check doRectsIntersect works for exact matches
-    // MAYBE - use find instead of filter as minor optimisation - don't need to catch every npc on first cycle?
-    return npcs.filter(npc => !npc.reeling && doRectsIntersect(attackZone, obstacleToRect(npc)))
-}
-
-const handlePlayerAttackHits = (npc: GameCharacter, state: GameState): GameCharacter => {
-    console.log('hit', state.cycleNumber, state.player.direction)
-    npc.reeling = {
-        direction: state.player.direction,
-        unitVector: directionToUnitVector(state.player.direction),
-        duration: REEL_DURATION,
-        remaining: REEL_DURATION,
-    }
-    npc.health.current = npc.health.current - 1
-    return npc
-}
 
 export const runCycle = (prevState: GameState, inputs: InputState): GameState => {
     const { player, npcs } = prevState
@@ -169,7 +59,7 @@ export const runCycle = (prevState: GameState, inputs: InputState): GameState =>
     const { collidedNpc } = attemptMove(player, prevState)
 
     if (collidedNpc && !player.reeling) {
-        const unitVector =  toUnitVector(getVectorFrom( collidedNpc, player)) 
+        const unitVector = toUnitVector(getVectorFrom(collidedNpc, player))
         player.reeling = {
             duration: REEL_DURATION / 2,
             remaining: REEL_DURATION / 2,

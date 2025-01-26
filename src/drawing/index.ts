@@ -1,7 +1,7 @@
 import { drawSpriteFunc, DrawToCanvasFunction, fullViewPort, makeDrawingMethods } from "@dblatcher/sprite-canvas";
 import { AssetKey, assetParams } from "../assets-defs";
 import { GameState } from "../game-state";
-import { getAttackZone } from "../game-state/run-cycle";
+import { getAttackZone } from "../game-state/operations/player-attacks";
 import { drawCharacter } from "./draw-character";
 
 
@@ -41,7 +41,7 @@ export const drawSceneFunction: DrawToCanvasFunction<GameState, AssetKey> = (sta
 
         const attackVector = getAttackZone(player)
         if (attackVector) {
-            drawingMethods.rect(attackVector.left, attackVector.top, player.width, player.height)
+            drawingMethods.rect(attackVector.left, attackVector.top, attackVector.width, attackVector.height)
         }
         ctx.stroke()
     }
