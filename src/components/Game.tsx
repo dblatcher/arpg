@@ -9,6 +9,7 @@ import { inputsToInputState } from "../game-state"
 import { useGamepad } from "../hooks/use-gamepad"
 import { runCycle } from "../game-state"
 import { HealthBar } from "./HealthBar"
+import { rumble } from "../lib/feedback"
 
 interface Props {
     mode?: string
@@ -66,10 +67,18 @@ export const Game = ({ mode }: Props) => {
 
     const handleFeedback = useCallback((feedback: FeedbackEvent[]) => {
 
-        feedback.forEach(event => console.log('handle', event))
+        const gamePadIndex = Number(Object.keys(gamePadRef.current ?? {})[0])
+        const gamePad = navigator.getGamepads()[gamePadIndex] ?? undefined
+
+        feedback.forEach(event => {
+            console.log('handle', event)
+            if (event.type === 'attack') {
+                rumble(gamePad, { duration: 200, strongMagnitude: .2 })
+            }
+        })
 
         dispatch({ type: 'clear-feedback' })
-    }, [dispatch])
+    }, [dispatch, gamePadRef])
 
     useSchedule(() => {
         if (state.paused) { return }
