@@ -4,13 +4,14 @@ import { getDirection } from "./helpers"
 import { attemptMove } from "./operations/movement"
 import { updateNpc } from "./operations/npc-automation"
 import { findNpcsHitByPlayerAttack, getAttackZone, handlePlayerAttackHits } from "./operations/player-attacks"
-import { GameCharacter, GameState, InputState } from "./types"
+import { FeedbackEvent, GameCharacter, GameState, InputState } from "./types"
 
 
-const progressReelingAndAttack = (character: GameCharacter) => {
+const progressReelingAndAttack = (character: GameCharacter, cycleNumber: number, newEvents: FeedbackEvent[]) => {
     if (character.reeling) {
         character.reeling.remaining -= 1
         if (character.reeling.remaining <= 0) {
+            newEvents.push({ type: 'reel-end', cycleNumber })
             delete character.reeling
             delete character.attack
         }
@@ -20,6 +21,7 @@ const progressReelingAndAttack = (character: GameCharacter) => {
     if (character.attack) {
         character.attack.remaining -= 1
         if (character.attack.remaining <= 0) {
+            newEvents.push({ type: 'attack-end', cycleNumber })
             delete character.attack
         }
         return true
@@ -27,14 +29,14 @@ const progressReelingAndAttack = (character: GameCharacter) => {
     return false
 }
 
-const updatePlayer = (player: GameCharacter, inputs: InputState): GameCharacter => {
+const updatePlayer = (player: GameCharacter, inputs: InputState, cycleNumber: number, newEvents: FeedbackEvent[]) => {
     if (player.attack || player.reeling) {
-        return player
+        return
     }
 
     if (player.health.current <= 0) {
         player.vector = { xd: 0, yd: 0 }
-        return player
+        return
     }
 
     const { xd = 0, yd = 0, attackButton } = inputs;
@@ -44,19 +46,23 @@ const updatePlayer = (player: GameCharacter, inputs: InputState): GameCharacter 
             duration: ATTACK_DURATION,
             remaining: ATTACK_DURATION,
         }
-        return player
+        newEvents.push({ type: 'attack', cycleNumber })
+        newEvents.push({ type: 'attack2', cycleNumber })
+        return
     }
     player.vector = { xd, yd }
-    return player
+    return
 }
 
 
-export const runCycle = (prevState: GameState, inputs: InputState): GameState => {
-    const { player, npcs } = prevState
+export const runCycle = (state: GameState, inputs: InputState): GameState => {
+    const newEvents: FeedbackEvent[] = []
+    const player = { ...state.player }
+    const npcs = state.npcs.map(npc => ({ ...npc }))
 
-    updatePlayer(player, inputs)
-    progressReelingAndAttack(player)
-    const { collidedNpc } = attemptMove(player, prevState)
+    updatePlayer(player, inputs, state.cycleNumber, newEvents)
+    progressReelingAndAttack(player, state.cycleNumber, newEvents)
+    const { collidedNpc } = attemptMove(player, state)
 
     if (collidedNpc && !player.reeling) {
         const unitVector = toUnitVector(getVectorFrom(collidedNpc, player))
@@ -70,21 +76,26 @@ export const runCycle = (prevState: GameState, inputs: InputState): GameState =>
     }
     // TO DO - how does the application react to player death?
 
+
+
     const attackZone = getAttackZone(player)
     if (attackZone) {
         const hitNpcs = findNpcsHitByPlayerAttack(npcs, attackZone)
-        hitNpcs.forEach(npc => handlePlayerAttackHits(npc, prevState))
+        hitNpcs.forEach(npc => handlePlayerAttackHits(npc, state))
     }
 
     npcs.forEach(npc => {
-        progressReelingAndAttack(npc)
-        updateNpc(npc, prevState)
-        attemptMove(npc, prevState)
+        progressReelingAndAttack(npc, state.cycleNumber, newEvents)
+        updateNpc(npc, state)
+        attemptMove(npc, state)
     })
 
+    const feedbackEvents = [...state.feedbackEvents, ...newEvents]
+
     return {
-        ...prevState,
-        cycleNumber: prevState.cycleNumber + 1,
+        ...state,
+        feedbackEvents,
+        cycleNumber: state.cycleNumber + 1,
         player,
         npcs: npcs.filter(npc => npc.health.current > 0), // TO DO add a 'dying' state, do not remove until animation finished / body fades
     }

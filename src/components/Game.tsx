@@ -1,6 +1,6 @@
 import { Reducer, useCallback, useReducer, useRef } from "react"
 import { useAssets } from "../context/asset-context"
-import { GameState, InputState, } from "../game-state"
+import { FeedbackEvent, GameState, InputState, } from "../game-state"
 import { makeInitalState } from "../lib/initial-state"
 import { useSchedule } from "../hooks/use-schedule"
 import { drawSceneFunction } from "../drawing"
@@ -22,6 +22,8 @@ type GameStateAction = {
     value: boolean,
 } | {
     type: 'reset'
+} | {
+    type: 'clear-feedback'
 }
 
 
@@ -29,6 +31,9 @@ const myReducer: Reducer<GameState, GameStateAction> = (prevState: GameState, ac
     switch (action.type) {
         case "tick": {
             return runCycle(prevState, action.inputs)
+        }
+        case 'clear-feedback': {
+            return { ...prevState, feedbackEvents: [] }
         }
         case "pause":
             return {
@@ -59,13 +64,24 @@ export const Game = ({ mode }: Props) => {
     const togglePaused = () => dispatch({ type: 'pause', value: !state.paused })
     const reset = () => dispatch({ type: 'reset' })
 
+    const handleFeedback = useCallback((feedback: FeedbackEvent[]) => {
+
+        feedback.forEach(event => console.log('handle', event))
+
+        dispatch({ type: 'clear-feedback' })
+    }, [dispatch])
+
     useSchedule(() => {
         if (state.paused) { return }
+
+        const keyMap = keyMapRef.current;
         const gamePadIndex = Number(Object.keys(gamePadRef.current ?? {})[0])
         const gamePad = navigator.getGamepads()[gamePadIndex] ?? undefined
+        handleFeedback(state.feedbackEvents)
+        const inputState = inputsToInputState(keyMap, gamePad)
         dispatch({
             type: 'tick',
-            inputs: inputsToInputState(keyMapRef.current, gamePad),
+            inputs: inputState,
         })
         drawScene(canvasRef.current)
     }, 10)
@@ -88,7 +104,7 @@ export const Game = ({ mode }: Props) => {
         <button onClick={togglePaused}>pause</button>
         <button onClick={reset}>reset</button>
         <div>
-            <HealthBar current={state.player.health.current} max={state.player.health.max}/>
+            <HealthBar current={state.player.health.current} max={state.player.health.max} />
             <canvas
                 style={{
                     border: '5px double black'

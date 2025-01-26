@@ -19,7 +19,7 @@ export type GameCharacter = Obstable & {
         remaining: number;
         duration: number;
     }
-    reeling? : {
+    reeling?: {
         remaining: number;
         duration: number;
         direction: Direction;
@@ -31,7 +31,14 @@ export type GameCharacter = Obstable & {
     }
 }
 
+export type FeedbackEvent = {
+    type: string;
+    cycleNumber: number;
+
+}
+
 export type GameState = BaseGameState & {
+    feedbackEvents: FeedbackEvent[],
     paused: boolean;
     player: GameCharacter;
     obstacles: Obstable[];

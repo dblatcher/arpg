@@ -2,6 +2,7 @@ import { GameState } from "../game-state";
 
 
 export const makeInitalState = (): GameState => ({
+    feedbackEvents: [],
     player: {
         direction: 'Down',
         x: 5, y: 5,
