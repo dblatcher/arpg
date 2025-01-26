@@ -57,8 +57,8 @@ const updatePlayer = (player: GameCharacter, inputs: InputState, cycleNumber: nu
 
 export const runCycle = (state: GameState, inputs: InputState): GameState => {
     const newEvents: FeedbackEvent[] = []
-    const player = { ...state.player }
-    const npcs = state.npcs.map(npc => ({ ...npc }))
+    const player = structuredClone(state.player)
+    const npcs = structuredClone(state.npcs)
 
     updatePlayer(player, inputs, state.cycleNumber, newEvents)
     progressReelingAndAttack(player, state.cycleNumber, newEvents)
@@ -73,10 +73,9 @@ export const runCycle = (state: GameState, inputs: InputState): GameState => {
             unitVector,
         }
         player.health.current = player.health.current - 1
+        newEvents.push({ type: 'player-death', cycleNumber: state.cycleNumber })
     }
     // TO DO - how does the application react to player death?
-
-
 
     const attackZone = getAttackZone(player)
     if (attackZone) {

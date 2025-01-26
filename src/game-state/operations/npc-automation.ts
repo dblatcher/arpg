@@ -1,7 +1,7 @@
 import { getDirection } from "../helpers";
 import { GameCharacter, GameState } from "../types";
 
-export const updateNpc = (npc: GameCharacter, state: GameState): GameCharacter => {
+export const updateNpc = (npc: GameCharacter, state: GameState) => {
     if (state.cycleNumber % 200 === 0) {
         switch (Math.floor(Math.random() * 5)) {
             case 0: {
@@ -28,5 +28,4 @@ export const updateNpc = (npc: GameCharacter, state: GameState): GameCharacter =
         }
     }
     npc.direction = getDirection(npc.vector.xd, npc.vector.yd)
-    return npc
 }

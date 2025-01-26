@@ -4,8 +4,8 @@ import { directionToUnitVector, obstacleToRect } from "../helpers";
 import { GameCharacter, GameState } from "../types";
 
 
-export const handlePlayerAttackHits = (npc: GameCharacter, state: GameState): GameCharacter => {
-    console.log('hit', state.cycleNumber, state.player.direction)
+export const handlePlayerAttackHits = (npc: GameCharacter, state: GameState) => {
+    console.log('hit', state.cycleNumber, state.player.direction, npc.health)
     npc.reeling = {
         direction: state.player.direction,
         unitVector: directionToUnitVector(state.player.direction),
@@ -13,7 +13,6 @@ export const handlePlayerAttackHits = (npc: GameCharacter, state: GameState): Ga
         remaining: REEL_DURATION,
     }
     npc.health.current = npc.health.current - 1
-    return npc
 };
 
 export const findNpcsHitByPlayerAttack = (npcs: GameCharacter[], attackZone: Rect): GameCharacter[] => {
