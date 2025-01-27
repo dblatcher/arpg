@@ -73,7 +73,7 @@ export const runCycle = (state: GameState, inputs: InputState): GameState => {
             unitVector,
         }
         player.health.current = player.health.current - 1
-        newEvents.push({ type: 'player-death', cycleNumber })
+        newEvents.push({ type: 'player-hit', cycleNumber })
     }
     // TO DO - how does the application react to player death?
 

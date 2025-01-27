@@ -1,16 +1,14 @@
 import { Reducer, useCallback, useReducer, useRef } from "react"
-import { useAssets } from "../context/asset-context"
-import { FeedbackEvent, GameState, InputState, } from "../game-state"
-import { makeInitalState } from "../lib/initial-state"
-import { useSchedule } from "../hooks/use-schedule"
-import { drawSceneFunction } from "../drawing"
-import { useKeyBoard } from "../hooks/use-keyboard"
-import { inputsToInputState } from "../game-state"
-import { useGamepad } from "../hooks/use-gamepad"
-import { runCycle } from "../game-state"
-import { HealthBar } from "./HealthBar"
-import { rumble } from "../lib/feedback"
 import { SoundDeck } from "sound-deck"
+import { useAssets } from "../context/asset-context"
+import { drawSceneFunction } from "../drawing"
+import { FeedbackEvent, GameState, InputState, inputsToInputState, runCycle, } from "../game-state"
+import { useGamepad } from "../hooks/use-gamepad"
+import { useKeyBoard } from "../hooks/use-keyboard"
+import { useSchedule } from "../hooks/use-schedule"
+import { runFeedback } from "../lib/feedback"
+import { makeInitalState } from "../lib/initial-state"
+import { HealthBar } from "./HealthBar"
 
 interface Props {
     mode?: string
@@ -65,39 +63,31 @@ export const Game = ({ mode, soundDeck }: Props) => {
         [state, assets]
     )
 
-    const togglePaused = () => dispatch({ type: 'pause', value: !state.paused })
-    const reset = () => dispatch({ type: 'reset' })
+    const getGamepad = useCallback(() => {
+        const gamePadIndex = Number(Object.keys(gamePadRef.current ?? {})[0])
+        return navigator.getGamepads()[gamePadIndex] ?? undefined
+    }, [gamePadRef])
 
     const handleFeedback = useCallback((feedback: FeedbackEvent[]) => {
-        const gamePadIndex = Number(Object.keys(gamePadRef.current ?? {})[0])
-        const gamePad = navigator.getGamepads()[gamePadIndex] ?? undefined
-
-        feedback.forEach(event => {
-            if (event.type === 'attack') {
-                rumble(gamePad, { duration: 200, strongMagnitude: .2 })
-                soundDeck.playTone({ duration: .2, frequency: 400 }, { volume: .1 })
-            }
-            if (event.type === 'npc-hit') {
-                soundDeck.playNoise({ duration: .1, frequency: 800 }, { volume: .2 })
-            }
-        })
-
-        dispatch({ type: 'set-feedback', events: [] })
-    }, [dispatch, gamePadRef, soundDeck])
+        const remainingFeedback = runFeedback(feedback, soundDeck, getGamepad())
+        dispatch({ type: 'set-feedback', events: remainingFeedback })
+    }, [dispatch, getGamepad, soundDeck])
 
     useSchedule(() => {
         if (state.paused) { return }
         handleFeedback(state.feedbackEvents)
         const keyMap = keyMapRef.current;
-        const gamePadIndex = Number(Object.keys(gamePadRef.current ?? {})[0])
-        const gamePad = navigator.getGamepads()[gamePadIndex] ?? undefined
-        const inputState = inputsToInputState(keyMap, gamePad)
+        const inputState = inputsToInputState(keyMap, getGamepad())
         dispatch({
             type: 'tick',
             inputs: inputState,
         })
         drawScene(canvasRef.current)
     }, 10)
+
+
+    const togglePaused = () => dispatch({ type: 'pause', value: !state.paused })
+    const reset = () => dispatch({ type: 'reset' })
 
     useKeyBoard([
         {
