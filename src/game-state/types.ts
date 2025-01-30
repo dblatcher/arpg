@@ -19,6 +19,11 @@ export type GameCharacter = Obstable & {
         remaining: number;
         duration: number;
     }
+    dying?: {
+        remaining: number;
+        duration: number;
+        unitVector: XY;
+    }
     reeling?: {
         remaining: number;
         duration: number;

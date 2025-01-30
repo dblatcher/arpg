@@ -4,7 +4,7 @@ import { obstacleToRect } from "../helpers";
 import { GameCharacter, GameState } from "../types";
 
 
-export const attemptMove = (character: GameCharacter, state: GameState): { character: GameCharacter; collidedNpc?: GameCharacter}  => {
+export const attemptMove = (character: GameCharacter, state: GameState): { character: GameCharacter; collidedNpc?: GameCharacter } => {
 
     // game thinking
     // characters don't move while attacking
@@ -16,7 +16,7 @@ export const attemptMove = (character: GameCharacter, state: GameState): { chara
         }
     }
 
-    const vector = character.reeling
+    const vector = (character.reeling || character.dying)
         ? reelVector(character)
         : {
             x: character.vector.xd * character.speed,
@@ -37,14 +37,15 @@ export const attemptMove = (character: GameCharacter, state: GameState): { chara
 };
 
 export const reelVector = (character: GameCharacter): XY => {
-    const { reeling } = character
-    if (!reeling) {
+    const { reeling, dying } = character
+    const reelingOrDying = reeling || dying;
+    if (!reelingOrDying) {
         return { x: 0, y: 0 }
     }
-    const speed = BASE_REEL_SPEED * (reeling.remaining) / reeling.duration
+    const speed = BASE_REEL_SPEED * (reelingOrDying.remaining) / reelingOrDying.duration
     return {
-        x: reeling.unitVector.x * speed,
-        y: reeling.unitVector.y * speed,
+        x: reelingOrDying.unitVector.x * speed,
+        y: reelingOrDying.unitVector.y * speed,
     }
 }
 

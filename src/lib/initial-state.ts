@@ -1,5 +1,22 @@
-import { GameState } from "../game-state";
+import { GameCharacter, GameState } from "../game-state";
 
+
+const standardNpc = (x: number, y: number): GameCharacter => (
+    {
+        direction: 'Down',
+        x, y,
+        width: 40,
+        height: 40,
+        speed: .75,
+        vector: {
+            xd: 0, yd: 0
+        },
+        health: {
+            max: 3,
+            current: 3,
+        },
+    }
+)
 
 export const makeInitalState = (): GameState => ({
     feedbackEvents: [],
@@ -8,7 +25,7 @@ export const makeInitalState = (): GameState => ({
         x: 5, y: 5,
         width: 40,
         height: 40,
-        speed: .75,
+        speed: 1,
         vector: {
             xd: 0, yd: 0
         },
@@ -32,34 +49,10 @@ export const makeInitalState = (): GameState => ({
         }
     ],
     npcs: [
-        {
-            direction: 'Down',
-            x: 20, y: 100,
-            width: 40,
-            height: 40,
-            speed: .75,
-            vector: {
-                xd: 0, yd: 0
-            },
-            health: {
-                max: 3,
-                current: 3,
-            },
-        },
-        {
-            direction: 'Down',
-            x: 65, y: 100,
-            width: 40,
-            height: 40,
-            speed: .75,
-            vector: {
-                xd: 0, yd: 0
-            },
-            health: {
-                max: 3,
-                current: 3,
-            },
-        },
+        standardNpc(20,100),
+        standardNpc(65,100),
+        standardNpc(165,160),
+        standardNpc(150,200),
     ],
     mapHeight: 350,
     mapWidth: 400,

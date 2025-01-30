@@ -6,29 +6,39 @@ import { GameCharacter, GameState } from "../types";
 
 export const handlePlayerAttackHits = (npc: GameCharacter, state: GameState) => {
     console.log('hit', state.cycleNumber, state.player.direction, npc.health)
+    npc.health.current = npc.health.current - 1
+
+    if (npc.health.current <= 0) {
+        npc.dying = {
+            duration: REEL_DURATION,
+            remaining: REEL_DURATION,
+            unitVector: directionToUnitVector(state.player.direction),
+        }
+        return
+    }
+
     npc.reeling = {
         direction: state.player.direction,
         unitVector: directionToUnitVector(state.player.direction),
         duration: REEL_DURATION,
         remaining: REEL_DURATION,
     }
-    npc.health.current = npc.health.current - 1
 };
 
 export const findNpcsHitByPlayerAttack = (npcs: GameCharacter[], attackZone: Rect): GameCharacter[] => {
     // TO DO - check doRectsIntersect works for exact matches
     // MAYBE - use find instead of filter as minor optimisation - don't need to catch every npc on first cycle?
-    return npcs.filter(npc => !npc.reeling && doRectsIntersect(attackZone, obstacleToRect(npc)))
+    return npcs.filter(npc => !npc.reeling && !npc.dying && doRectsIntersect(attackZone, obstacleToRect(npc)))
 };
 
 
 const shiftZoneFromCharacter = (scalar: number, characterDimension: number, zoneDimension: number) => {
-    if (scalar === 0) { return 0} 
-    if (scalar > 0) { return characterDimension * Math.sign(scalar)} 
+    if (scalar === 0) { return 0 }
+    if (scalar > 0) { return characterDimension * Math.sign(scalar) }
     return zoneDimension * Math.sign(scalar)
 }
 
-export const getAttackZone = (character: GameCharacter): (Rect & { width: number; height: number} ) | undefined => {
+export const getAttackZone = (character: GameCharacter): (Rect & { width: number; height: number }) | undefined => {
     const { attack, direction } = character
     if (!attack) {
         return undefined
