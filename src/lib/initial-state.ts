@@ -1,6 +1,5 @@
 import { GameCharacter, GameState } from "../game-state";
 
-
 const standardNpc = (x: number, y: number): GameCharacter => (
     {
         direction: 'Down',
@@ -22,7 +21,7 @@ export const makeInitalState = (): GameState => ({
     feedbackEvents: [],
     player: {
         direction: 'Down',
-        x: 5, y: 5,
+        x: 300, y: 50,
         width: 40,
         height: 40,
         speed: 1,
@@ -36,17 +35,23 @@ export const makeInitalState = (): GameState => ({
     },
     obstacles: [
         {
-            x: 170,
+            x: 370,
             y: 30,
             width: 30,
             height: 100,
         },
         {
             x: 80,
-            y: 40,
+            y: 140,
             width: 60,
             height: 30,
-        }
+        },
+        {
+            x: 60,
+            y: 240,
+            width: 60,
+            height: 30,
+        },
     ],
     npcs: [
         standardNpc(20,100),
@@ -54,8 +59,8 @@ export const makeInitalState = (): GameState => ({
         standardNpc(165,160),
         standardNpc(150,200),
     ],
-    mapHeight: 350,
-    mapWidth: 400,
+    mapHeight: 600,
+    mapWidth: 600,
     cycleNumber: 0,
     paused: false,
 })

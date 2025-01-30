@@ -9,6 +9,7 @@ import { useSchedule } from "../hooks/use-schedule"
 import { runFeedback } from "../lib/feedback"
 import { makeInitalState } from "../lib/initial-state"
 import { HealthBar } from "./HealthBar"
+import { centeredViewPort } from "@dblatcher/sprite-canvas"
 
 interface Props {
     mode?: string
@@ -48,6 +49,9 @@ const myReducer: Reducer<GameState, GameStateAction> = (prevState: GameState, ac
     }
 }
 
+const VIEW_WIDTH = 400;
+const VIEW_HEIGHT = 400;
+
 export const Game = ({ mode, soundDeck }: Props) => {
     const assets = useAssets();
     const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -59,7 +63,7 @@ export const Game = ({ mode, soundDeck }: Props) => {
     )
 
     const drawScene = useCallback(
-        (canvas: HTMLCanvasElement | null) => drawSceneFunction(state, assets)(canvas),
+        (canvas: HTMLCanvasElement | null) => drawSceneFunction(state, assets, centeredViewPort(state.player, VIEW_WIDTH, VIEW_HEIGHT, state))(canvas),
         [state, assets]
     )
 
@@ -113,8 +117,8 @@ export const Game = ({ mode, soundDeck }: Props) => {
                     border: '5px double black'
                 }}
                 ref={canvasRef}
-                height={state.mapHeight}
-                width={state.mapWidth}></canvas>
+                height={VIEW_HEIGHT}
+                width={VIEW_WIDTH}></canvas>
         </div>
     </div>
 
