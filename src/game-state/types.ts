@@ -1,14 +1,14 @@
 import { BaseGameState, Direction } from "@dblatcher/sprite-canvas"
 import { XY } from "../lib/geometry"
 
-export type Obstable = {
+export type Space = {
     x: number,
     y: number
     width: number
     height: number
 }
 
-export type GameCharacter = Obstable & {
+export type GameCharacter = Space & {
     direction: Direction;
     speed: number;
     vector: {
@@ -46,7 +46,7 @@ export type GameState = BaseGameState & {
     feedbackEvents: FeedbackEvent[],
     paused: boolean;
     player: GameCharacter;
-    obstacles: Obstable[];
+    obstacles: Space[];
     npcs: GameCharacter[];
 }
 

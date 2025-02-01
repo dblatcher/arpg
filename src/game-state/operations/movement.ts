@@ -1,6 +1,6 @@
 import { translate, doRectsIntersect, XY } from "../../lib/geometry";
 import { BASE_REEL_SPEED } from "../constants";
-import { obstacleToRect } from "../helpers";
+import { spaceToRect } from "../helpers";
 import { GameCharacter, GameState } from "../types";
 
 
@@ -26,9 +26,9 @@ export const attemptMove = (character: GameCharacter, state: GameState): { chara
     const newPosition = translate(character, vector)
     // TO DO - bind new position by edge of map? 
     // detect player walking off to next screen?
-    const newPositionRect = obstacleToRect({ ...character, ...newPosition })
-    const collidedObstacle = state.obstacles.find(obstacle => doRectsIntersect(obstacleToRect(obstacle), newPositionRect))
-    const collidedNpc = state.npcs.find(npc => doRectsIntersect(obstacleToRect(npc), newPositionRect))
+    const newPositionRect = spaceToRect({ ...character, ...newPosition })
+    const collidedObstacle = state.obstacles.find(obstacle => doRectsIntersect(spaceToRect(obstacle), newPositionRect))
+    const collidedNpc = state.npcs.find(npc => doRectsIntersect(spaceToRect(npc), newPositionRect))
     if (!collidedObstacle && !collidedNpc) {
         character.x = newPosition.x
         character.y = newPosition.y

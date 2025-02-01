@@ -1,8 +1,8 @@
 import { Direction } from "@dblatcher/sprite-canvas";
 import { Rect, XY } from "../lib/geometry";
-import { Obstable } from "./types";
+import { Space } from "./types";
 
-export const obstacleToRect = (o: Obstable): Rect => ({ top: o.y, left: o.x, bottom: o.y + o.height, right: o.x + o.width })
+export const spaceToRect = (o: Space): Rect => ({ top: o.y, left: o.x, bottom: o.y + o.height, right: o.x + o.width })
 
 export const getDirection = (xd: number, yd: number): Direction => {
     if (Math.abs(xd) > Math.abs(yd)) {
