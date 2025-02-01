@@ -1,15 +1,14 @@
-import { Reducer, useCallback, useEffect, useReducer, useRef, useState } from "react"
+import { centeredViewPort } from "@dblatcher/sprite-canvas"
+import { Reducer, useCallback, useReducer, useRef, useState } from "react"
 import { SoundDeck } from "sound-deck"
-import { useAssets } from "../context/asset-context"
-import { drawSceneFunction, generateBackdropUrl } from "../drawing"
 import { FeedbackEvent, GameState, InputState, inputsToInputState, runCycle, } from "../game-state"
 import { useGamepad } from "../hooks/use-gamepad"
 import { useKeyBoard } from "../hooks/use-keyboard"
 import { useSchedule } from "../hooks/use-schedule"
 import { runFeedback } from "../lib/feedback"
 import { makeInitalState } from "../lib/initial-state"
+import { GameScreen } from "./GameScreen"
 import { HealthBar } from "./HealthBar"
-import { centeredViewPort } from "@dblatcher/sprite-canvas"
 
 interface Props {
     mode?: string
@@ -52,30 +51,13 @@ const myReducer: Reducer<GameState, GameStateAction> = (prevState: GameState, ac
 const VIEW_WIDTH = 400;
 const VIEW_HEIGHT = 400;
 
-export const Game = ({ mode, soundDeck }: Props) => {
-    const assets = useAssets();
-    const canvasRef = useRef<HTMLCanvasElement>(null)
+export const Game = ({ mode = 'normal', soundDeck }: Props) => {
     const keyMapRef = useRef<Record<string, boolean>>({})
     const gamePadRef = useRef<Record<number, Gamepad>>({})
+    const [initialGameState] = useState(makeInitalState())
     const [state, dispatch] = useReducer<Reducer<GameState, GameStateAction>>(
         myReducer,
-        makeInitalState(),
-    )
-    const [backdropUrl, setBackdropUrl] = useState<string | undefined>(undefined);
-
-    useEffect(() => {
-        console.log('backdrop generating')
-        const url = generateBackdropUrl(makeInitalState(), assets)
-        setBackdropUrl(url)
-        return () => {
-            console.log('revoking backdrop url')
-            URL.revokeObjectURL(url)
-        }
-    }, [setBackdropUrl, assets])
-
-    const drawScene = useCallback(
-        (canvas: HTMLCanvasElement | null) => drawSceneFunction(state, assets, centeredViewPort(state.player, VIEW_WIDTH, VIEW_HEIGHT, state))(canvas),
-        [state, assets]
+        initialGameState,
     )
 
     const getGamepad = useCallback(() => {
@@ -97,7 +79,6 @@ export const Game = ({ mode, soundDeck }: Props) => {
             type: 'tick',
             inputs: inputState,
         })
-        drawScene(canvasRef.current)
     }, 10)
 
 
@@ -118,20 +99,28 @@ export const Game = ({ mode, soundDeck }: Props) => {
     useGamepad(gamePadRef)
 
     return <div>
-        <h2>Game {mode ?? 'normal'}</h2>
-        <button onClick={togglePaused}>{state.paused ? 'resume' : 'pause'}</button>
-        <button onClick={reset}>reset</button>
-        <div>
-            <HealthBar current={state.player.health.current} max={state.player.health.max} />
-            <canvas
+        <header style={{ display: 'flex' }}>
+            <span>{mode} mode</span>
+            <button onClick={togglePaused}>{state.paused ? 'resume' : 'pause'}</button>
+            <button onClick={reset}>reset</button>
+        </header>
+        <div style={{ position: 'relative' }}>
+            <GameScreen
+                initialGameState={initialGameState}
+                gameState={state}
+                viewPort={centeredViewPort(state.player, VIEW_WIDTH, VIEW_HEIGHT, state)}
+                magnify={1.2}
+            />
+            <HealthBar
                 style={{
-                    border: '5px double black'
+                    position: 'absolute',
+                    left: 5,
+                    top: 5,
+                    padding: 5,
                 }}
-                ref={canvasRef}
-                height={VIEW_HEIGHT}
-                width={VIEW_WIDTH}></canvas>
+                current={state.player.health.current}
+                max={state.player.health.max} />
         </div>
-        <img src={backdropUrl}/>
     </div>
 
 }

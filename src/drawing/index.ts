@@ -15,9 +15,8 @@ const drawBackdrop: DrawToCanvasFunction<GameState, AssetKey> = (state, assets, 
         const drawSprite = drawSpriteFunc(drawingMethods, assets, assetParams)
         const { obstacles } = state
 
-
-        ctx.beginPath()
         ctx.clearRect(0, 0, viewport.width, viewport.height)
+        ctx.beginPath()
 
         obstacles.forEach(({ x, y, width, height }) => {
             drawSprite({
@@ -44,24 +43,10 @@ export const drawSceneFunction: DrawToCanvasFunction<GameState, AssetKey> = (sta
     if (!ctx) { return }
     const drawingMethods = makeDrawingMethods(ctx, viewport)
     const drawSprite = drawSpriteFunc(drawingMethods, assets, assetParams)
-    const { player, obstacles } = state
+    const { player } = state
 
     ctx.beginPath()
     ctx.clearRect(0, 0, viewport.width, viewport.height)
-
-    obstacles.forEach(({ x, y, width, height }) => {
-        drawSprite({
-            key: 'MISC',
-            fx: 0, fy: 0,
-            x,
-            y,
-            width, height
-        })
-        if (SHOW_HITBOX) {
-            drawingMethods.rect(x, y, width, height)
-            ctx.stroke()
-        }
-    })
 
     drawCharacter(player, state, drawSprite, ctx)
     state.npcs.forEach(character => {
@@ -70,7 +55,6 @@ export const drawSceneFunction: DrawToCanvasFunction<GameState, AssetKey> = (sta
 
     if (SHOW_HITBOX) {
         drawingMethods.rect(player.x, player.y, player.width, player.height)
-
         const attackVector = getAttackZone(player)
         if (attackVector) {
             drawingMethods.rect(attackVector.left, attackVector.top, attackVector.width, attackVector.height)

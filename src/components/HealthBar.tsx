@@ -1,13 +1,16 @@
-import React, { memo } from "react";
+import React, { CSSProperties, memo } from "react";
 
 interface Props {
     current: number;
     max: number;
+    style?: CSSProperties
 }
 
-const HealthBarInner: React.FunctionComponent<Props> = ({ current, max }) => {
+const HealthBarInner: React.FunctionComponent<Props> = ({ current, max, style }) => {
     return (
-        <div>
+        <div style={{...style,
+            background:'yellow'
+        }}>
             HEALTH:
             <span>{current}</span>
             <span>/</span>
