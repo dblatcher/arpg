@@ -1,4 +1,4 @@
-import { drawSpriteFunc, DrawToCanvasFunction, fullViewPort, makeDrawingMethods } from "@dblatcher/sprite-canvas";
+import { drawSpriteFunc, DrawToCanvasFunction, fullViewPort, makeDrawingMethods, GenerateImageUrl, drawOffScreen } from "@dblatcher/sprite-canvas";
 import { AssetKey, assetParams } from "../assets-defs";
 import { GameState } from "../game-state";
 import { getAttackZone } from "../game-state/operations/player-attacks";
@@ -6,6 +6,38 @@ import { drawCharacter } from "./draw-character";
 
 
 const SHOW_HITBOX = true as boolean;
+
+const drawBackdrop: DrawToCanvasFunction<GameState, AssetKey> = (state, assets, viewport = fullViewPort(state)) => {
+    return (canvas) => {
+        const ctx = canvas?.getContext('2d');
+        if (!ctx) { return }
+        const drawingMethods = makeDrawingMethods(ctx, viewport)
+        const drawSprite = drawSpriteFunc(drawingMethods, assets, assetParams)
+        const { obstacles } = state
+
+
+        ctx.beginPath()
+        ctx.clearRect(0, 0, viewport.width, viewport.height)
+
+        obstacles.forEach(({ x, y, width, height }) => {
+            drawSprite({
+                key: 'TILES_1',
+                fx: 1, fy: 5,
+                x,
+                y,
+                width, height
+            })
+            if (SHOW_HITBOX) {
+                drawingMethods.rect(x, y, width, height)
+                ctx.stroke()
+            }
+        })
+    }
+}
+
+export const generateBackdropUrl: GenerateImageUrl<GameState, AssetKey> = (state, assets, viewport = fullViewPort(state)) => {
+    return drawOffScreen(drawBackdrop)(state, assets, viewport)
+}
 
 export const drawSceneFunction: DrawToCanvasFunction<GameState, AssetKey> = (state, assets, viewport = fullViewPort(state)) => (canvas) => {
     const ctx = canvas?.getContext('2d');

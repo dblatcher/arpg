@@ -1,7 +1,7 @@
-import { Reducer, useCallback, useReducer, useRef } from "react"
+import { Reducer, useCallback, useEffect, useReducer, useRef, useState } from "react"
 import { SoundDeck } from "sound-deck"
 import { useAssets } from "../context/asset-context"
-import { drawSceneFunction } from "../drawing"
+import { drawSceneFunction, generateBackdropUrl } from "../drawing"
 import { FeedbackEvent, GameState, InputState, inputsToInputState, runCycle, } from "../game-state"
 import { useGamepad } from "../hooks/use-gamepad"
 import { useKeyBoard } from "../hooks/use-keyboard"
@@ -61,6 +61,17 @@ export const Game = ({ mode, soundDeck }: Props) => {
         myReducer,
         makeInitalState(),
     )
+    const [backdropUrl, setBackdropUrl] = useState<string | undefined>(undefined);
+
+    useEffect(() => {
+        console.log('backdrop generating')
+        const url = generateBackdropUrl(makeInitalState(), assets)
+        setBackdropUrl(url)
+        return () => {
+            console.log('revoking backdrop url')
+            URL.revokeObjectURL(url)
+        }
+    }, [setBackdropUrl, assets])
 
     const drawScene = useCallback(
         (canvas: HTMLCanvasElement | null) => drawSceneFunction(state, assets, centeredViewPort(state.player, VIEW_WIDTH, VIEW_HEIGHT, state))(canvas),
@@ -120,6 +131,7 @@ export const Game = ({ mode, soundDeck }: Props) => {
                 height={VIEW_HEIGHT}
                 width={VIEW_WIDTH}></canvas>
         </div>
+        <img src={backdropUrl}/>
     </div>
 
 }
