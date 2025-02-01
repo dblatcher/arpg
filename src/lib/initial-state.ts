@@ -1,4 +1,5 @@
 import { GameCharacter, GameState } from "../game-state";
+import { stringToTileMap, tileMapToObstacles } from "./tile-maps";
 
 const standardNpc = (x: number, y: number): GameCharacter => (
     {
@@ -17,6 +18,19 @@ const standardNpc = (x: number, y: number): GameCharacter => (
     }
 )
 
+const tiles =
+    `
+rr  r
+ r   r
+ rrrrrrrrrr
+ r   r    r
+  sss     r
+ sss      r   s
+`;
+
+const tileMap = stringToTileMap(tiles)
+const blockedTiles = tileMapToObstacles(tileMap)
+
 export const makeInitalState = (): GameState => ({
     feedbackEvents: [],
     player: {
@@ -34,33 +48,17 @@ export const makeInitalState = (): GameState => ({
         }
     },
     obstacles: [
-        {
-            x: 370,
-            y: 30,
-            width: 30,
-            height: 100,
-        },
-        {
-            x: 80,
-            y: 140,
-            width: 60,
-            height: 30,
-        },
-        {
-            x: 60,
-            y: 240,
-            width: 60,
-            height: 30,
-        },
+        ...blockedTiles
     ],
     npcs: [
-        standardNpc(20,100),
-        standardNpc(65,100),
-        standardNpc(165,160),
-        standardNpc(150,200),
+        standardNpc(20, 100),
+        standardNpc(65, 100),
+        standardNpc(265, 260),
+        standardNpc(150, 280),
     ],
     mapHeight: 600,
     mapWidth: 600,
     cycleNumber: 0,
     paused: false,
+    tileMap,
 })

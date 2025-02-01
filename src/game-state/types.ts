@@ -42,12 +42,26 @@ export type FeedbackEvent = {
     cycleNumber: number;
 }
 
+export enum Traversability {
+    Open, Blocking
+}
+
+export enum Terrain {
+    Grass, Road, Stone
+}
+
+export type Tile = {
+    traversability: Traversability
+    terrain: Terrain
+}
+
 export type GameState = BaseGameState & {
     feedbackEvents: FeedbackEvent[],
     paused: boolean;
     player: GameCharacter;
     obstacles: Space[];
     npcs: GameCharacter[];
+    tileMap: Tile[][];
 }
 
 export type InputState = {

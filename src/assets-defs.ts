@@ -6,6 +6,7 @@ import rangerRun from "./assets/NES_Ranger_Run_Sheet_4way.png"
 import rangerAttack from "./assets/NES_Ranger_Attack_Sheet_4way.png"
 import rangerHit from "./assets/NES_Ranger_Hit_Sheet_4way.png"
 import tiles1 from "./assets/NES_Stonelands_Tile_Set_16x16_128x128_1.png"
+import tiles2 from "./assets/NES_Stonelands_Tile_Set_16x16_128x128_2.png"
 
 const MISC: AssetData = {
     src: miscPng,
@@ -53,8 +54,18 @@ const TILES_1: AssetData = {
     }
 }
 
+const TILES_2: AssetData = {
+    src: tiles2,
+    sprites: {
+        cols: 8,
+        rows: 8,
+    }
+}
+
 export const assetParams = {
-    MISC, RANGER_IDLE, RANGER_WALK, RANGER_RUN, RANGER_ATTACK, RANGER_HIT, TILES_1
+    MISC, 
+    RANGER_IDLE, RANGER_WALK, RANGER_RUN, RANGER_ATTACK, RANGER_HIT, 
+    TILES_1, TILES_2
 }
 
 export type AssetKey = keyof typeof assetParams;
