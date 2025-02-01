@@ -17,9 +17,11 @@ export const GameScreen = ({ gameState, initialGameState, viewPort, magnify = 1 
     const [backdropUrl, setBackdropUrl] = useState<string | undefined>(undefined)
 
     useEffect(() => {
+        console.log('generating backdrop url')
         const url = generateBackdropUrl(initialGameState, assets)
         setBackdropUrl(url)
         return () => {
+            console.log('revoking backdrop url')
             URL.revokeObjectURL(url)
         }
     }, [initialGameState, assets])
