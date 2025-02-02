@@ -19,9 +19,9 @@ export const drawSceneFunction: DrawToCanvasFunction<GameState, AssetKey> = (sta
     ctx.beginPath()
     ctx.clearRect(0, 0, viewport.width, viewport.height)
 
-    drawCharacter(player, state, ranger, drawSprite, ctx)
+    drawCharacter(player, state, ranger, drawSprite)
     state.npcs.forEach(character => {
-        drawCharacter(character, state, punisher, drawSprite, ctx)
+        drawCharacter(character, state, punisher, drawSprite)
     })
 
     if (SHOW_HITBOX) {

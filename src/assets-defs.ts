@@ -21,31 +21,33 @@ const MISC: AssetData = {
     sprites: { cols: 3, rows: 4 }
 }
 
+const RANGER_FRAME_WIDTH_SCALE = 1.1
+
 const RANGER_IDLE: AssetData = {
     src: rangerIdle,
     sprites: { cols: 4, rows: 4 },
-    frameScale: { width: 1.5 }
+    frameScale: { width: RANGER_FRAME_WIDTH_SCALE }
 }
 const RANGER_WALK: AssetData = {
     src: rangerWalk,
     sprites: { cols: 4, rows: 4 },
-    frameScale: { width: 1.5 },
+    frameScale: { width: RANGER_FRAME_WIDTH_SCALE },
 }
 const RANGER_RUN: AssetData = {
     src: rangerRun,
     sprites: { cols: 4, rows: 4 },
-    frameScale: { width: 1.5 },
+    frameScale: { width: RANGER_FRAME_WIDTH_SCALE },
 }
 const RANGER_ATTACK: AssetData = {
     src: rangerAttack,
     sprites: { cols: 4, rows: 4 },
-    frameScale: { width: 2.25 },
+    frameScale: { width: RANGER_FRAME_WIDTH_SCALE * 1.5 },
 
 }
 const RANGER_HIT: AssetData = {
     src: rangerHit,
     sprites: { cols: 4, rows: 1 },
-    frameScale: { width: 1.5 }
+    frameScale: { width: RANGER_FRAME_WIDTH_SCALE }
 }
 
 const TILES_1: AssetData = {

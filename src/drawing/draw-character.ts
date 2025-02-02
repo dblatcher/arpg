@@ -9,7 +9,7 @@ const progressionFrame = ({ duration, remaining }: { duration: number, remaining
 
 const PINKY_FLASH = "brightness(400%) hue-rotate(310deg) saturate(490%)";
 
-const getFilter = (cycleNumber: number, { dying, reeling }: GameCharacter): string => {
+const getFilter = (cycleNumber: number, { dying, reeling }: GameCharacter): string | undefined => {
     const blink = cycleNumber % 25 <= 10;
     if (dying) {
         const { duration, remaining } = dying;
@@ -19,7 +19,7 @@ const getFilter = (cycleNumber: number, { dying, reeling }: GameCharacter): stri
     if (reeling && blink) {
         return PINKY_FLASH
     }
-    return 'none'
+    return undefined
 }
 
 export const drawCharacter = (
@@ -27,7 +27,7 @@ export const drawCharacter = (
     state: GameState,
     sprite: CharacterSprite,
     drawSprite: DrawSpriteFunction<AssetKey>,
-    ctx: CanvasRenderingContext2D,
+    baseFilter?: string,
 ) => {
     const speed = Math.abs(character.vector.xd) + Math.abs(character.vector.yd)
     const animation = (character.dying || character.reeling) ? 'reel' : character.attack ? 'attack' : speed <= 0
@@ -42,7 +42,7 @@ export const drawCharacter = (
         ? progressionFrame(character.attack)
         : Math.floor(state.cycleNumber / 25) % 4;
 
-    ctx.filter = getFilter(state.cycleNumber, character)
+    const filter = [baseFilter, getFilter(state.cycleNumber, character) ].flatMap(i => i ? i : []).join(" ")
 
     drawSprite({
         ...sprite.getFrame(animation, direction, frameIndex),
@@ -50,6 +50,6 @@ export const drawCharacter = (
         y: character.y,
         width: character.width,
         height: character.height,
+        filter
     })
-    ctx.filter = "none"
 }
