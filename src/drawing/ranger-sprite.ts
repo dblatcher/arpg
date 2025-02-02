@@ -1,5 +1,6 @@
 import { Sprite } from "@dblatcher/sprite-canvas";
 import { AssetKey } from "../assets-defs";
+import { CharacterSprite } from "./constants-and-types";
 
 
 const frameRow = (key: AssetKey, fy: number) => [
@@ -22,9 +23,7 @@ const animationFrames2 = (key: AssetKey) => ({
     Right: frameRow(key, 3)
 })
 
-type CharacterAnimations = 'idle' | 'walk' | 'run' | 'attack' | 'run' | 'reel'
-
-export const ranger = new Sprite<AssetKey, CharacterAnimations>(
+export const ranger: CharacterSprite = new Sprite(
     'Down',
     { key: 'RANGER_IDLE', fx: 0, fy: 0 },
     {

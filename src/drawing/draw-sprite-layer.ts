@@ -3,6 +3,8 @@ import { AssetKey, assetParams } from "../assets-defs";
 import { GameState } from "../game-state";
 import { getAttackZone } from "../game-state/operations/player-attacks";
 import { drawCharacter } from "./draw-character";
+import { ranger } from "./ranger-sprite";
+import { punisher } from "./punisher-sprite";
 
 
 const SHOW_HITBOX = true as boolean;
@@ -17,9 +19,9 @@ export const drawSceneFunction: DrawToCanvasFunction<GameState, AssetKey> = (sta
     ctx.beginPath()
     ctx.clearRect(0, 0, viewport.width, viewport.height)
 
-    drawCharacter(player, state, drawSprite, ctx)
+    drawCharacter(player, state, ranger, drawSprite, ctx)
     state.npcs.forEach(character => {
-        drawCharacter(character, state, drawSprite, ctx)
+        drawCharacter(character, state, punisher, drawSprite, ctx)
     })
 
     if (SHOW_HITBOX) {

@@ -1,7 +1,7 @@
-import { ranger } from "./ranger-sprite";
-import { GameCharacter, GameState } from "../game-state";
-import { AssetKey } from "../assets-defs";
 import { DrawSpriteFunction } from "@dblatcher/sprite-canvas";
+import { AssetKey } from "../assets-defs";
+import { GameCharacter, GameState } from "../game-state";
+import { CharacterSprite } from "./constants-and-types";
 
 const progressionFrame = ({ duration, remaining }: { duration: number, remaining: number }): number => {
     return Math.round(((duration - remaining) / duration) * 3)
@@ -25,6 +25,7 @@ const getFilter = (cycleNumber: number, { dying, reeling }: GameCharacter): stri
 export const drawCharacter = (
     character: GameCharacter,
     state: GameState,
+    sprite: CharacterSprite,
     drawSprite: DrawSpriteFunction<AssetKey>,
     ctx: CanvasRenderingContext2D,
 ) => {
@@ -44,7 +45,7 @@ export const drawCharacter = (
     ctx.filter = getFilter(state.cycleNumber, character)
 
     drawSprite({
-        ...ranger.getFrame(animation, direction, frameIndex),
+        ...sprite.getFrame(animation, direction, frameIndex),
         x: character.x,
         y: character.y,
         width: character.width,

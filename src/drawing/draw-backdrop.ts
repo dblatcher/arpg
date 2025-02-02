@@ -1,7 +1,7 @@
 import { drawOffScreen, drawSpriteFunc, DrawToCanvasFunction, fullViewPort, GenerateImageUrl, makeDrawingMethods, SpriteFrame } from "@dblatcher/sprite-canvas";
 import { AssetKey, assetParams } from "../assets-defs";
 import { GameState, Terrain } from "../game-state";
-import { TILE_SIZE, TILE_DIMS } from "./constants";
+import { TILE_SIZE, TILE_DIMS } from "./constants-and-types";
 
 
 const STONE: SpriteFrame<AssetKey> = { key: 'TILES_1', fx: 1, fy: 5, }
