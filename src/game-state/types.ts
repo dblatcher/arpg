@@ -9,6 +9,7 @@ export type Space = {
 }
 
 export type GameCharacter = Space & {
+    id: number,
     direction: Direction;
     speed: number;
     vector: {

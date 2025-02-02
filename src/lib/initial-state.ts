@@ -1,8 +1,10 @@
 import { GameCharacter, GameState } from "../game-state";
 import { stringToTileMap, tileMapToObstacles } from "./tile-maps";
 
+let npcId = 1
 const standardNpc = (x: number, y: number): GameCharacter => (
     {
+        id: npcId++,
         direction: 'Down',
         x, y,
         width: 40,
@@ -34,6 +36,7 @@ const blockedTiles = tileMapToObstacles(tileMap)
 export const makeInitalState = (): GameState => ({
     feedbackEvents: [],
     player: {
+        id: -1,
         direction: 'Down',
         x: 300, y: 50,
         width: 40,
