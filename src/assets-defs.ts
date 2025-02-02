@@ -62,11 +62,13 @@ const TILES_2: AssetData = {
 
 const CENTURION_IDLE = buildAsset(centurionIdle, 4, 4, 2, 1.25)
 
-const PUNISHER_IDLE: AssetData = buildAsset(punisherIdle, 4, 4, 1.1, 1);
-const PUNISHER_WALK: AssetData = buildAsset(punisherWalk, 4, 4, 1.1, 1);
-const PUNISHER_RUN: AssetData = buildAsset(punisherRun, 4, 4, 1.1, 1);
-const PUNISHER_ATTACK: AssetData = buildAsset(punisherAttack, 1, 4, 1.1, 1);
-const PUNISHER_HURT: AssetData = buildAsset(punisherHurt, 1, 4, 1.1, 1);
+const PUNISHER_FRAME_WIDTH = 1.8
+const PUNISHER_FRAME_HEIGHT = 1.1
+const PUNISHER_IDLE: AssetData = buildAsset(punisherIdle, 4, 4, PUNISHER_FRAME_WIDTH, PUNISHER_FRAME_HEIGHT);
+const PUNISHER_WALK: AssetData = buildAsset(punisherWalk, 4, 4, PUNISHER_FRAME_WIDTH, PUNISHER_FRAME_HEIGHT);
+const PUNISHER_RUN: AssetData = buildAsset(punisherRun, 4, 4, PUNISHER_FRAME_WIDTH, PUNISHER_FRAME_HEIGHT);
+const PUNISHER_ATTACK: AssetData = buildAsset(punisherAttack, 1, 4, PUNISHER_FRAME_WIDTH, PUNISHER_FRAME_HEIGHT);
+const PUNISHER_HURT: AssetData = buildAsset(punisherHurt, 1, 4, PUNISHER_FRAME_WIDTH, PUNISHER_FRAME_HEIGHT);
 
 export const assetParams = {
     MISC,

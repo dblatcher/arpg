@@ -23,8 +23,11 @@ export const drawSceneFunction: DrawToCanvasFunction<GameState, AssetKey> = (sta
     state.npcs.forEach(character => {
         drawCharacter(character, state, punisher, drawSprite)
     })
-
+    
     if (SHOW_HITBOX) {
+        state.npcs.forEach(character => {
+            drawingMethods.rect(character.x, character.y, character.width, character.height)
+        })
         drawingMethods.rect(player.x, player.y, player.width, player.height)
         const attackVector = getAttackZone(player)
         if (attackVector) {
