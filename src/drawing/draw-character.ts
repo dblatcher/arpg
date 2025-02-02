@@ -1,4 +1,4 @@
-import { ranger } from "./sprites";
+import { ranger } from "./ranger-sprite";
 import { GameCharacter, GameState } from "../game-state";
 import { AssetKey } from "../assets-defs";
 import { DrawSpriteFunction } from "@dblatcher/sprite-canvas";
@@ -44,12 +44,10 @@ export const drawCharacter = (
     ctx.filter = getFilter(state.cycleNumber, character)
 
     drawSprite({
-        key: 'RANGER_IDLE',
         ...ranger.getFrame(animation, direction, frameIndex),
-        x: character.x + character.width / 2,
-        y: character.y + character.height / 2,
-        width: animation === 'attack' ? 2 * character.width : (4 / 3) * character.width,
-        center: true,
+        x: character.x,
+        y: character.y,
+        width: character.width,
         height: character.height,
     })
     ctx.filter = "none"
