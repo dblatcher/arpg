@@ -7,6 +7,7 @@ import rangerAttack from "./assets/NES_Ranger_Attack_Sheet_4way.png"
 import rangerHit from "./assets/NES_Ranger_Hit_Sheet_4way.png"
 import tiles1 from "./assets/NES_Stonelands_Tile_Set_16x16_128x128_1.png"
 import tiles2 from "./assets/NES_Stonelands_Tile_Set_16x16_128x128_2.png"
+import tiles3 from "./assets/NES_Stonelands_Tile_Set_16x16_128x128_3.png"
 import centurionIdle from "./assets/centurion-purple/Idle_SpriteSheet.png"
 import punisherIdle from "./assets/punisher/Idle_SpriteSheet.png"
 import punisherWalk from "./assets/punisher/Walk_SpriteSheet.png"
@@ -50,30 +51,24 @@ const RANGER_HIT: AssetData = {
     frameScale: { width: RANGER_FRAME_WIDTH_SCALE }
 }
 
-const TILES_1: AssetData = {
-    src: tiles1,
-    sprites: { cols: 8, rows: 8 }
-}
-
-const TILES_2: AssetData = {
-    src: tiles2,
-    sprites: { cols: 8, rows: 8 }
-}
+const TILES_1 = buildAsset(tiles1, 8, 8)
+const TILES_2 = buildAsset(tiles2, 8, 8)
+const TILES_3 = buildAsset(tiles3, 8, 8)
 
 const CENTURION_IDLE = buildAsset(centurionIdle, 4, 4, 2, 1.25)
 
 const PUNISHER_FRAME_WIDTH = 1.8
 const PUNISHER_FRAME_HEIGHT = 1.1
-const PUNISHER_IDLE: AssetData = buildAsset(punisherIdle, 4, 4, PUNISHER_FRAME_WIDTH, PUNISHER_FRAME_HEIGHT);
-const PUNISHER_WALK: AssetData = buildAsset(punisherWalk, 4, 4, PUNISHER_FRAME_WIDTH, PUNISHER_FRAME_HEIGHT);
-const PUNISHER_RUN: AssetData = buildAsset(punisherRun, 4, 4, PUNISHER_FRAME_WIDTH, PUNISHER_FRAME_HEIGHT);
-const PUNISHER_ATTACK: AssetData = buildAsset(punisherAttack, 1, 4, PUNISHER_FRAME_WIDTH, PUNISHER_FRAME_HEIGHT);
-const PUNISHER_HURT: AssetData = buildAsset(punisherHurt, 1, 4, PUNISHER_FRAME_WIDTH, PUNISHER_FRAME_HEIGHT);
+const PUNISHER_IDLE = buildAsset(punisherIdle, 4, 4, PUNISHER_FRAME_WIDTH, PUNISHER_FRAME_HEIGHT);
+const PUNISHER_WALK = buildAsset(punisherWalk, 4, 4, PUNISHER_FRAME_WIDTH, PUNISHER_FRAME_HEIGHT);
+const PUNISHER_RUN = buildAsset(punisherRun, 4, 4, PUNISHER_FRAME_WIDTH, PUNISHER_FRAME_HEIGHT);
+const PUNISHER_ATTACK = buildAsset(punisherAttack, 1, 4, PUNISHER_FRAME_WIDTH, PUNISHER_FRAME_HEIGHT);
+const PUNISHER_HURT = buildAsset(punisherHurt, 1, 4, PUNISHER_FRAME_WIDTH, PUNISHER_FRAME_HEIGHT);
 
 export const assetParams = {
     MISC,
     RANGER_IDLE, RANGER_WALK, RANGER_RUN, RANGER_ATTACK, RANGER_HIT,
-    TILES_1, TILES_2,
+    TILES_1, TILES_2, TILES_3,
     CENTURION_IDLE,
     PUNISHER_IDLE, PUNISHER_WALK, PUNISHER_RUN, PUNISHER_HURT, PUNISHER_ATTACK
 }

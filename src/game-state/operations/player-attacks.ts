@@ -5,7 +5,6 @@ import { GameCharacter, GameState } from "../types";
 
 
 export const handlePlayerAttackHits = (npc: GameCharacter, state: GameState) => {
-    console.log('hit', state.cycleNumber, state.player.direction, npc.health)
     npc.health.current = npc.health.current - 1
 
     if (npc.health.current <= 0) {

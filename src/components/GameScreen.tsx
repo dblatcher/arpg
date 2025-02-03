@@ -14,15 +14,21 @@ interface Props {
 export const GameScreen = ({ gameState, initialGameState, viewPort, magnify = 1 }: Props) => {
     const assets = useAssets()
     const spriteCanvasRef = createRef<HTMLCanvasElement>()
-    const [backdropUrl, setBackdropUrl] = useState<string | undefined>(undefined)
+    const [backdropUrlList, setBackdropUrlList] = useState<string[] | undefined>(undefined)
 
     useEffect(() => {
-        console.log('generating backdrop url')
-        const url = generateBackdropUrl(initialGameState, assets)
-        setBackdropUrl(url)
+        console.log('generating backdrop urls')
+        const urlsList = [
+            generateBackdropUrl(0)(initialGameState, assets),
+            generateBackdropUrl(1)(initialGameState, assets),
+            generateBackdropUrl(2)(initialGameState, assets),
+            generateBackdropUrl(3)(initialGameState, assets),
+        ]
+        setBackdropUrlList(urlsList)
+
         return () => {
-            console.log('revoking backdrop url')
-            URL.revokeObjectURL(url)
+            console.log('revoking backdrop urls')
+            urlsList.forEach(URL.revokeObjectURL)
         }
     }, [initialGameState, assets])
 
@@ -34,6 +40,10 @@ export const GameScreen = ({ gameState, initialGameState, viewPort, magnify = 1 
 
     const xR = gameState.mapWidth / viewPort.width
     const yR = gameState.mapHeight / viewPort.height
+
+    const backDropUrl = backdropUrlList ? backdropUrlList[Math.floor(gameState.cycleNumber / 10) % backdropUrlList.length] : undefined;
+
+    ;
 
     return (
         <div style={{
@@ -59,7 +69,7 @@ export const GameScreen = ({ gameState, initialGameState, viewPort, magnify = 1 
                         inset: 0,
                         width: `${100}%`,
                         height: `${100}%`,
-                        backgroundImage: backdropUrl ? `url("${backdropUrl}")` : undefined,
+                        backgroundImage: backDropUrl ? `url("${backDropUrl}")` : undefined,
                         backgroundSize: ` ${100}% ${100}%`,
                     }}
                 ></div>

@@ -14,6 +14,16 @@ const letterToTile = (letter: string): Tile => {
                 terrain: Terrain.Stone,
                 traversability: Traversability.Blocking
             }
+        case 'w':
+            return {
+                terrain: Terrain.Water,
+                traversability: Traversability.Blocking
+            }
+        case 'F':
+            return {
+                terrain: Terrain.Splash,
+                traversability: Traversability.Blocking
+            }
         default:
             return {
                 terrain: Terrain.Grass,

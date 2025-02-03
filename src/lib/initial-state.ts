@@ -21,9 +21,9 @@ const standardNpc = (x: number, y: number): GameCharacter => (
 )
 
 const tiles =
-    `
-rr  r
- r   r
+    `    ww
+rr  r    ww
+ r   r   FF
  rrrrrrrrrr
  r   r    r
   sss     r

@@ -48,7 +48,7 @@ export enum Traversability {
 }
 
 export enum Terrain {
-    Grass, Road, Stone
+    Grass, Road, Stone, Water, Splash
 }
 
 export type Tile = {

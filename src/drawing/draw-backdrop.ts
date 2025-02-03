@@ -6,10 +6,27 @@ import { TILE_SIZE, TILE_DIMS } from "./constants-and-types";
 
 const STONE: SpriteFrame<AssetKey> = { key: 'TILES_1', fx: 1, fy: 5, }
 const GRASS: SpriteFrame<AssetKey> = { key: 'TILES_1', fx: 1, fy: 0, }
-const GRASS_ALT: SpriteFrame<AssetKey> = { key: 'TILES_1', fx: 7, fy: 2, }
 const ROAD: SpriteFrame<AssetKey> = { key: 'TILES_2', fx: 4, fy: 0, }
 
-const drawBackdrop: DrawToCanvasFunction<GameState, AssetKey> = (state, assets, viewport = fullViewPort(state)) => {
+const WATERFALL = [
+    { key: 'TILES_3', fx: 7, fy: 0 },
+    { key: 'TILES_3', fx: 1, fy: 2 },
+    { key: 'TILES_3', fx: 2, fy: 3 },
+    { key: 'TILES_2', fx: 5, fy: 5 },
+] satisfies SpriteFrame<AssetKey>[];
+
+const SPLASH = [
+    { key: 'TILES_3', fx: 7, fy: 0 },
+    { key: 'TILES_3', fx: 1, fy: 2 },
+    { key: 'TILES_3', fx: 2, fy: 3 },
+    { key: 'TILES_3', fx: 0, fy: 4 },
+] satisfies SpriteFrame<AssetKey>[];
+
+
+
+type BackdropVariant = 0 | 1 | 2 | 3;
+
+const drawBackdrop = (variant: BackdropVariant): DrawToCanvasFunction<GameState, AssetKey> => (state, assets, viewport = fullViewPort(state)) => {
     return (canvas) => {
         const ctx = canvas?.getContext('2d');
         if (!ctx) { return }
@@ -23,19 +40,13 @@ const drawBackdrop: DrawToCanvasFunction<GameState, AssetKey> = (state, assets, 
         ctx.fillRect(0, 0, viewport.width, viewport.height)
         ctx.beginPath()
 
-        const drawGrassTile = (x: number, y: number) => drawSprite({ ...GRASS, x: x * TILE_SIZE, y: y * TILE_SIZE, ...TILE_DIMS })
-        const drawGrassAltTile = (x: number, y: number) => drawSprite({ ...GRASS_ALT, x: x * TILE_SIZE, y: y * TILE_SIZE, ...TILE_DIMS })
         const drawTile = (frame: SpriteFrame<AssetKey>, x: number, y: number) => drawSprite({ ...frame, x: x * TILE_SIZE, y: y * TILE_SIZE, ...TILE_DIMS })
         const widthInTiles = Math.ceil(viewport.width)
         const heightInTiles = Math.ceil(viewport.height)
 
         for (let x = 0; x <= widthInTiles; x++) {
             for (let y = 0; y <= heightInTiles; y++) {
-                if (Math.random() > .9) {
-                    drawGrassAltTile(x, y)
-                } else {
-                    drawGrassTile(x, y)
-                }
+                drawTile(GRASS, x, y)
             }
         }
 
@@ -50,12 +61,19 @@ const drawBackdrop: DrawToCanvasFunction<GameState, AssetKey> = (state, assets, 
                     case Terrain.Stone:
                         drawTile(STONE, tileIndex, rowIndex);
                         break
+                    case Terrain.Water:
+                        drawTile(WATERFALL[variant], tileIndex, rowIndex)
+                        break;
+                    case Terrain.Splash:
+                        drawTile(SPLASH[variant], tileIndex, rowIndex)
+                        break;
+
                 }
             })
         })
     }
 }
 
-export const generateBackdropUrl: GenerateImageUrl<GameState, AssetKey> = (state, assets, viewport = fullViewPort(state)) => {
-    return drawOffScreen(drawBackdrop)(state, assets, viewport)
-}
+export const generateBackdropUrl = (variant: BackdropVariant): GenerateImageUrl<GameState, AssetKey> =>
+    (state, assets, viewport = fullViewPort(state)) =>
+        drawOffScreen(drawBackdrop(variant))(state, assets, viewport)
