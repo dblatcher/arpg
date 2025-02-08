@@ -1,37 +1,22 @@
-import { createRef, useEffect, useLayoutEffect, useState } from "react"
-import { drawSceneFunction, generateBackdropUrl } from "../drawing"
-import { useAssets } from "../context/asset-context"
-import { GameState } from "../game-state"
 import { ViewPort } from "@dblatcher/sprite-canvas"
+import { createRef, useLayoutEffect } from "react"
+import { useAssets } from "../context/asset-context"
+import { useBackdrops } from "../context/backdrop-context"
+import { drawSceneFunction } from "../drawing"
+import { GameState } from "../game-state"
 import { ScrollingBackdrop } from "./ScrollingBackdrop"
 
 interface Props {
-    initialGameState: GameState,
     gameState: GameState
     viewPort: ViewPort
     magnify?: number
 }
 
-export const GameScreen = ({ gameState, initialGameState, viewPort, magnify = 1 }: Props) => {
+export const GameScreen = ({ gameState, viewPort, magnify = 1 }: Props) => {
     const assets = useAssets()
+    const backdropUrlList = useBackdrops()
+    const [baseBackdropUrl] = backdropUrlList
     const spriteCanvasRef = createRef<HTMLCanvasElement>()
-    const [backdropUrlList, setBackdropUrlList] = useState<string[] | undefined>(undefined)
-
-    useEffect(() => {
-        console.log('generating backdrop urls')
-        const urlsList = [
-            generateBackdropUrl(0)(initialGameState, assets),
-            generateBackdropUrl(1)(initialGameState, assets),
-            generateBackdropUrl(2)(initialGameState, assets),
-            generateBackdropUrl(3)(initialGameState, assets),
-        ]
-        setBackdropUrlList(urlsList)
-
-        return () => {
-            console.log('revoking backdrop urls')
-            urlsList.forEach(URL.revokeObjectURL)
-        }
-    }, [initialGameState, assets])
 
     const renderCanvas = () => {
         drawSceneFunction(gameState, assets, viewPort)(spriteCanvasRef.current)
@@ -58,7 +43,7 @@ export const GameScreen = ({ gameState, initialGameState, viewPort, magnify = 1 
                 yR={yR}
                 viewPort={viewPort}
                 magnify={magnify}
-                url={backdropUrlList?.[0]}
+                url={baseBackdropUrl}
             />
             <ScrollingBackdrop
                 xR={xR}

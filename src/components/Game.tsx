@@ -9,6 +9,7 @@ import { runFeedback } from "../lib/feedback"
 import { makeInitalState } from "../lib/initial-state"
 import { GameScreen } from "./GameScreen"
 import { HealthBar } from "./HealthBar"
+import { WaitingBackdropProvider } from "../context/WaitingBackdropProvider"
 
 interface Props {
     mode?: string
@@ -105,21 +106,22 @@ export const Game = ({ mode = 'normal', soundDeck }: Props) => {
             <button onClick={reset}>reset</button>
         </header>
         <div style={{ position: 'relative' }}>
-            <GameScreen
-                initialGameState={initialGameState}
-                gameState={state}
-                viewPort={centeredViewPort(state.player, VIEW_WIDTH, VIEW_HEIGHT, state)}
-                magnify={1.2}
-            />
-            <HealthBar
-                style={{
-                    position: 'absolute',
-                    left: 5,
-                    top: 5,
-                    padding: 5,
-                }}
-                current={state.player.health.current}
-                max={state.player.health.max} />
+            <WaitingBackdropProvider initialGameState={initialGameState}>
+                <GameScreen
+                    gameState={state}
+                    viewPort={centeredViewPort(state.player, VIEW_WIDTH, VIEW_HEIGHT, state)}
+                    magnify={1.2}
+                />
+                <HealthBar
+                    style={{
+                        position: 'absolute',
+                        left: 5,
+                        top: 5,
+                        padding: 5,
+                    }}
+                    current={state.player.health.current}
+                    max={state.player.health.max} />
+            </WaitingBackdropProvider>
         </div>
     </div>
 

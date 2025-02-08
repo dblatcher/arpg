@@ -13,7 +13,7 @@ function App() {
     <>
       <h1>A rpg</h1>
       <WaitingAssetProvider assetParams={assetParams}>
-        <Game  soundDeck={soundDeck}/>
+        <Game soundDeck={soundDeck} />
       </WaitingAssetProvider>
     </>
   )
