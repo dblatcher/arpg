@@ -1,4 +1,5 @@
 import { GameCharacter, GameState } from "../game-state";
+import { TILE_SIZE } from "../game-state/constants";
 import { stringToTileMap, tileMapToObstacles } from "./tile-maps";
 
 let npcId = 1
@@ -30,7 +31,10 @@ rr  r    ww
  sss      r   s
 `;
 
-const tileMap = stringToTileMap(tiles)
+const MAP_WIDTH = 600
+const MAP_HEIGHT = 600
+
+const tileMap = stringToTileMap(tiles, MAP_WIDTH / TILE_SIZE, MAP_HEIGHT / TILE_SIZE)
 const blockedTiles = tileMapToObstacles(tileMap)
 
 export const makeInitalState = (): GameState => ({
@@ -59,8 +63,8 @@ export const makeInitalState = (): GameState => ({
         standardNpc(265, 260),
         standardNpc(150, 280),
     ],
-    mapHeight: 600,
-    mapWidth: 600,
+    mapHeight: MAP_HEIGHT,
+    mapWidth: MAP_WIDTH,
     cycleNumber: 0,
     paused: false,
     tileMap,

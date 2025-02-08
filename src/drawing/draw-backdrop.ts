@@ -1,7 +1,7 @@
 import { drawOffScreen, drawSpriteFunc, DrawToCanvasFunction, fullViewPort, GenerateImageUrl, makeDrawingMethods, SpriteFrame } from "@dblatcher/sprite-canvas";
 import { AssetKey, assetParams } from "../assets-defs";
 import { GameState, Terrain } from "../game-state";
-import { TILE_SIZE, TILE_DIMS } from "./constants-and-types";
+import { TILE_DIMS } from "./constants-and-types";
 
 
 const STONE: SpriteFrame<AssetKey> = { key: 'TILES_1', fx: 1, fy: 5, }
@@ -28,6 +28,7 @@ type BackdropVariant = 0 | 1 | 2 | 3;
 
 const drawBackdrop = (variant: BackdropVariant): DrawToCanvasFunction<GameState, AssetKey> => (state, assets, viewport = fullViewPort(state)) => {
     return (canvas) => {
+        console.time(`draw backdrop ${variant}`)
         const ctx = canvas?.getContext('2d');
         if (!ctx) { return }
         const drawingMethods = makeDrawingMethods(ctx, viewport)
@@ -40,20 +41,14 @@ const drawBackdrop = (variant: BackdropVariant): DrawToCanvasFunction<GameState,
         ctx.fillRect(0, 0, viewport.width, viewport.height)
         ctx.beginPath()
 
-        const drawTile = (frame: SpriteFrame<AssetKey>, x: number, y: number) => drawSprite({ ...frame, x: x * TILE_SIZE, y: y * TILE_SIZE, ...TILE_DIMS })
-        const widthInTiles = Math.ceil(viewport.width)
-        const heightInTiles = Math.ceil(viewport.height)
-
-        for (let x = 0; x <= widthInTiles; x++) {
-            for (let y = 0; y <= heightInTiles; y++) {
-                drawTile(GRASS, x, y)
-            }
-        }
+        const drawTile = (frame: SpriteFrame<AssetKey>, x: number, y: number) => 
+            drawSprite({ ...frame, x: x * TILE_DIMS.width, y: y * TILE_DIMS.height, ...TILE_DIMS })
 
         tileMap.forEach((row, rowIndex) => {
             row.forEach((tile, tileIndex) => {
                 switch (tile.terrain) {
                     case Terrain.Grass:
+                        drawTile(GRASS, tileIndex, rowIndex)
                         break
                     case Terrain.Road:
                         drawTile(ROAD, tileIndex, rowIndex);
@@ -71,9 +66,15 @@ const drawBackdrop = (variant: BackdropVariant): DrawToCanvasFunction<GameState,
                 }
             })
         })
+        console.timeEnd(`draw backdrop ${variant}`)
     }
 }
 
 export const generateBackdropUrl = (variant: BackdropVariant): GenerateImageUrl<GameState, AssetKey> =>
-    (state, assets, viewport = fullViewPort(state)) =>
-        drawOffScreen(drawBackdrop(variant))(state, assets, viewport)
+    (state, assets, viewport = fullViewPort(state)) => {
+
+        console.time(`gen backdrop url ${variant}`)
+        const url = drawOffScreen(drawBackdrop(variant))(state, assets, viewport)
+        console.timeEnd(`gen backdrop url ${variant}`)
+        return url
+    }

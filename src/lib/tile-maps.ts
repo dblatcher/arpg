@@ -32,9 +32,12 @@ const letterToTile = (letter: string): Tile => {
     }
 }
 
-export const stringToTileMap = (input: string): Tile[][] => {
+export const stringToTileMap = (input: string, width: number, height:number): Tile[][] => {
     const characterRows = input.split("\n").filter(row => row.length > 0)
-    const letterGrid = characterRows.map(row => row.split(''))
+    while (characterRows.length < height) {
+        characterRows.push(" ")
+    }
+    const letterGrid = characterRows.map(row => row.padEnd(width," ").split(''))
     const tileGrid = letterGrid.map(row => row.map(letterToTile))
     return tileGrid
 }
