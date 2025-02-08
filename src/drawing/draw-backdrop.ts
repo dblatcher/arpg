@@ -7,6 +7,7 @@ import { TILE_DIMS } from "./constants-and-types";
 const STONE: SpriteFrame<AssetKey> = { key: 'TILES_1', fx: 1, fy: 5, }
 const GRASS: SpriteFrame<AssetKey> = { key: 'TILES_1', fx: 1, fy: 0, }
 const ROAD: SpriteFrame<AssetKey> = { key: 'TILES_2', fx: 4, fy: 0, }
+const WATER: SpriteFrame<AssetKey> = { key: 'TILES_2', fx: 6, fy: 2, }
 
 const WATERFALL = [
     { key: 'TILES_3', fx: 7, fy: 0 },
@@ -38,7 +39,13 @@ const drawBackdrop = (variant: BackdropVariant): DrawToCanvasFunction<GameState,
         ctx.beginPath()
 
         const drawTile = (frame: SpriteFrame<AssetKey>, x: number, y: number) =>
-            drawSprite({ ...frame, x: x * TILE_DIMS.width, y: y * TILE_DIMS.height, height: TILE_DIMS.height + 1, width: TILE_DIMS.width+1 })
+            drawSprite({
+                ...frame,
+                x: -1 + (x * TILE_DIMS.width),
+                y: -1 + (y * TILE_DIMS.height),
+                height: TILE_DIMS.height + 2,
+                width: TILE_DIMS.width + 2
+            })
 
         const drawTileIfBase = (frame: SpriteFrame<AssetKey>, x: number, y: number) => {
             if (variant === 0) {
@@ -59,6 +66,9 @@ const drawBackdrop = (variant: BackdropVariant): DrawToCanvasFunction<GameState,
                         drawTileIfBase(STONE, tileIndex, rowIndex);
                         break
                     case Terrain.Water:
+                        drawTileIfBase(WATER, tileIndex, rowIndex);
+                        break
+                    case Terrain.Waterfall:
                         drawTile(WATERFALL[variant], tileIndex, rowIndex)
                         break;
                     case Terrain.Splash:

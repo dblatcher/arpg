@@ -21,13 +21,14 @@ const standardNpc = (x: number, y: number): GameCharacter => (
     }
 )
 
-const tiles =
-    `    ww
-rr  r    ww
- r   r   FF
- rrrrrrrrrr
- r   r    r
-  sss     r
+const tiles = `
+ rsssssssffssss
+ rsssssssffssss
+ r     wwFFww
+ rrrrr wwwwww
+ r   r     
+  ss rrrrrr
+ sss      r   s
  sss      r   s
 `;
 
@@ -42,7 +43,7 @@ export const makeInitalState = (): GameState => ({
     player: {
         id: -1,
         direction: 'Down',
-        x: 300, y: 50,
+        x: TILE_SIZE*5, y: TILE_SIZE*2,
         width: 40,
         height: 40,
         speed: 1.5,
