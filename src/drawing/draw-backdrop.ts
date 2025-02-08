@@ -34,16 +34,11 @@ const drawBackdrop = (variant: BackdropVariant): DrawToCanvasFunction<GameState,
         const drawSprite = drawSpriteFunc(drawingMethods, assets, assetParams)
         const { tileMap } = state
 
-        if (variant === 0) {
-            ctx.clearRect(0, 0, viewport.width, viewport.height)
-            ctx.beginPath()
-            ctx.fillStyle = "green"
-            ctx.fillRect(0, 0, viewport.width, viewport.height)
-            ctx.beginPath()
-        }
+        ctx.clearRect(0, 0, viewport.width, viewport.height)
+        ctx.beginPath()
 
         const drawTile = (frame: SpriteFrame<AssetKey>, x: number, y: number) =>
-            drawSprite({ ...frame, x: x * TILE_DIMS.width, y: y * TILE_DIMS.height, ...TILE_DIMS })
+            drawSprite({ ...frame, x: x * TILE_DIMS.width, y: y * TILE_DIMS.height, height: TILE_DIMS.height + 1, width: TILE_DIMS.width+1 })
 
         const drawTileIfBase = (frame: SpriteFrame<AssetKey>, x: number, y: number) => {
             if (variant === 0) {
@@ -72,7 +67,6 @@ const drawBackdrop = (variant: BackdropVariant): DrawToCanvasFunction<GameState,
                 }
             })
         })
-
     }
 }
 
