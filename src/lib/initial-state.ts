@@ -45,7 +45,7 @@ export const makeInitalState = (): GameState => ({
         x: 300, y: 50,
         width: 40,
         height: 40,
-        speed: 1,
+        speed: 1.5,
         vector: {
             xd: 0, yd: 0
         },

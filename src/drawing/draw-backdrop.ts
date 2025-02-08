@@ -28,33 +28,40 @@ type BackdropVariant = 0 | 1 | 2 | 3;
 
 const drawBackdrop = (variant: BackdropVariant): DrawToCanvasFunction<GameState, AssetKey> => (state, assets, viewport = fullViewPort(state)) => {
     return (canvas) => {
-        console.time(`draw backdrop ${variant}`)
         const ctx = canvas?.getContext('2d');
         if (!ctx) { return }
         const drawingMethods = makeDrawingMethods(ctx, viewport)
         const drawSprite = drawSpriteFunc(drawingMethods, assets, assetParams)
         const { tileMap } = state
 
-        ctx.clearRect(0, 0, viewport.width, viewport.height)
-        ctx.beginPath()
-        ctx.fillStyle = "green"
-        ctx.fillRect(0, 0, viewport.width, viewport.height)
-        ctx.beginPath()
+        if (variant === 0) {
+            ctx.clearRect(0, 0, viewport.width, viewport.height)
+            ctx.beginPath()
+            ctx.fillStyle = "green"
+            ctx.fillRect(0, 0, viewport.width, viewport.height)
+            ctx.beginPath()
+        }
 
-        const drawTile = (frame: SpriteFrame<AssetKey>, x: number, y: number) => 
+        const drawTile = (frame: SpriteFrame<AssetKey>, x: number, y: number) =>
             drawSprite({ ...frame, x: x * TILE_DIMS.width, y: y * TILE_DIMS.height, ...TILE_DIMS })
+
+        const drawTileIfBase = (frame: SpriteFrame<AssetKey>, x: number, y: number) => {
+            if (variant === 0) {
+                drawTile(frame, x, y)
+            }
+        }
 
         tileMap.forEach((row, rowIndex) => {
             row.forEach((tile, tileIndex) => {
                 switch (tile.terrain) {
                     case Terrain.Grass:
-                        drawTile(GRASS, tileIndex, rowIndex)
+                        drawTileIfBase(GRASS, tileIndex, rowIndex)
                         break
                     case Terrain.Road:
-                        drawTile(ROAD, tileIndex, rowIndex);
+                        drawTileIfBase(ROAD, tileIndex, rowIndex);
                         break
                     case Terrain.Stone:
-                        drawTile(STONE, tileIndex, rowIndex);
+                        drawTileIfBase(STONE, tileIndex, rowIndex);
                         break
                     case Terrain.Water:
                         drawTile(WATERFALL[variant], tileIndex, rowIndex)
@@ -62,11 +69,10 @@ const drawBackdrop = (variant: BackdropVariant): DrawToCanvasFunction<GameState,
                     case Terrain.Splash:
                         drawTile(SPLASH[variant], tileIndex, rowIndex)
                         break;
-
                 }
             })
         })
-        console.timeEnd(`draw backdrop ${variant}`)
+
     }
 }
 

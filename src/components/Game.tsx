@@ -48,7 +48,7 @@ const myReducer: Reducer<GameState, GameStateAction> = (prevState: GameState, ac
     }
 }
 
-const VIEW_WIDTH = 400;
+const VIEW_WIDTH = 450;
 const VIEW_HEIGHT = 400;
 
 export const Game = ({ mode = 'normal', soundDeck }: Props) => {

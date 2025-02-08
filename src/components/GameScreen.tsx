@@ -3,6 +3,7 @@ import { drawSceneFunction, generateBackdropUrl } from "../drawing"
 import { useAssets } from "../context/asset-context"
 import { GameState } from "../game-state"
 import { ViewPort } from "@dblatcher/sprite-canvas"
+import { ScrollingBackdrop } from "./ScrollingBackdrop"
 
 interface Props {
     initialGameState: GameState,
@@ -43,8 +44,6 @@ export const GameScreen = ({ gameState, initialGameState, viewPort, magnify = 1 
 
     const backDropUrl = backdropUrlList ? backdropUrlList[Math.floor(gameState.cycleNumber / 10) % backdropUrlList.length] : undefined;
 
-    ;
-
     return (
         <div style={{
             display: 'flex',
@@ -54,26 +53,20 @@ export const GameScreen = ({ gameState, initialGameState, viewPort, magnify = 1 
             overflow: 'hidden',
             border: '4px outset red'
         }}>
-            <div
-                style={{
-                    position: 'absolute',
-                    inset: 0,
-                    width: `${100 * xR}%`,
-                    height: `${100 * yR}%`,
-                    transform: `translatex(${-viewPort.x * magnify}px) translatey(${-viewPort.y * magnify}px)`,
-                }}
-            >
-                <div
-                    style={{
-                        position: 'absolute',
-                        inset: 0,
-                        width: `${100}%`,
-                        height: `${100}%`,
-                        backgroundImage: backDropUrl ? `url("${backDropUrl}")` : undefined,
-                        backgroundSize: ` ${100}% ${100}%`,
-                    }}
-                ></div>
-            </div>
+            <ScrollingBackdrop
+                xR={xR}
+                yR={yR}
+                viewPort={viewPort}
+                magnify={magnify}
+                url={backdropUrlList?.[0]}
+            />
+            <ScrollingBackdrop
+                xR={xR}
+                yR={yR}
+                viewPort={viewPort}
+                magnify={magnify}
+                url={backDropUrl}
+            />
             <canvas
                 style={{
                     position: 'absolute',
