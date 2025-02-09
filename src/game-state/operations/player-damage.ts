@@ -21,6 +21,13 @@ export const handlePlayerNpcCollisions = (
         direction: 'Up',
         unitVector,
     }
+
+    collidedNpc.reeling = {
+        duration: REEL_DURATION / 2,
+        remaining: REEL_DURATION / 2,
+        direction: collidedNpc.direction,
+        unitVector: { x: -unitVector.x, y: -unitVector.y }
+    }
     // if the player was reeling at the start of the cycle, make them reel again,
     // but do not take another point of health
     if (!playerWasReelingAtStart) {
