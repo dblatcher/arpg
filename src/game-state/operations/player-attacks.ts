@@ -25,7 +25,6 @@ export const handlePlayerAttackHits = (npc: GameCharacter, state: GameState) => 
 };
 
 export const findNpcsHitByPlayerAttack = (npcs: GameCharacter[], attackZone: Rect): GameCharacter[] => {
-    // TO DO - check doRectsIntersect works for exact matches
     // MAYBE - use find instead of filter as minor optimisation - don't need to catch every npc on first cycle?
     return npcs.filter(npc => !npc.reeling && !npc.dying && doRectsIntersect(attackZone, spaceToRect(npc)))
 };
