@@ -115,9 +115,8 @@ export const Game = ({ mode = 'normal', soundDeck }: Props) => {
                 <HealthBar
                     style={{
                         position: 'absolute',
-                        left: 5,
-                        top: 5,
-                        padding: 5,
+                        left: 10,
+                        top: 10
                     }}
                     current={state.player.health.current}
                     max={state.player.health.max} />
