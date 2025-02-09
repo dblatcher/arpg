@@ -1,7 +1,10 @@
-import { GameCharacter, FeedbackEvent } from "../types";
+import { GameCharacter, FeedbackEventEventType } from "../types";
 
 
-export const progressCharacterStatus = (character: GameCharacter, cycleNumber: number, newEvents: FeedbackEvent[]) => {
+export const progressCharacterStatus = (
+    character: GameCharacter,
+    addFeedback: { (type: FeedbackEventEventType): void }
+) => {
 
     if (character.dying) {
         character.dying.remaining -= 1
@@ -12,7 +15,7 @@ export const progressCharacterStatus = (character: GameCharacter, cycleNumber: n
     if (character.reeling) {
         character.reeling.remaining -= 1
         if (character.reeling.remaining <= 0) {
-            newEvents.push({ type: 'reel-end', cycleNumber })
+            addFeedback('reel-end')
             delete character.reeling
             delete character.attack
         }
@@ -22,7 +25,7 @@ export const progressCharacterStatus = (character: GameCharacter, cycleNumber: n
     if (character.attack) {
         character.attack.remaining -= 1
         if (character.attack.remaining <= 0) {
-            newEvents.push({ type: 'attack-end', cycleNumber })
+            addFeedback('attack-end')
             delete character.attack
         }
         return true

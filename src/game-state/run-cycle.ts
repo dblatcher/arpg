@@ -43,7 +43,7 @@ export const runCycle = (state: GameState, inputs: InputState): GameState => {
 
     updatePlayer(player, inputs, cycleNumber, newEvents)
     const playerWasReelingAtStart = !!player.reeling
-    progressCharacterStatus(player, cycleNumber, newEvents)
+    progressCharacterStatus(player, addFeedback)
     const { collidedNpc } = attemptMove(player, state, true)
 
     if (collidedNpc) {
@@ -56,12 +56,12 @@ export const runCycle = (state: GameState, inputs: InputState): GameState => {
         const hitNpcs = findNpcsHitByPlayerAttack(npcs, attackZone)
         hitNpcs.forEach(npc => {
             handlePlayerAttackHits(npc, state)
-            newEvents.push({ type: 'npc-hit', cycleNumber })
+            addFeedback('npc-hit')
         })
     }
 
     npcs.forEach(npc => {
-        progressCharacterStatus(npc, cycleNumber, newEvents)
+        progressCharacterStatus(npc, addFeedback)
         updateNpc(npc, state)
         const { collidesWithPlayer } = attemptMove(npc, state)
         if (collidesWithPlayer) {

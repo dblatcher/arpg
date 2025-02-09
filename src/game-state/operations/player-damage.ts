@@ -3,7 +3,12 @@ import { REEL_DURATION } from "../constants";
 import { GameCharacter, FeedbackEventEventType } from "../types";
 
 
-export const handlePlayerNpcCollisions = (player: GameCharacter, collidedNpc: GameCharacter, playerWasReelingAtStart: boolean, addFeedback: { (type: FeedbackEventEventType): void} ) => {
+export const handlePlayerNpcCollisions = (
+    player: GameCharacter,
+    collidedNpc: GameCharacter,
+    playerWasReelingAtStart: boolean,
+    addFeedback: { (type: FeedbackEventEventType): void }
+) => {
 
     if (collidedNpc.dying || player.reeling) {
         return
