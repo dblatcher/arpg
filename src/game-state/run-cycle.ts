@@ -1,40 +1,12 @@
-import { getVectorFrom, toUnitVector } from "../lib/geometry"
-import { ATTACK_DURATION, REEL_DURATION } from "./constants"
+import { ATTACK_DURATION } from "./constants"
 import { getDirection } from "./helpers"
+import { progressCharacterStatus } from "./operations/character-status"
 import { attemptMove } from "./operations/movement"
 import { updateNpc } from "./operations/npc-automation"
 import { findNpcsHitByPlayerAttack, getAttackZone, handlePlayerAttackHits } from "./operations/player-attacks"
-import { FeedbackEvent, GameCharacter, GameState, InputState } from "./types"
+import { handlePlayerNpcCollisions } from "./operations/player-damage"
+import { FeedbackEvent, GameCharacter, GameState, InputState, FeedbackEventEventType } from "./types"
 
-
-const progressCharacterStatus = (character: GameCharacter, cycleNumber: number, newEvents: FeedbackEvent[]) => {
-
-    if (character.dying) {
-        character.dying.remaining -= 1
-        delete character.attack
-        return
-    }
-
-    if (character.reeling) {
-        character.reeling.remaining -= 1
-        if (character.reeling.remaining <= 0) {
-            newEvents.push({ type: 'reel-end', cycleNumber })
-            delete character.reeling
-            delete character.attack
-        }
-        return true
-    }
-
-    if (character.attack) {
-        character.attack.remaining -= 1
-        if (character.attack.remaining <= 0) {
-            newEvents.push({ type: 'attack-end', cycleNumber })
-            delete character.attack
-        }
-        return true
-    }
-    return false
-}
 
 const updatePlayer = (player: GameCharacter, inputs: InputState, cycleNumber: number, newEvents: FeedbackEvent[]) => {
     if (player.attack || player.reeling) {
@@ -67,25 +39,15 @@ export const runCycle = (state: GameState, inputs: InputState): GameState => {
     const npcs = structuredClone(state.npcs)
     const cycleNumber = state.cycleNumber
 
+    const addFeedback = (type: FeedbackEventEventType) => newEvents.push({ type, cycleNumber })
+
     updatePlayer(player, inputs, cycleNumber, newEvents)
     const playerWasReelingAtStart = !!player.reeling
     progressCharacterStatus(player, cycleNumber, newEvents)
-    const { collidedNpc } = attemptMove(player, state)
+    const { collidedNpc } = attemptMove(player, state, true)
 
-    if (collidedNpc && !collidedNpc.dying && !player.reeling) {
-        // if the player was reeling at the start of the cycle, make them reel again,
-        // but do not take another point of health
-        const unitVector = toUnitVector(getVectorFrom(collidedNpc, player))
-        player.reeling = {
-            duration: REEL_DURATION / 2,
-            remaining: REEL_DURATION / 2,
-            direction: 'Up',
-            unitVector,
-        }
-        if (!playerWasReelingAtStart) {
-            player.health.current = player.health.current - 1
-            newEvents.push({ type: 'player-hit', cycleNumber })
-        }
+    if (collidedNpc) {
+        handlePlayerNpcCollisions(player, collidedNpc, playerWasReelingAtStart, addFeedback)
     }
     // TO DO - how does the application react to player death?
 
@@ -101,7 +63,10 @@ export const runCycle = (state: GameState, inputs: InputState): GameState => {
     npcs.forEach(npc => {
         progressCharacterStatus(npc, cycleNumber, newEvents)
         updateNpc(npc, state)
-        attemptMove(npc, state)
+        const { collidesWithPlayer } = attemptMove(npc, state)
+        if (collidesWithPlayer) {
+            handlePlayerNpcCollisions(player, npc, playerWasReelingAtStart, addFeedback)
+        }
     })
 
     const feedbackEvents = [...state.feedbackEvents, ...newEvents]

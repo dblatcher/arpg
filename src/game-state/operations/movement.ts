@@ -4,7 +4,7 @@ import { spaceToRect } from "../helpers";
 import { GameCharacter, GameState } from "../types";
 
 
-export const attemptMove = (character: GameCharacter, state: GameState): { character: GameCharacter; collidedNpc?: GameCharacter } => {
+export const attemptMove = (character: GameCharacter, state: GameState, isPlayer = false): { character: GameCharacter; collidedNpc?: GameCharacter, collidesWithPlayer: boolean } => {
 
     // game thinking
     // characters don't move while attacking
@@ -12,7 +12,7 @@ export const attemptMove = (character: GameCharacter, state: GameState): { chara
     // of attack that involve movement (charge?)
     if (character.attack && !character.reeling) {
         return {
-            character
+            character, collidesWithPlayer: false
         }
     }
 
@@ -29,11 +29,14 @@ export const attemptMove = (character: GameCharacter, state: GameState): { chara
     const newPositionRect = spaceToRect({ ...character, ...newPosition })
     const collidedObstacle = state.obstacles.find(obstacle => doRectsIntersect(spaceToRect(obstacle), newPositionRect))
     const collidedNpc = state.npcs.find(npc => npc.id !== character.id && doRectsIntersect(spaceToRect(npc), newPositionRect))
-    if (!collidedObstacle && !collidedNpc) {
+
+    const collidesWithPlayer = isPlayer ? false : doRectsIntersect(spaceToRect(state.player), newPositionRect)
+
+    if (!collidedObstacle && !collidedNpc && !collidesWithPlayer) {
         character.x = newPosition.x
         character.y = newPosition.y
     }
-    return { character, collidedNpc }
+    return { character, collidedNpc, collidesWithPlayer }
 };
 
 export const reelVector = (character: GameCharacter): XY => {
