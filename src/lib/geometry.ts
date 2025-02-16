@@ -33,6 +33,13 @@ export const toUnitVector = (xy: XY): XY => {
     }
 }
 
+export const toNearestCardinalUnitVector = (xy: XY): XY => {
+    if (Math.abs(xy.x) > Math.abs(xy.y)) {
+        return Math.sign(xy.x) < 0 ? { x: -1, y: 0 } : { x: 1, y: 0 }
+    }
+    return Math.sign(xy.y) < 0 ? { y: -1, x: 0 } : { y: 1, x: 0 }
+}
+
 export const normaliseHeading = (h: number): number => {
     const hr = h % (_360_DEG)
     return hr > 0 ? hr : (_360_DEG) + hr

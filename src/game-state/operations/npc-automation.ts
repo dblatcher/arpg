@@ -1,4 +1,4 @@
-import { getVectorFrom, toUnitVector } from "../../lib/geometry";
+import { getVectorFrom, toNearestCardinalUnitVector, toUnitVector } from "../../lib/geometry";
 import { getDirection } from "../helpers";
 import { GameCharacter, GameState } from "../types";
 
@@ -40,7 +40,7 @@ const chasePlayer = (npc: GameCharacter, state: GameState) => {
     }
 
     if (state.cycleNumber % 100 === 10) {
-        const unitVector = toUnitVector(getVectorFrom(npc, state.player))
+        const unitVector = toNearestCardinalUnitVector(getVectorFrom(npc, state.player))
         npc.vector = {
             xd: unitVector.x,
             yd: unitVector.y,
