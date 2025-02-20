@@ -28,11 +28,14 @@ export const attemptMove = (character: GameCharacter, state: GameState, isPlayer
     // detect player walking off to next screen?
     const newPositionRect = spaceToRect({ ...character, ...newPosition })
     const collidedObstacle = state.obstacles.find(obstacle => doRectsIntersect(spaceToRect(obstacle), newPositionRect))
-    const collidedNpc = state.npcs.find(npc => npc.id !== character.id && doRectsIntersect(spaceToRect(npc), newPositionRect))
+
+    const ignoreNpcCollisions = !isPlayer && (character.reeling || character.dying)
+    const collidedNpc = ignoreNpcCollisions ? undefined : state.npcs.filter(npc => !npc.dying).find(npc => npc.id !== character.id && doRectsIntersect(spaceToRect(npc), newPositionRect))
+    const wereNpcsAlreadyInContact = !isPlayer && !!collidedNpc && doRectsIntersect(spaceToRect(collidedNpc), spaceToRect(character))
 
     const collidesWithPlayer = isPlayer ? false : doRectsIntersect(spaceToRect(state.player), newPositionRect)
 
-    if (!collidedObstacle && !collidedNpc && !collidesWithPlayer) {
+    if (!collidedObstacle && !(collidedNpc && !wereNpcsAlreadyInContact) && !collidesWithPlayer) {
         character.x = newPosition.x
         character.y = newPosition.y
     }

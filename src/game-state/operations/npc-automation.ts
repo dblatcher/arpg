@@ -1,4 +1,4 @@
-import { getVectorFrom, toNearestCardinalUnitVector, toUnitVector } from "../../lib/geometry";
+import { getVectorFrom, toNearestCardinalUnitVector } from "../../lib/geometry";
 import { getDirection } from "../helpers";
 import { GameCharacter, GameState } from "../types";
 
