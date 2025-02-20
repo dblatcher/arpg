@@ -9,6 +9,13 @@ const GRASS: SpriteFrame<AssetKey> = { key: 'TILES_1', fx: 1, fy: 0, }
 const ROAD: SpriteFrame<AssetKey> = { key: 'TILES_2', fx: 4, fy: 0, }
 const WATER: SpriteFrame<AssetKey> = { key: 'TILES_2', fx: 6, fy: 2, }
 
+const CAVE = {
+    topLeft: { key: 'TILES_3', fx: 4, fy: 0 },
+    topRight: { key: 'TILES_3', fx: 5, fy: 0 },
+    bottomLeft: { key: 'TILES_3', fx: 6, fy: 1 },
+    bottomRight: { key: 'TILES_3', fx: 7, fy: 1 },
+} satisfies Record<string, SpriteFrame<AssetKey>>
+
 const WATERFALL = [
     { key: 'TILES_3', fx: 7, fy: 0 },
     { key: 'TILES_3', fx: 1, fy: 2 },
@@ -74,6 +81,20 @@ const drawBackdrop = (variant: BackdropVariant): DrawToCanvasFunction<GameState,
                     case Terrain.Splash:
                         drawTile(SPLASH[variant], tileIndex, rowIndex)
                         break;
+                    case Terrain.Cave: {
+                        const isOnLeft = tileMap[rowIndex]?.[tileIndex + 1]?.terrain === Terrain.Cave
+                        const isOnTop = tileMap[rowIndex + 1]?.[tileIndex]?.terrain === Terrain.Cave
+                        const frame = isOnTop
+                            ? isOnLeft
+                                ? CAVE.topLeft
+                                : CAVE.topRight
+                            : isOnLeft
+                                ? CAVE.bottomLeft
+                                : CAVE.bottomRight
+
+                        drawTileIfBase(frame, tileIndex, rowIndex)
+                        break;
+                    }
                 }
             })
         })
