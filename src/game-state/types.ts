@@ -56,6 +56,10 @@ export type Tile = {
     terrain: Terrain
 }
 
+export type Exit = Space & {
+    id: string
+}
+
 export type GameState = BaseGameState & {
     feedbackEvents: FeedbackEvent[],
     paused: boolean;
@@ -63,6 +67,7 @@ export type GameState = BaseGameState & {
     obstacles: Space[];
     npcs: GameCharacter[];
     tileMap: Tile[][];
+    exits: Exit[];
 }
 
 export type InputState = {

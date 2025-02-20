@@ -43,7 +43,7 @@ export const makeInitalState = (): GameState => ({
     player: {
         id: -1,
         direction: 'Down',
-        x: TILE_SIZE*5, y: TILE_SIZE*2,
+        x: TILE_SIZE * 5, y: TILE_SIZE * 2,
         width: 40,
         height: 40,
         speed: 1.5,
@@ -57,6 +57,15 @@ export const makeInitalState = (): GameState => ({
     },
     obstacles: [
         ...blockedTiles
+    ],
+    exits: [
+        {
+            width: TILE_SIZE * 2,
+            height: TILE_SIZE * 1,
+            y: TILE_SIZE * 0,
+            x: TILE_SIZE * 4,
+            id: 'cave'
+        }
     ],
     npcs: [
         standardNpc(20, 100),

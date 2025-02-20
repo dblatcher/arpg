@@ -1,5 +1,6 @@
+import { doRectsIntersect } from "../lib/geometry"
 import { ATTACK_DURATION } from "./constants"
-import { getDirection } from "./helpers"
+import { getDirection, spaceToRect } from "./helpers"
 import { progressCharacterStatus } from "./operations/character-status"
 import { attemptMove } from "./operations/movement"
 import { updateNpc } from "./operations/npc-automation"
@@ -70,6 +71,14 @@ export const runCycle = (state: GameState, inputs: InputState): GameState => {
     })
 
     const feedbackEvents = [...state.feedbackEvents, ...newEvents]
+
+    const playerRect = spaceToRect(player)
+    const exit = state.exits.find(exit => doRectsIntersect(spaceToRect(exit), playerRect))
+
+    if (exit) {
+        console.log(exit.id, state.cycleNumber)
+        // TO DO - remodel the state to allow for changing maps!
+    }
 
     return {
         ...state,
