@@ -37,7 +37,8 @@ const updatePlayer = (player: GameCharacter, inputs: InputState, cycleNumber: nu
 export const runCycle = (state: GameState, inputs: InputState): GameState => {
     const newEvents: FeedbackEvent[] = []
     const player = structuredClone(state.player)
-    const npcs = structuredClone(state.npcs)
+    const level = structuredClone(state.levels[state.currentLevelIndex])
+    const { npcs } = level
     const cycleNumber = state.cycleNumber
 
     const addFeedback = (type: FeedbackEventEventType) => newEvents.push({ type, cycleNumber })
@@ -73,18 +74,20 @@ export const runCycle = (state: GameState, inputs: InputState): GameState => {
     const feedbackEvents = [...state.feedbackEvents, ...newEvents]
 
     const playerRect = spaceToRect(player)
-    const exit = state.exits.find(exit => doRectsIntersect(spaceToRect(exit), playerRect))
+    const exit = level.exits.find(exit => doRectsIntersect(spaceToRect(exit), playerRect))
 
     if (exit) {
         console.log(exit.id, state.cycleNumber)
-        // TO DO - remodel the state to allow for changing maps!
+        // TO DO - return state change for new level
     }
+
+    level.npcs = npcs.filter(npc => !npc.dying || npc.dying.remaining > 0)
 
     return {
         ...state,
         feedbackEvents,
         cycleNumber: cycleNumber + 1,
         player,
-        npcs: npcs.filter(npc => !npc.dying || npc.dying.remaining > 0),
+        levels: [...state.levels.slice(0, state.currentLevelIndex), level, ...state.levels.slice(state.currentLevelIndex)],
     }
 }

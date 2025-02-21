@@ -15,17 +15,18 @@ export const drawSceneFunction: DrawToCanvasFunction<GameState, AssetKey> = (sta
     const drawingMethods = makeDrawingMethods(ctx, viewport)
     const drawSprite = drawSpriteFunc(drawingMethods, assets, assetParams)
     const { player } = state
+    const level = state.levels[state.currentLevelIndex]
 
     ctx.beginPath()
     ctx.clearRect(0, 0, viewport.width, viewport.height)
 
     drawCharacter(player, state, ranger, drawSprite)
-    state.npcs.forEach(character => {
+    level.npcs.forEach(character => {
         drawCharacter(character, state, punisher, drawSprite)
     })
     
     if (SHOW_HITBOX) {
-        state.npcs.forEach(character => {
+        level.npcs.forEach(character => {
             drawingMethods.rect(character.x, character.y, character.width, character.height)
         })
         drawingMethods.rect(player.x, player.y, player.width, player.height)

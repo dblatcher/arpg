@@ -106,7 +106,7 @@ export const Game = ({ mode = 'normal', soundDeck }: Props) => {
             <button onClick={reset}>reset</button>
         </header>
         <div style={{ position: 'relative' }}>
-            <WaitingBackdropProvider initialGameState={initialGameState}>
+            <WaitingBackdropProvider initialGameState={initialGameState} currentLevelIndex={state.currentLevelIndex}>
                 <GameScreen
                     gameState={state}
                     viewPort={centeredViewPort(state.player, VIEW_WIDTH, VIEW_HEIGHT, state)}

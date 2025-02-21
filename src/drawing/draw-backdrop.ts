@@ -40,7 +40,7 @@ const drawBackdrop = (variant: BackdropVariant): DrawToCanvasFunction<GameState,
         if (!ctx) { return }
         const drawingMethods = makeDrawingMethods(ctx, viewport)
         const drawSprite = drawSpriteFunc(drawingMethods, assets, assetParams)
-        const { tileMap } = state
+        const { tileMap } = state.levels[state.currentLevelIndex]
 
         ctx.clearRect(0, 0, viewport.width, viewport.height)
         ctx.beginPath()

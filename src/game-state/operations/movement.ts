@@ -6,6 +6,8 @@ import { GameCharacter, GameState } from "../types";
 
 export const attemptMove = (character: GameCharacter, state: GameState, isPlayer = false): { character: GameCharacter; collidedNpc?: GameCharacter, collidesWithPlayer: boolean } => {
 
+    const level = state.levels[state.currentLevelIndex]
+
     // game thinking
     // characters don't move while attacking
     // might want to revise that or have other types
@@ -27,10 +29,10 @@ export const attemptMove = (character: GameCharacter, state: GameState, isPlayer
     // TO DO - bind new position by edge of map? 
     // detect player walking off to next screen?
     const newPositionRect = spaceToRect({ ...character, ...newPosition })
-    const collidedObstacle = state.obstacles.find(obstacle => doRectsIntersect(spaceToRect(obstacle), newPositionRect))
+    const collidedObstacle = level.obstacles.find(obstacle => doRectsIntersect(spaceToRect(obstacle), newPositionRect))
 
     const ignoreNpcCollisions = !isPlayer && (character.reeling || character.dying)
-    const collidedNpc = ignoreNpcCollisions ? undefined : state.npcs.filter(npc => !npc.dying).find(npc => npc.id !== character.id && doRectsIntersect(spaceToRect(npc), newPositionRect))
+    const collidedNpc = ignoreNpcCollisions ? undefined : level.npcs.filter(npc => !npc.dying).find(npc => npc.id !== character.id && doRectsIntersect(spaceToRect(npc), newPositionRect))
     const wereNpcsAlreadyInContact = !isPlayer && !!collidedNpc && doRectsIntersect(spaceToRect(collidedNpc), spaceToRect(character))
 
     const collidesWithPlayer = isPlayer ? false : doRectsIntersect(spaceToRect(state.player), newPositionRect)

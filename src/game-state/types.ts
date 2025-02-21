@@ -60,14 +60,21 @@ export type Exit = Space & {
     id: string
 }
 
-export type GameState = BaseGameState & {
-    feedbackEvents: FeedbackEvent[],
-    paused: boolean;
-    player: GameCharacter;
+type Level = {
+    levelType?: 'overhead'
+    id?: string,
     obstacles: Space[];
     npcs: GameCharacter[];
     tileMap: Tile[][];
     exits: Exit[];
+}
+
+export type GameState = BaseGameState & {
+    feedbackEvents: FeedbackEvent[],
+    paused: boolean;
+    player: GameCharacter;
+    currentLevelIndex: number;
+    levels: Level[];
 }
 
 export type InputState = {
