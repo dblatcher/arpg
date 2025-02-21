@@ -57,7 +57,12 @@ export type Tile = {
 }
 
 export type Exit = Space & {
-    id: string
+    destination: {
+        levelIndex: number,
+        x: number,
+        y: number,
+    }
+
 }
 
 type Level = {

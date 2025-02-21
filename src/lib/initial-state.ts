@@ -35,12 +35,11 @@ const tilesLevel0 = `
  sss      r   s
 `;
 
-const tileMapLevel0 = stringToTileMap(tilesLevel0, MAP_WIDTH / TILE_SIZE, MAP_HEIGHT / TILE_SIZE)
-const blockedTilesLevel0 = tileMapToObstacles(tileMapLevel0)
 
 const tilesLevel1 = `
- ssssssssssssss
- ssssssssssssss
+ssssssssssssss
+ssssssssssccss
+ssssssssssccss
   
   
  r     wwwwww
@@ -52,8 +51,14 @@ const tilesLevel1 = `
  r         
 `;
 
-const tileMapLevel1 = stringToTileMap(tilesLevel1, MAP_WIDTH / TILE_SIZE, MAP_HEIGHT / TILE_SIZE)
-const blockedTilesLevel1 = tileMapToObstacles(tileMapLevel1)
+
+const makeObstaclesAndTileMap = (tiles: string) => {
+    const tileMap = stringToTileMap(tiles, MAP_WIDTH / TILE_SIZE, MAP_HEIGHT / TILE_SIZE)
+    const obstacles = tileMapToObstacles(tileMap)
+    return {
+        tileMap, obstacles
+    }
+}
 
 export const makeInitalState = (): GameState => ({
     feedbackEvents: [],
@@ -77,13 +82,18 @@ export const makeInitalState = (): GameState => ({
 
     levels: [
         {
+            id: 'first',
             exits: [
                 {
                     width: TILE_SIZE * 2,
                     height: TILE_SIZE * 1,
                     y: TILE_SIZE * 0,
                     x: TILE_SIZE * 4,
-                    id: 'cave'
+                    destination: {
+                        levelIndex: 1,
+                        x: TILE_SIZE * 10.5,
+                        y: TILE_SIZE * 3,
+                    }
                 }
             ],
             npcs: [
@@ -101,18 +111,25 @@ export const makeInitalState = (): GameState => ({
                 standardNpc(500, 300),
                 standardNpc(550, 440),
             ],
-            obstacles: [
-                ...blockedTilesLevel0
-            ],
-            tileMap: tileMapLevel0,
+            ...makeObstaclesAndTileMap(tilesLevel0)
         },
         {
-            exits: [],
-            npcs: [],
-            obstacles: [
-                ...blockedTilesLevel1
+            id: 'second',
+            exits: [
+                {
+                    x: TILE_SIZE * 10,
+                    y: TILE_SIZE * 1,
+                    width: TILE_SIZE * 2,
+                    height: TILE_SIZE * 1,
+                    destination: {
+                        levelIndex: 0,
+                        x: TILE_SIZE * 4.5,
+                        y: TILE_SIZE * 2,
+                    }
+                }
             ],
-            tileMap: tileMapLevel1
+            npcs: [],
+            ...makeObstaclesAndTileMap(tilesLevel1)
         }
     ],
 

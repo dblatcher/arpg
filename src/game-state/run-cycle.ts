@@ -38,11 +38,21 @@ export const runCycle = (state: GameState, inputs: InputState): GameState => {
     const newEvents: FeedbackEvent[] = []
     const player = structuredClone(state.player)
     const level = structuredClone(state.levels[state.currentLevelIndex])
-    const { npcs } = level
     const cycleNumber = state.cycleNumber
 
     const addFeedback = (type: FeedbackEventEventType) => newEvents.push({ type, cycleNumber })
 
+    const playerRect = spaceToRect(player)
+    const exit = level.exits.find(exit => doRectsIntersect(spaceToRect(exit), playerRect))
+    if (exit) {
+        return {
+            ...state,
+            currentLevelIndex: exit.destination.levelIndex,
+            player: { ...player, x: exit.destination.x, y: exit.destination.y }
+        }
+    }
+
+    const { npcs } = level
     updatePlayer(player, inputs, cycleNumber, newEvents)
     const playerWasReelingAtStart = !!player.reeling
     progressCharacterStatus(player, addFeedback)
@@ -73,14 +83,6 @@ export const runCycle = (state: GameState, inputs: InputState): GameState => {
 
     const feedbackEvents = [...state.feedbackEvents, ...newEvents]
 
-    const playerRect = spaceToRect(player)
-    const exit = level.exits.find(exit => doRectsIntersect(spaceToRect(exit), playerRect))
-
-    if (exit) {
-        console.log(exit.id, state.cycleNumber)
-        // TO DO - return state change for new level
-    }
-
     level.npcs = npcs.filter(npc => !npc.dying || npc.dying.remaining > 0)
 
     return {
@@ -88,6 +90,6 @@ export const runCycle = (state: GameState, inputs: InputState): GameState => {
         feedbackEvents,
         cycleNumber: cycleNumber + 1,
         player,
-        levels: [...state.levels.slice(0, state.currentLevelIndex), level, ...state.levels.slice(state.currentLevelIndex)],
+        levels: [...state.levels.slice(0, state.currentLevelIndex), level, ...state.levels.slice(state.currentLevelIndex + 1)],
     }
 }
