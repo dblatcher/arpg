@@ -1,8 +1,7 @@
 import { Space, Terrain, Tile, Traversability } from "../game-state";
 import { TILE_SIZE } from "../game-state/constants";
 
-const letterToTile = (letter: string): Tile => {
-
+const letterToTile = (letter: string, defaultTile: Tile): Tile => {
     switch (letter) {
         case 'r':
             return {
@@ -35,20 +34,20 @@ const letterToTile = (letter: string): Tile => {
                 traversability: Traversability.Open
             }
         default:
-            return {
-                terrain: Terrain.Grass,
-                traversability: Traversability.Open
-            }
+            return { ...defaultTile }
     }
 }
 
-export const stringToTileMap = (input: string, width: number, height: number): Tile[][] => {
+export const stringToTileMap = (input: string, width: number, height: number, defaultTile: Tile = {
+    terrain: Terrain.Grass,
+    traversability: Traversability.Open
+}): Tile[][] => {
     const characterRows = input.split("\n").filter(row => row.length > 0)
     while (characterRows.length < height) {
         characterRows.push(" ")
     }
     const letterGrid = characterRows.map(row => row.padEnd(width, " ").split(''))
-    const tileGrid = letterGrid.map(row => row.map(letterToTile))
+    const tileGrid = letterGrid.map(row => row.map((letter) => letterToTile(letter, defaultTile)))
     return tileGrid
 }
 

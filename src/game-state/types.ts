@@ -48,7 +48,7 @@ export enum Traversability {
 }
 
 export enum Terrain {
-    Grass, Road, Stone, Waterfall, Splash, Water, Cave
+    Grass, Road, Stone, Waterfall, Splash, Water, Cave, MossyGround
 }
 
 export type Tile = {

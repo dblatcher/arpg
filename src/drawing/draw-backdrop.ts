@@ -8,6 +8,7 @@ const STONE: SpriteFrame<AssetKey> = { key: 'TILES_1', fx: 1, fy: 5, }
 const GRASS: SpriteFrame<AssetKey> = { key: 'TILES_1', fx: 1, fy: 0, }
 const ROAD: SpriteFrame<AssetKey> = { key: 'TILES_2', fx: 4, fy: 0, }
 const WATER: SpriteFrame<AssetKey> = { key: 'TILES_2', fx: 6, fy: 2, }
+const MOSSY_GROUND: SpriteFrame<AssetKey> = { key: 'TILES_2', fx: 6, fy: 5 }
 
 const CAVE = {
     topLeft: { key: 'TILES_3', fx: 4, fy: 0 },
@@ -95,6 +96,9 @@ const drawBackdrop = (variant: BackdropVariant): DrawToCanvasFunction<GameState,
                         drawTileIfBase(frame, tileIndex, rowIndex)
                         break;
                     }
+                    case Terrain.MossyGround:
+                        drawTileIfBase(MOSSY_GROUND, tileIndex, rowIndex);
+                        break;
                 }
             })
         })

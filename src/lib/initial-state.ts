@@ -1,4 +1,4 @@
-import { GameCharacter, GameState } from "../game-state";
+import { GameCharacter, GameState, Terrain, Tile, Traversability } from "../game-state";
 import { TILE_SIZE } from "../game-state/constants";
 import { stringToTileMap, tileMapToObstacles } from "./tile-maps";
 
@@ -37,23 +37,23 @@ const tilesLevel0 = `
 
 
 const tilesLevel1 = `
-ssssssssssssss
-ssssssssssccss
-ssssssssssccss
-  
-  
- r     wwwwww
- r     wwwwww
- r    wwwwwww
- r   wwww
- r         
- r     s s   
- r         
+sssssssssssssss
+ssssssssssccsss
+ssssssssssccsss
+s            ss
+s            ss
+sr      wwwwwss
+srrr   wwwwwwss
+sr    wwwwwwwss
+sr   wwww    ss
+sr          sss
+sss    s s  sss
+sssssssssssssss
 `;
 
 
-const makeObstaclesAndTileMap = (tiles: string) => {
-    const tileMap = stringToTileMap(tiles, MAP_WIDTH / TILE_SIZE, MAP_HEIGHT / TILE_SIZE)
+const makeObstaclesAndTileMap = (tiles: string, defaultTile?: Tile) => {
+    const tileMap = stringToTileMap(tiles, MAP_WIDTH / TILE_SIZE, MAP_HEIGHT / TILE_SIZE, defaultTile)
     const obstacles = tileMapToObstacles(tileMap)
     return {
         tileMap, obstacles
@@ -66,8 +66,8 @@ export const makeInitalState = (): GameState => ({
         id: -1,
         direction: 'Down',
         x: TILE_SIZE * 5, y: TILE_SIZE * 2,
-        width: 40,
-        height: 40,
+        width: 39,
+        height: 39,
         speed: 1.5,
         vector: {
             xd: 0, yd: 0
@@ -129,7 +129,10 @@ export const makeInitalState = (): GameState => ({
                 }
             ],
             npcs: [],
-            ...makeObstaclesAndTileMap(tilesLevel1)
+            ...makeObstaclesAndTileMap(tilesLevel1, {
+                terrain: Terrain.MossyGround,
+                traversability: Traversability.Open
+            })
         }
     ],
 
