@@ -11,7 +11,7 @@
     "test": "vitest"
   },
   "dependencies": {
-    "@dblatcher/sprite-canvas": "file:../../sprite-canvas",
+    "@dblatcher/sprite-canvas": "^0.2.6",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "sound-deck": "^0.0.3"
