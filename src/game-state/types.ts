@@ -66,14 +66,22 @@ export type Exit = Space & {
 
 }
 
-type Level = {
-    levelType?: 'overhead'
-    id?: string,
+export type OverheadLevel = {
+    levelType: 'overhead'
+    id: string,
     obstacles: Space[];
     npcs: GameCharacter[];
     tileMap: Tile[][];
     exits: Exit[];
 }
+
+export type PlatformLevel = {
+    levelType: 'platform',
+    id: string,
+    npcs: GameCharacter[];
+}
+
+export type Level = OverheadLevel | PlatformLevel
 
 export type GameState = BaseGameState & {
     feedbackEvents: FeedbackEvent[],

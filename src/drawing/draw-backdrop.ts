@@ -1,6 +1,6 @@
-import { drawOffScreen, drawSpriteFunc, DrawToCanvasFunction, fullViewPort, GenerateImageUrl, makeDrawingMethods, SpriteFrame } from "@dblatcher/sprite-canvas";
-import { AssetKey, assetParams } from "../assets-defs";
-import { GameState, Terrain } from "../game-state";
+import { drawOffScreen, drawSpriteFunc, DrawToCanvasFunction, fullViewPort, GenerateImageUrl, makeDrawingMethods, OffsetDrawMethods, SpriteFrame, ViewPort } from "@dblatcher/sprite-canvas";
+import { AssetKey, AssetMap, assetParams } from "../assets-defs";
+import { GameState, OverheadLevel, Terrain } from "../game-state";
 import { TILE_DIMS } from "./constants-and-types";
 
 
@@ -35,73 +35,87 @@ const SPLASH = [
 
 type BackdropVariant = 0 | 1 | 2 | 3;
 
+
+const drawOverheadBackdrop = (variant: BackdropVariant, level: OverheadLevel, drawingMethods: OffsetDrawMethods, assets: AssetMap, viewport: ViewPort) => {
+
+    const { ctx } = drawingMethods
+    const drawSprite = drawSpriteFunc(drawingMethods, assets, assetParams)
+    const { tileMap } = level
+
+    ctx.clearRect(0, 0, viewport.width, viewport.height)
+    ctx.beginPath()
+
+    const drawTile = (frame: SpriteFrame<AssetKey>, x: number, y: number) =>
+        drawSprite({
+            ...frame,
+            x: -1 + (x * TILE_DIMS.width),
+            y: -1 + (y * TILE_DIMS.height),
+            height: TILE_DIMS.height + 2,
+            width: TILE_DIMS.width + 2
+        })
+
+    const drawTileIfBase = (frame: SpriteFrame<AssetKey>, x: number, y: number) => {
+        if (variant === 0) {
+            drawTile(frame, x, y)
+        }
+    }
+
+    tileMap.forEach((row, rowIndex) => {
+        row.forEach((tile, tileIndex) => {
+            switch (tile.terrain) {
+                case Terrain.Grass:
+                    drawTileIfBase(GRASS, tileIndex, rowIndex)
+                    break
+                case Terrain.Road:
+                    drawTileIfBase(ROAD, tileIndex, rowIndex);
+                    break
+                case Terrain.Stone:
+                    drawTileIfBase(STONE, tileIndex, rowIndex);
+                    break
+                case Terrain.Water:
+                    drawTileIfBase(WATER, tileIndex, rowIndex);
+                    break
+                case Terrain.Waterfall:
+                    drawTile(WATERFALL[variant], tileIndex, rowIndex)
+                    break;
+                case Terrain.Splash:
+                    drawTile(SPLASH[variant], tileIndex, rowIndex)
+                    break;
+                case Terrain.Cave: {
+                    const isOnLeft = tileMap[rowIndex]?.[tileIndex + 1]?.terrain === Terrain.Cave
+                    const isOnTop = tileMap[rowIndex + 1]?.[tileIndex]?.terrain === Terrain.Cave
+                    const frame = isOnTop
+                        ? isOnLeft
+                            ? CAVE.topLeft
+                            : CAVE.topRight
+                        : isOnLeft
+                            ? CAVE.bottomLeft
+                            : CAVE.bottomRight
+
+                    drawTileIfBase(frame, tileIndex, rowIndex)
+                    break;
+                }
+                case Terrain.MossyGround:
+                    drawTileIfBase(MOSSY_GROUND, tileIndex, rowIndex);
+                    break;
+            }
+        })
+    })
+
+}
+
 const drawBackdrop = (variant: BackdropVariant): DrawToCanvasFunction<GameState, AssetKey> => (state, assets, viewport = fullViewPort(state)) => {
     return (canvas) => {
         const ctx = canvas?.getContext('2d');
         if (!ctx) { return }
+        const level = state.levels[state.currentLevelIndex]
         const drawingMethods = makeDrawingMethods(ctx, viewport)
-        const drawSprite = drawSpriteFunc(drawingMethods, assets, assetParams)
-        const { tileMap } = state.levels[state.currentLevelIndex]
-
-        ctx.clearRect(0, 0, viewport.width, viewport.height)
-        ctx.beginPath()
-
-        const drawTile = (frame: SpriteFrame<AssetKey>, x: number, y: number) =>
-            drawSprite({
-                ...frame,
-                x: -1 + (x * TILE_DIMS.width),
-                y: -1 + (y * TILE_DIMS.height),
-                height: TILE_DIMS.height + 2,
-                width: TILE_DIMS.width + 2
-            })
-
-        const drawTileIfBase = (frame: SpriteFrame<AssetKey>, x: number, y: number) => {
-            if (variant === 0) {
-                drawTile(frame, x, y)
-            }
+        switch (level?.levelType) {
+            case "overhead":
+                return drawOverheadBackdrop(variant, level, drawingMethods, assets, viewport)
+            case "platform":
+                return
         }
-
-        tileMap.forEach((row, rowIndex) => {
-            row.forEach((tile, tileIndex) => {
-                switch (tile.terrain) {
-                    case Terrain.Grass:
-                        drawTileIfBase(GRASS, tileIndex, rowIndex)
-                        break
-                    case Terrain.Road:
-                        drawTileIfBase(ROAD, tileIndex, rowIndex);
-                        break
-                    case Terrain.Stone:
-                        drawTileIfBase(STONE, tileIndex, rowIndex);
-                        break
-                    case Terrain.Water:
-                        drawTileIfBase(WATER, tileIndex, rowIndex);
-                        break
-                    case Terrain.Waterfall:
-                        drawTile(WATERFALL[variant], tileIndex, rowIndex)
-                        break;
-                    case Terrain.Splash:
-                        drawTile(SPLASH[variant], tileIndex, rowIndex)
-                        break;
-                    case Terrain.Cave: {
-                        const isOnLeft = tileMap[rowIndex]?.[tileIndex + 1]?.terrain === Terrain.Cave
-                        const isOnTop = tileMap[rowIndex + 1]?.[tileIndex]?.terrain === Terrain.Cave
-                        const frame = isOnTop
-                            ? isOnLeft
-                                ? CAVE.topLeft
-                                : CAVE.topRight
-                            : isOnLeft
-                                ? CAVE.bottomLeft
-                                : CAVE.bottomRight
-
-                        drawTileIfBase(frame, tileIndex, rowIndex)
-                        break;
-                    }
-                    case Terrain.MossyGround:
-                        drawTileIfBase(MOSSY_GROUND, tileIndex, rowIndex);
-                        break;
-                }
-            })
-        })
     }
 }
 

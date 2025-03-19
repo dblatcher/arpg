@@ -1,12 +1,10 @@
 import { translate, doRectsIntersect, XY } from "../../lib/geometry";
 import { BASE_REEL_SPEED } from "../constants";
 import { spaceToRect } from "../helpers";
-import { GameCharacter, GameState } from "../types";
+import { GameCharacter, GameState, OverheadLevel } from "../types";
 
 
-export const attemptMove = (character: GameCharacter, state: GameState, isPlayer = false): { character: GameCharacter; collidedNpc?: GameCharacter, collidesWithPlayer: boolean } => {
-
-    const level = state.levels[state.currentLevelIndex]
+export const attemptMove = (character: GameCharacter, level: OverheadLevel, state: GameState, isPlayer = false): { character: GameCharacter; collidedNpc?: GameCharacter, collidesWithPlayer: boolean } => {
 
     // game thinking
     // characters don't move while attacking
