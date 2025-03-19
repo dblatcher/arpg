@@ -18,6 +18,7 @@ const standardNpc = (x: number, y: number): GameCharacter => (
             max: 3,
             current: 3,
         },
+        pointsForKilling: 25,
     }
 )
 
@@ -61,6 +62,7 @@ const makeObstaclesAndTileMap = (tiles: string, defaultTile?: Tile) => {
 }
 
 export const makeInitalState = (): GameState => ({
+    score: 0,
     feedbackEvents: [],
     player: {
         id: -1,

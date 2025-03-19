@@ -34,7 +34,8 @@ export type GameCharacter = Space & {
     health: {
         max: number;
         current: number;
-    }
+    },
+    pointsForKilling?: number
 }
 
 export type FeedbackEventEventType = 'attack' | 'npc-hit' | 'attack-end' | 'reel-end' | 'player-hit'
@@ -80,6 +81,7 @@ export type GameState = BaseGameState & {
     player: GameCharacter;
     currentLevelIndex: number;
     levels: Level[];
+    score: number;
 }
 
 export type InputState = {

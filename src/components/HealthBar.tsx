@@ -17,7 +17,7 @@ const HealthBarInner: React.FunctionComponent<Props> = ({ current, max, style })
     hearts.fill(0, current, max)
 
     return (
-        <div style={style} className="health-bar">
+        <div style={style} className="ui-panel">
             {hearts.map((value, index) => (
                 <span key={index} 
                     className={value === 0 ? emptyHeartClassName : fullHeartClassName}

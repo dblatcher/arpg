@@ -8,6 +8,7 @@ export const handlePlayerAttackHits = (npc: GameCharacter, state: GameState) => 
     npc.health.current = npc.health.current - 1
 
     if (npc.health.current <= 0) {
+        state.score += npc.pointsForKilling ?? 0;
         npc.dying = {
             duration: REEL_DURATION,
             remaining: REEL_DURATION,

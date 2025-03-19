@@ -5,10 +5,11 @@
   text-align: center;
 }
 
-.health-bar {
+.ui-panel {
   border-radius: 4px;
   padding: 2px 8px;
   backdrop-filter: blur(3px);
+  color: white;
 }
 
 .health-heart {

@@ -10,6 +10,7 @@ import { makeInitalState } from "../lib/initial-state"
 import { GameScreen } from "./GameScreen"
 import { HealthBar } from "./HealthBar"
 import { WaitingBackdropProvider } from "../context/WaitingBackdropProvider"
+import { ScoreDisplay } from "./ScoreDisplay"
 
 interface Props {
     mode?: string
@@ -120,6 +121,11 @@ export const Game = ({ mode = 'normal', soundDeck }: Props) => {
                     }}
                     current={state.player.health.current}
                     max={state.player.health.max} />
+                <ScoreDisplay score={state.score} style={{
+                    position: 'absolute',
+                    right: 10,
+                    top: 10
+                }} />
             </WaitingBackdropProvider>
         </div>
     </div>
