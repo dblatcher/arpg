@@ -1,6 +1,6 @@
 import { drawOffScreen, drawSpriteFunc, DrawToCanvasFunction, fullViewPort, GenerateImageUrl, makeDrawingMethods, OffsetDrawMethods, SpriteFrame, ViewPort } from "@dblatcher/sprite-canvas";
 import { AssetKey, AssetMap, assetParams } from "../assets-defs";
-import { GameState, OverheadLevel, Terrain } from "../game-state";
+import { GameState, OverheadLevel, PlatformLevel, Space, Terrain } from "../game-state";
 import { TILE_DIMS } from "./constants-and-types";
 
 
@@ -104,6 +104,47 @@ const drawOverheadBackdrop = (variant: BackdropVariant, level: OverheadLevel, dr
 
 }
 
+const drawPlatformbackdrop = (
+    _variant: BackdropVariant,
+    level: PlatformLevel,
+    drawingMethods: OffsetDrawMethods,
+    assets: AssetMap,
+    viewport: ViewPort
+) => {
+
+    const { ctx } = drawingMethods
+    const drawSprite = drawSpriteFunc(drawingMethods, assets, assetParams)
+
+    ctx.clearRect(0, 0, viewport.width, viewport.height)
+    ctx.beginPath()
+
+
+    const drawTile = (frame: SpriteFrame<AssetKey>, { x, y, width, height }: Space) =>
+        drawSprite({
+            ...frame,
+            x,
+            y,
+            height,
+            width,
+        })
+
+    const { platforms } = level
+
+    platforms.forEach((platform) => {
+        drawTile(STONE, platform)
+    })
+
+    ctx.beginPath()
+    ctx.fillStyle='red'
+    drawingMethods.fillText('260', 500, 260)
+    drawingMethods.fillText('300-ceiling', 500, 300)
+    drawingMethods.fillText('318', 500, 318)
+    drawingMethods.fillText('360-floor', 500, 360)
+    drawingMethods.fillText('288', 500, 288)
+    ctx.stroke()
+    ctx.fill()
+}
+
 const drawBackdrop = (variant: BackdropVariant): DrawToCanvasFunction<GameState, AssetKey> => (state, assets, viewport = fullViewPort(state)) => {
     return (canvas) => {
         const ctx = canvas?.getContext('2d');
@@ -114,7 +155,7 @@ const drawBackdrop = (variant: BackdropVariant): DrawToCanvasFunction<GameState,
             case "overhead":
                 return drawOverheadBackdrop(variant, level, drawingMethods, assets, viewport)
             case "platform":
-                return
+                return drawPlatformbackdrop(variant, level, drawingMethods, assets, viewport)
         }
     }
 }

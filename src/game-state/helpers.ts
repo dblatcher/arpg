@@ -10,7 +10,7 @@ export const getDirection = (xd: number, yd: number): Direction => {
     }
     return yd > 0 ? 'Down' : 'Up'
 }
-export const directionToUnitVector = (direction: Direction):XY => {
+export const directionToUnitVector = (direction: Direction): XY => {
     switch (direction) {
         case "Up":
             return { x: 0, y: -1 }
@@ -22,3 +22,15 @@ export const directionToUnitVector = (direction: Direction):XY => {
             return { x: 1, y: 0 }
     }
 }
+
+export const hasXOverlap = (spaceA: Space, spaceB: Space): boolean => {
+    const rightEdge = spaceA.x + spaceA.width;
+    return (
+        spaceA.x >= spaceB.x && spaceA.x <= (spaceB.x + spaceB.width) ||
+        rightEdge >= spaceB.x && rightEdge <= (spaceB.x + spaceB.width) ||
+        spaceA.x < spaceB.x && rightEdge > (spaceB.x + spaceB.width)
+    )
+}
+
+export const highestSpaceFirst = (spaceA: Space, spaceB: Space) => spaceA.y - spaceB.y;
+export const lowestSpaceFirst = (spaceA: Space, spaceB: Space) => (spaceB.y + spaceB.height) - (spaceA.y + spaceB.height);

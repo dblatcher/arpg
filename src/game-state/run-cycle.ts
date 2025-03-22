@@ -6,7 +6,41 @@ import { updateNpc } from "./operations/npc-automation"
 import { updatePlayer } from "./operations/overhead-update-player"
 import { findNpcsHitByPlayerAttack, getAttackZone, handlePlayerAttackHits } from "./operations/player-attacks"
 import { handlePlayerNpcCollisions } from "./operations/player-damage"
-import { FeedbackEvent, FeedbackEventEventType, GameState, InputState } from "./types"
+import { fallOrStayOnGround, getAltitudeAndFloorLevel } from "./platform-operations/gravity"
+import { attemptPlatformMovement } from "./platform-operations/movement"
+import { FeedbackEvent, FeedbackEventEventType, GameCharacter, GameState, InputState, PlatformLevel } from "./types"
+
+const runPlatformLevel = (level: PlatformLevel, state: GameState, player: GameCharacter, inputs: InputState) => {
+
+    const { altitude, floorLevel } = getAltitudeAndFloorLevel(player, level)
+    if (altitude <= 0) {
+        if (inputs.yd && inputs?.yd < 0) {
+            player.vector.yd = -3
+        }
+        player.vector.xd = inputs.xd ?? 0
+    } else {
+        fallOrStayOnGround(altitude, player)
+    }
+    attemptPlatformMovement(level, altitude, floorLevel, player)
+
+    if (player.y > state.mapHeight) {
+        player.health.current = 0
+        player.dying = {
+            remaining: 10,
+            duration: 10,
+            unitVector: { x: 0, y: 1 }
+        }
+    }
+
+    const { npcs } = level
+
+    npcs.forEach(npc => {
+        const { altitude, floorLevel } = getAltitudeAndFloorLevel(npc, level)
+        fallOrStayOnGround(altitude,  npc)
+        attemptPlatformMovement(level, altitude, floorLevel, npc)
+    })
+
+}
 
 
 export const runCycle = (state: GameState, inputs: InputState): GameState => {
@@ -21,7 +55,7 @@ export const runCycle = (state: GameState, inputs: InputState): GameState => {
     const { npcs } = level
 
     if (level.levelType === 'platform') {
-        console.log('not implemented')
+        runPlatformLevel(level, state, player, inputs)
     } else if (level.levelType === 'overhead') {
 
         const exit = level.exits.find(exit => doRectsIntersect(spaceToRect(exit), playerRect))
