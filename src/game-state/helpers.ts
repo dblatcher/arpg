@@ -31,6 +31,14 @@ export const hasXOverlap = (spaceA: Space, spaceB: Space): boolean => {
         spaceA.x < spaceB.x && rightEdge > (spaceB.x + spaceB.width)
     )
 }
+export const hasYOverlap = (spaceA: Space, spaceB: Space): boolean => {
+    const bottomEdge = spaceA.y + spaceA.height;
+    return (
+        spaceA.y >= spaceB.y && spaceA.y <= (spaceB.y + spaceB.height) ||
+        bottomEdge >= spaceB.y && bottomEdge <= (spaceB.y + spaceB.height) ||
+        spaceA.y < spaceB.y && bottomEdge > (spaceB.y + spaceB.height)
+    )
+}
 
 export const highestSpaceFirst = (spaceA: Space, spaceB: Space) => spaceA.y - spaceB.y;
 export const lowestSpaceFirst = (spaceA: Space, spaceB: Space) => (spaceB.y + spaceB.height) - (spaceA.y + spaceB.height);
