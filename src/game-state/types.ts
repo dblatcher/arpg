@@ -36,6 +36,7 @@ export type GameCharacter = Space & {
         current: number;
     },
     pointsForKilling?: number
+    altitude: number
 }
 
 export type FeedbackEventEventType = 'attack' | 'npc-hit' | 'attack-end' | 'reel-end' | 'player-hit'

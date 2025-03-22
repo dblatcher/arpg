@@ -8,6 +8,7 @@ export const MAP_HEIGHT = 600
 let npcId = 1
 export const standardNpc = (x: number, y: number): GameCharacter => (
     {
+        altitude: 0,
         id: npcId++,
         direction: 'Down',
         x, y,

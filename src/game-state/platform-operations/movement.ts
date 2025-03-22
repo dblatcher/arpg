@@ -1,7 +1,7 @@
 import { hasXOverlap, hasYOverlap, lowestSpaceFirst } from "../helpers";
 import { GameCharacter, PlatformLevel, Space } from "../types";
 
-export const attemptPlatformMovement = (level: PlatformLevel, _altitude: number, floorLevel = Infinity, character: GameCharacter) => {
+export const attemptPlatformMovement = (level: PlatformLevel, floorLevel = Infinity, character: GameCharacter) => {
     const { platforms } = level
     const afterYMovement: Space = {
         x: character.x,

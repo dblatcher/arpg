@@ -11,22 +11,19 @@ import { attemptPlatformMovement } from "./platform-operations/movement"
 import { FeedbackEvent, FeedbackEventEventType, GameCharacter, GameState, InputState, PlatformLevel } from "./types"
 
 const runPlatformLevel = (level: PlatformLevel, state: GameState, player: GameCharacter, inputs: InputState) => {
+    const { floorLevel } = getAltitudeAndFloorLevel(player, level)
 
-    const { altitude, floorLevel } = getAltitudeAndFloorLevel(player, level)
-
-
-    if (altitude <= 0) { // on ground
+    if (player.altitude <= 0) { // on ground
         player.vector.xd = inputs.xd ?? 0
         if (inputs.yd && inputs?.yd < 0) {
             player.vector.yd = -3
             player.vector.xd = player.vector.xd * 3
         }
-
     } else {
-        fallOrStayOnGround(altitude, player)
+        fallOrStayOnGround(player)
     }
 
-    attemptPlatformMovement(level, altitude, floorLevel, player)
+    attemptPlatformMovement(level, floorLevel, player)
 
     if (player.y > state.mapHeight) {
         player.health.current = 0
@@ -40,11 +37,10 @@ const runPlatformLevel = (level: PlatformLevel, state: GameState, player: GameCh
     const { npcs } = level
 
     npcs.forEach(npc => {
-        const { altitude, floorLevel } = getAltitudeAndFloorLevel(npc, level)
-        fallOrStayOnGround(altitude, npc)
-        attemptPlatformMovement(level, altitude, floorLevel, npc)
+        const { floorLevel } = getAltitudeAndFloorLevel(npc, level)
+        fallOrStayOnGround(npc)
+        attemptPlatformMovement(level, floorLevel, npc)
     })
-
 }
 
 
@@ -53,7 +49,6 @@ export const runCycle = (state: GameState, inputs: InputState): GameState => {
     const player = structuredClone(state.player)
     const level = structuredClone(state.levels[state.currentLevelIndex])
     const cycleNumber = state.cycleNumber
-
     const addFeedback = (type: FeedbackEventEventType) => newEvents.push({ type, cycleNumber })
 
     const playerRect = spaceToRect(player)

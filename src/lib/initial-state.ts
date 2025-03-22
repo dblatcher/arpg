@@ -5,11 +5,12 @@ import { overlandLevel } from "./levels.ts/overland";
 import { MAP_HEIGHT, MAP_WIDTH, standardNpc } from "./levels.ts/stuff";
 
 
-const makePlatform = (x: number, y: number): Space => ({ 
-    x: x * TILE_SIZE, 
-    y: y * TILE_SIZE, 
-    width: TILE_SIZE, 
-    height: TILE_SIZE/2 })
+const makePlatform = (x: number, y: number): Space => ({
+    x: x * TILE_SIZE,
+    y: y * TILE_SIZE,
+    width: TILE_SIZE,
+    height: TILE_SIZE / 2
+})
 
 export const makeInitalState = (): GameState => ({
     score: 0,
@@ -17,8 +18,9 @@ export const makeInitalState = (): GameState => ({
     player: {
         id: -1,
         direction: 'Down',
+        altitude: 0,
         // x: TILE_SIZE * 5, y: TILE_SIZE * 2,
-        x: TILE_SIZE * 9.2, y: TILE_SIZE*4,
+        x: TILE_SIZE * 9.2, y: TILE_SIZE * 4,
         width: 39,
         height: 39,
         speed: 1.5,
@@ -38,7 +40,7 @@ export const makeInitalState = (): GameState => ({
             id: 'castle',
             levelType: 'platform',
             npcs: [
-                standardNpc(TILE_SIZE*5,50)
+                standardNpc(TILE_SIZE * 5, 50)
             ],
             platforms: [
                 makePlatform(0, 0),
