@@ -21,7 +21,14 @@ export const getAltitudeAndFloorLevel = (
 
 export const fallOrStayOnGround = (altitude: number, character: GameCharacter) => {
     if (altitude > 0) {
-        character.vector.yd += .1
+        character.vector.yd += .1 // gravity pulling downwards
+
+        if (character.vector.xd) {
+            // air resistance slowing lateral movement
+            const newAbs = Math.max(0, Math.abs(character.vector.xd) - .01)
+            character.vector.xd = newAbs * Math.sign(character.vector.xd)
+        }
+
     } else {
         character.vector.yd = Math.min(0, character.vector.yd)
     }

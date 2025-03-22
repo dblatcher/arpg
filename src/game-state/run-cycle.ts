@@ -13,14 +13,19 @@ import { FeedbackEvent, FeedbackEventEventType, GameCharacter, GameState, InputS
 const runPlatformLevel = (level: PlatformLevel, state: GameState, player: GameCharacter, inputs: InputState) => {
 
     const { altitude, floorLevel } = getAltitudeAndFloorLevel(player, level)
-    if (altitude <= 0) {
+
+
+    if (altitude <= 0) { // on ground
+        player.vector.xd = inputs.xd ?? 0
         if (inputs.yd && inputs?.yd < 0) {
             player.vector.yd = -3
+            player.vector.xd = player.vector.xd * 3
         }
-        player.vector.xd = inputs.xd ?? 0
+
     } else {
         fallOrStayOnGround(altitude, player)
     }
+
     attemptPlatformMovement(level, altitude, floorLevel, player)
 
     if (player.y > state.mapHeight) {
@@ -36,7 +41,7 @@ const runPlatformLevel = (level: PlatformLevel, state: GameState, player: GameCh
 
     npcs.forEach(npc => {
         const { altitude, floorLevel } = getAltitudeAndFloorLevel(npc, level)
-        fallOrStayOnGround(altitude,  npc)
+        fallOrStayOnGround(altitude, npc)
         attemptPlatformMovement(level, altitude, floorLevel, npc)
     })
 

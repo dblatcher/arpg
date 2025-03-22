@@ -7,10 +7,7 @@ export const attemptPlatformMovement = (level: PlatformLevel, _altitude: number,
 
     const afterYMovement: Space = {
         x: character.x,
-        y: Math.min(
-            character.y + character.vector.yd,
-            // floorLevel - character.height,
-        ),
+        y: character.y + character.vector.yd,
         width: character.width,
         height: character.height,
     }
