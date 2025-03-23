@@ -1,15 +1,16 @@
-import { GameState, Space } from "../game-state";
+import { GameState, Platform } from "../game-state";
 import { TILE_SIZE } from "../game-state/constants";
 import { caveLevel } from "./levels.ts/cave";
 import { overlandLevel } from "./levels.ts/overland";
-import { MAP_HEIGHT, MAP_WIDTH, standardNpc } from "./levels.ts/stuff";
+import { MAP_HEIGHT, MAP_WIDTH } from "./levels.ts/stuff";
 
 
-const makePlatform = (x: number, y: number): Space => ({
+const makePlatform = (x: number, y: number, blocking = true): Platform => ({
     x: x * TILE_SIZE,
     y: y * TILE_SIZE,
     width: TILE_SIZE,
-    height: TILE_SIZE / 2
+    height: blocking ? TILE_SIZE / 2 : TILE_SIZE / 4,
+    blocking,
 })
 
 export const makeInitalState = (): GameState => ({
@@ -40,7 +41,7 @@ export const makeInitalState = (): GameState => ({
             id: 'castle',
             levelType: 'platform',
             npcs: [
-                standardNpc(TILE_SIZE * 5, 50)
+                // standardNpc(TILE_SIZE * 5, 50)
             ],
             platforms: [
                 makePlatform(0, 0),
@@ -49,13 +50,15 @@ export const makeInitalState = (): GameState => ({
                 makePlatform(8, 9),
                 makePlatform(9, 9),
                 makePlatform(9.1, 6.8),
-                makePlatform(10.1, 7.0),
+                makePlatform(10.1, 7.0, false),
                 makePlatform(11, 9),
                 makePlatform(0, 10),
                 makePlatform(2, 10),
                 makePlatform(4, 10),
                 makePlatform(5, 10),
                 makePlatform(6, 10),
+                makePlatform(6, 9.1, false),
+                makePlatform(6, 8.3, false),
                 makePlatform(4, 12),
                 makePlatform(0, 14),
                 makePlatform(3, 14),

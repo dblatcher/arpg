@@ -119,7 +119,7 @@ const drawPlatformbackdrop = (
     ctx.beginPath()
 
 
-    const drawTile = (frame: SpriteFrame<AssetKey>, { x, y, width, height }: Space) =>
+    const drawPlatform = (frame: SpriteFrame<AssetKey>, { x, y, width, height }: Space) =>
         drawSprite({
             ...frame,
             x,
@@ -131,11 +131,11 @@ const drawPlatformbackdrop = (
     const { platforms } = level
 
     platforms.forEach((platform) => {
-        drawTile(STONE, platform)
+        drawPlatform(platform.blocking ? STONE : GRASS, platform)
     })
 
     ctx.beginPath()
-    ctx.fillStyle='red'
+    ctx.fillStyle = 'red'
     drawingMethods.fillText('260', 500, 260)
     drawingMethods.fillText('300-ceiling', 500, 300)
     drawingMethods.fillText('318', 500, 318)

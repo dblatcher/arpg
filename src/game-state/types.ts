@@ -76,11 +76,15 @@ export type OverheadLevel = {
     exits: Exit[];
 }
 
+export type Platform = Space & {
+    blocking?: boolean
+}
+
 export type PlatformLevel = {
     levelType: 'platform',
     id: string,
     npcs: GameCharacter[];
-    platforms: Space[]
+    platforms: Platform[];
 }
 
 export type Level = OverheadLevel | PlatformLevel

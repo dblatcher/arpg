@@ -5,15 +5,17 @@ export const getAltitudeAndFloorLevel = (
     character: GameCharacter,
     level: PlatformLevel,
 ) => {
-    const platformsBelow = level.platforms.filter((platform) => platform.y > character.y)
+    const footLevel = character.y + character.height;
+    const platformsBelow = level.platforms
+        .filter((platform) => platform.y >= footLevel)
+        .filter(platform => hasXOverlap(character, platform))
+        .sort(highestSpaceFirst);
 
     // TO DO - coyote time?
-    const platformsDirectlyUnder = platformsBelow
-        .filter(platform => hasXOverlap(character, platform))
-        .sort(highestSpaceFirst)
+    const floorPlatform = platformsBelow.shift()
+    const floorLevel = floorPlatform?.y;
 
-    const floorLevel = platformsDirectlyUnder.length ? platformsDirectlyUnder[0]?.y : undefined;
-    character.altitude = floorLevel ? floorLevel - (character.y + character.height) : Infinity
+    character.altitude = floorLevel ? floorLevel - footLevel : Infinity
     return { floorLevel }
 }
 

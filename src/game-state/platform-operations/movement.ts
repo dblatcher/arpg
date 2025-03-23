@@ -13,14 +13,13 @@ export const attemptPlatformMovement = (level: PlatformLevel, floorLevel = Infin
     // if going up, check for ceilings above
     if (character.vector.yd < 0) {
         const lowestPlatformAbove = platforms
-            .filter(platform => platform.y < (floorLevel) && hasXOverlap(afterYMovement, platform))
+            .filter(platform => platform.blocking && platform.y < (floorLevel) && hasXOverlap(afterYMovement, platform))
             .sort(lowestSpaceFirst)
             .shift()
 
         if (lowestPlatformAbove) {
             const ceiling = lowestPlatformAbove.y + lowestPlatformAbove.height
-            const wouldHitCeiling = afterYMovement.y < ceiling
-            if (wouldHitCeiling) {
+            if (afterYMovement.y < ceiling) { //would pass ceiling
                 afterYMovement.y = ceiling
                 character.vector.yd = 0
             }
@@ -28,9 +27,13 @@ export const attemptPlatformMovement = (level: PlatformLevel, floorLevel = Infin
     }
 
     // character must not fall through floor
-    const floorAdjustedForHeight = (floorLevel ?? Infinity) - character.height;
-    if (afterYMovement.y > floorAdjustedForHeight) {
-        afterYMovement.y = floorAdjustedForHeight
+    // when going down
+    if (character.vector.yd > 0) {
+        const floorAdjustedForHeight = (floorLevel ?? Infinity) - character.height;
+        if (afterYMovement.y > floorAdjustedForHeight) { //would pass floor
+            character.vector.yd = 0
+            afterYMovement.y = floorAdjustedForHeight
+        }
     }
     character.y = afterYMovement.y
 
@@ -44,6 +47,7 @@ export const attemptPlatformMovement = (level: PlatformLevel, floorLevel = Infin
     // are there platforms blocking x movement?
     const platformsBlockingXMovement = platforms
         .filter(platform =>
+            platform.blocking &&
             platform.y < floorLevel &&
             hasYOverlap(platform, afterXMovement) &&
             hasXOverlap(platform, afterXMovement)
