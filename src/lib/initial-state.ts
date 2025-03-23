@@ -11,7 +11,7 @@ export const makeInitalState = (): GameState => {
         overlandLevel(),
         caveLevel(),
     ]
-    const currentLevelIndex = levels.findIndex(level => level.id === LEVEL_IDS.Caves)
+    const currentLevelIndex = levels.findIndex(level => level.id === LEVEL_IDS.Tunnel)
 
     return {
         score: 0,
@@ -23,7 +23,8 @@ export const makeInitalState = (): GameState => {
             direction: 'Down',
             altitude: 0,
             // x: TILE_SIZE * 5, y: TILE_SIZE * 2,
-            x: TILE_SIZE * 9.2, y: TILE_SIZE * 4,
+            x: MAP_WIDTH/2, 
+            y: TILE_SIZE * 4,
             width: 39,
             height: 39,
             speed: 1.5,
