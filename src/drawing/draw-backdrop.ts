@@ -3,6 +3,7 @@ import { AssetKey, AssetMap, assetParams } from "../assets-defs";
 import { GameState, OverheadLevel, PlatformLevel, Space, Terrain } from "../game-state";
 import { TILE_DIMS } from "./constants-and-types";
 import { getCurrentLevel } from "../game-state/helpers";
+import { MAP_HEIGHT, MAP_WIDTH } from "../lib/levels.ts/stuff";
 
 
 const STONE: SpriteFrame<AssetKey> = { key: 'TILES_1', fx: 1, fy: 5, }
@@ -106,7 +107,7 @@ const drawOverheadBackdrop = (variant: BackdropVariant, level: OverheadLevel, dr
 }
 
 const drawPlatformbackdrop = (
-    _variant: BackdropVariant,
+    variant: BackdropVariant,
     level: PlatformLevel,
     drawingMethods: OffsetDrawMethods,
     assets: AssetMap,
@@ -119,26 +120,60 @@ const drawPlatformbackdrop = (
     ctx.clearRect(0, 0, viewport.width, viewport.height)
     ctx.beginPath()
 
+    if (variant === 0) {
+        const drawPlatform = (frame: SpriteFrame<AssetKey>, { x, y, width, height }: Space) =>
+            drawSprite({
+                ...frame,
+                x,
+                y,
+                height,
+                width,
+            })
 
-    const drawPlatform = (frame: SpriteFrame<AssetKey>, { x, y, width, height }: Space) =>
-        drawSprite({
-            ...frame,
-            x,
-            y,
-            height,
-            width,
+        const { platforms, exits } = level
+
+        platforms.forEach((platform) => {
+            drawPlatform(platform.blocking ? STONE : GRASS, platform)
         })
 
-    const { platforms, exits } = level
+        exits.forEach(({ x, y, width, height }) => {
+            rect(x, y, width, height)
+            ctx.fill()
+        })
 
-    platforms.forEach((platform) => {
-        drawPlatform(platform.blocking ? STONE : GRASS, platform)
-    })
+        rect(
+            (MAP_WIDTH * 1 / 2) - 100,
+            MAP_HEIGHT * 1 / 4,
+            200,
+            MAP_HEIGHT / 2,
+        )
+        ctx.stroke()
+    }
 
-    exits.forEach(({ x, y, width, height }) => {
-        rect(x,y,width,height)
-        ctx.fill()
-    })
+    if (variant === 1) {
+
+        drawSprite({
+            ...WATER,
+            x: 0,
+            y: MAP_HEIGHT * 1 / 4,
+            width: 100,
+            height: MAP_HEIGHT / 2,
+        })
+        rect(
+            (MAP_WIDTH * 1 / 2) - 100,
+            MAP_HEIGHT * 1 / 4,
+            200,
+            MAP_HEIGHT / 2,
+        )
+        ctx.stroke()
+        drawSprite({
+            ...WATER,
+            x: MAP_WIDTH - 100,
+            y: MAP_HEIGHT * 1 / 4,
+            width: 100,
+            height: MAP_HEIGHT / 2,
+        })
+    }
 }
 
 const drawBackdrop = (variant: BackdropVariant): DrawToCanvasFunction<GameState, AssetKey> => (state, assets, viewport = fullViewPort(state)) => {
