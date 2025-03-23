@@ -1,6 +1,6 @@
 import { Direction } from "@dblatcher/sprite-canvas";
 import { Rect, XY } from "../lib/geometry";
-import { Space } from "./types";
+import { GameState, Space } from "./types";
 
 export const spaceToRect = (o: Space): Rect => ({ top: o.y, left: o.x, bottom: o.y + o.height, right: o.x + o.width })
 
@@ -42,3 +42,5 @@ export const hasYOverlap = (spaceA: Space, spaceB: Space): boolean => {
 
 export const highestSpaceFirst = (spaceA: Space, spaceB: Space) => spaceA.y - spaceB.y;
 export const lowestSpaceFirst = (spaceA: Space, spaceB: Space) => (spaceB.y + spaceB.height) - (spaceA.y + spaceB.height);
+
+export const getLevelType = (state: GameState) => state.levels[state.currentLevelIndex]?.levelType ?? 'overhead'

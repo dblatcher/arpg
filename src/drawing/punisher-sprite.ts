@@ -41,5 +41,8 @@ export const punisher: CharacterSprite = new Sprite(
         },
         'reel': {
             frames: animationFramesSingle('PUNISHER_HURT')
+        },
+        'jump': {
+            frames: animationFramesSingle('PUNISHER_HURT')
         }
     })

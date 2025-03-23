@@ -39,6 +39,14 @@ export const ranger: CharacterSprite = new Sprite(
         'attack': {
             frames: animationFrames2('RANGER_ATTACK')
         },
+        'jump': {
+            frames: {
+                Down: [{ key: 'RANGER_JUMP', fy: 0, fx: 3 }],
+                Left: [{ key: 'RANGER_JUMP', fy: 0, fx: 0 }],
+                Right: [{ key: 'RANGER_JUMP', fy: 0, fx: 1 }],
+                Up: [{ key: 'RANGER_JUMP', fy: 0, fx: 2 }],
+            }
+        },
         'reel': {
             frames: {
                 Down: [{ key: 'RANGER_HIT', fy: 0, fx: 3 }],

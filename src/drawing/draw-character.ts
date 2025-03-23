@@ -2,6 +2,7 @@ import { DrawSpriteFunction } from "@dblatcher/sprite-canvas";
 import { AssetKey } from "../assets-defs";
 import { GameCharacter, GameState } from "../game-state";
 import { CharacterSprite } from "./constants-and-types";
+import { getLevelType } from "../game-state/helpers";
 
 const progressionFrame = ({ duration, remaining }: { duration: number, remaining: number }): number => {
     return Math.round(((duration - remaining) / duration) * 3)
@@ -29,12 +30,21 @@ export const drawCharacter = (
     drawSprite: DrawSpriteFunction<AssetKey>,
     baseFilter?: string,
 ) => {
-    const speed = Math.abs(character.vector.xd) + Math.abs(character.vector.yd)
-    const animation = (character.dying || character.reeling) ? 'reel' : character.attack ? 'attack' : speed <= 0
-        ? 'idle'
-        : speed < .6
-            ? 'walk'
-            : 'run'
+
+    const levelType = getLevelType(state)
+
+    const speed = levelType === 'platform' ? Math.abs(character.vector.xd) : Math.abs(character.vector.xd) + Math.abs(character.vector.yd)
+    const animation = (character.dying || character.reeling)
+        ? 'reel'
+        : character.altitude > 0
+            ? 'jump'
+            : character.attack
+                ? 'attack'
+                : speed <= 0
+                    ? 'idle'
+                    : speed < .6
+                        ? 'walk'
+                        : 'run'
 
     const direction = character.dying ? 'Up' : character.reeling?.direction ?? character.direction
 
@@ -42,7 +52,7 @@ export const drawCharacter = (
         ? progressionFrame(character.attack)
         : Math.floor(state.cycleNumber / 25) % 4;
 
-    const filter = [baseFilter, getFilter(state.cycleNumber, character) ].flatMap(i => i ? i : []).join(" ")
+    const filter = [baseFilter, getFilter(state.cycleNumber, character)].flatMap(i => i ? i : []).join(" ")
 
     drawSprite({
         ...sprite.getFrame(animation, direction, frameIndex),

@@ -5,6 +5,7 @@ import rangerWalk from "./assets/NES_Ranger_Walk_Sheet_4way.png"
 import rangerRun from "./assets/NES_Ranger_Run_Sheet_4way.png"
 import rangerAttack from "./assets/NES_Ranger_Attack_Sheet_4way.png"
 import rangerHit from "./assets/NES_Ranger_Hit_Sheet_4way.png"
+import rangerJump from "./assets/NES_Ranger_Jump_Sheet_4way.png"
 import tiles1 from "./assets/NES_Stonelands_Tile_Set_16x16_128x128_1.png"
 import tiles2 from "./assets/NES_Stonelands_Tile_Set_16x16_128x128_2.png"
 import tiles3 from "./assets/NES_Stonelands_Tile_Set_16x16_128x128_3.png"
@@ -43,10 +44,14 @@ const RANGER_ATTACK: AssetData = {
     src: rangerAttack,
     sprites: { cols: 4, rows: 4 },
     frameScale: { width: RANGER_FRAME_WIDTH_SCALE * 1.5 },
-
 }
 const RANGER_HIT: AssetData = {
     src: rangerHit,
+    sprites: { cols: 4, rows: 1 },
+    frameScale: { width: RANGER_FRAME_WIDTH_SCALE }
+}
+const RANGER_JUMP:AssetData = {
+    src: rangerJump,
     sprites: { cols: 4, rows: 1 },
     frameScale: { width: RANGER_FRAME_WIDTH_SCALE }
 }
@@ -67,7 +72,7 @@ const PUNISHER_HURT = buildAsset(punisherHurt, 1, 4, PUNISHER_FRAME_WIDTH, PUNIS
 
 export const assetParams = {
     MISC,
-    RANGER_IDLE, RANGER_WALK, RANGER_RUN, RANGER_ATTACK, RANGER_HIT,
+    RANGER_IDLE, RANGER_WALK, RANGER_RUN, RANGER_ATTACK, RANGER_HIT, RANGER_JUMP,
     TILES_1, TILES_2, TILES_3,
     CENTURION_IDLE,
     PUNISHER_IDLE, PUNISHER_WALK, PUNISHER_RUN, PUNISHER_HURT, PUNISHER_ATTACK

@@ -19,6 +19,16 @@ const runPlatformLevel = (level: PlatformLevel, state: GameState, player: GameCh
             player.vector.yd = -3
             player.vector.xd = player.vector.xd * 3
         }
+
+        switch (Math.sign(inputs.xd ?? 0)) {
+            case -1:
+                player.direction = 'Left'
+                break
+            case 1:
+                player.direction = 'Right'
+                break
+        }
+
     } else {
         fallOrStayOnGround(player)
     }
