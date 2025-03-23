@@ -52,4 +52,5 @@ export const hasYOverlap = (spaceA: Space, spaceB: Space): boolean => {
 export const highestSpaceFirst = (spaceA: Space, spaceB: Space) => spaceA.y - spaceB.y;
 export const lowestSpaceFirst = (spaceA: Space, spaceB: Space) => (spaceB.y + spaceB.height) - (spaceA.y + spaceB.height);
 
-export const getLevelType = (state: GameState) => state.levels[state.currentLevelIndex]?.levelType ?? 'overhead'
+export const getCurrentLevel = (state: GameState) => state.levels[state.currentLevelIndex] ?? undefined;
+export const getLevelType = (state: GameState) => getCurrentLevel(state)?.levelType ?? 'overhead';

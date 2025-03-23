@@ -2,6 +2,7 @@ import { drawOffScreen, drawSpriteFunc, DrawToCanvasFunction, fullViewPort, Gene
 import { AssetKey, AssetMap, assetParams } from "../assets-defs";
 import { GameState, OverheadLevel, PlatformLevel, Space, Terrain } from "../game-state";
 import { TILE_DIMS } from "./constants-and-types";
+import { getCurrentLevel } from "../game-state/helpers";
 
 
 const STONE: SpriteFrame<AssetKey> = { key: 'TILES_1', fx: 1, fy: 5, }
@@ -138,23 +139,13 @@ const drawPlatformbackdrop = (
         rect(x,y,width,height)
         ctx.fill()
     })
-
-    ctx.beginPath()
-    ctx.fillStyle = 'red'
-    drawingMethods.fillText('260', 500, 260)
-    drawingMethods.fillText('300-ceiling', 500, 300)
-    drawingMethods.fillText('318', 500, 318)
-    drawingMethods.fillText('360-floor', 500, 360)
-    drawingMethods.fillText('288', 500, 288)
-    ctx.stroke()
-    ctx.fill()
 }
 
 const drawBackdrop = (variant: BackdropVariant): DrawToCanvasFunction<GameState, AssetKey> => (state, assets, viewport = fullViewPort(state)) => {
     return (canvas) => {
         const ctx = canvas?.getContext('2d');
         if (!ctx) { return }
-        const level = state.levels[state.currentLevelIndex]
+        const level = getCurrentLevel(state)
         const drawingMethods = makeDrawingMethods(ctx, viewport)
         switch (level?.levelType) {
             case "overhead":

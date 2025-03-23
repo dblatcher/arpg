@@ -5,6 +5,7 @@ import { getAttackZone } from "../game-state/operations/player-attacks";
 import { drawCharacter } from "./draw-character";
 import { ranger } from "./ranger-sprite";
 import { punisher } from "./punisher-sprite";
+import { getCurrentLevel } from "../game-state/helpers";
 
 
 const SHOW_HITBOX = true as boolean;
@@ -15,7 +16,7 @@ export const drawSceneFunction: DrawToCanvasFunction<GameState, AssetKey> = (sta
     const drawingMethods = makeDrawingMethods(ctx, viewport)
     const drawSprite = drawSpriteFunc(drawingMethods, assets, assetParams)
     const { player } = state
-    const level = state.levels[state.currentLevelIndex]
+    const level = getCurrentLevel(state)
 
     ctx.beginPath()
     ctx.clearRect(0, 0, viewport.width, viewport.height)
@@ -24,7 +25,7 @@ export const drawSceneFunction: DrawToCanvasFunction<GameState, AssetKey> = (sta
     level.npcs.forEach(character => {
         drawCharacter(character, state, punisher, drawSprite)
     })
-    
+
     if (SHOW_HITBOX) {
         level.npcs.forEach(character => {
             drawingMethods.rect(character.x, character.y, character.width, character.height)

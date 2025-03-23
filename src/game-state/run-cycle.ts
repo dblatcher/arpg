@@ -1,5 +1,5 @@
 import { doRectsIntersect } from "../lib/geometry"
-import { rectMiddleSlice, spaceToRect } from "./helpers"
+import { getCurrentLevel, rectMiddleSlice, spaceToRect } from "./helpers"
 import { progressCharacterStatus } from "./operations/character-status"
 import { attemptMove } from "./operations/movement"
 import { updateNpc } from "./operations/npc-automation"
@@ -85,7 +85,7 @@ const handleExits = (level: Level, player: GameCharacter, state: GameState): Gam
 export const runCycle = (state: GameState, inputs: InputState): GameState => {
     const newEvents: FeedbackEvent[] = []
     const player = structuredClone(state.player)
-    const level = structuredClone(state.levels[state.currentLevelIndex])
+    const level = structuredClone(getCurrentLevel(state))
     const cycleNumber = state.cycleNumber
     const addFeedback = (type: FeedbackEventEventType) => newEvents.push({ type, cycleNumber })
 
