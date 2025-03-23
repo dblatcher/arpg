@@ -11,7 +11,7 @@ export const makeInitalState = (): GameState => {
         overlandLevel(),
         caveLevel(),
     ]
-    const currentLevelIndex = levels.findIndex(level => level.id === LEVEL_IDS.Tunnel)
+    const currentLevelIndex = levels.findIndex(level => level.id === LEVEL_IDS.Bridge)
 
     return {
         score: 0,

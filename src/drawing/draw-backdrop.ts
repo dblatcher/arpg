@@ -120,58 +120,47 @@ const drawPlatformbackdrop = (
     ctx.clearRect(0, 0, viewport.width, viewport.height)
     ctx.beginPath()
 
+    const drawPlatform = (frame: SpriteFrame<AssetKey>, { x, y, width, height }: Space) =>
+        drawSprite({
+            ...frame,
+            x,
+            y,
+            height,
+            width,
+        })
+
     if (variant === 0) {
-        const drawPlatform = (frame: SpriteFrame<AssetKey>, { x, y, width, height }: Space) =>
-            drawSprite({
-                ...frame,
-                x,
-                y,
-                height,
-                width,
-            })
-
         const { platforms, exits } = level
-
         platforms.forEach((platform) => {
             drawPlatform(platform.blocking ? STONE : GRASS, platform)
         })
-
         exits.forEach(({ x, y, width, height }) => {
             rect(x, y, width, height)
             ctx.fill()
         })
-
-        rect(
-            (MAP_WIDTH * 1 / 2) - 100,
-            MAP_HEIGHT * 1 / 4,
-            200,
-            MAP_HEIGHT / 2,
-        )
-        ctx.stroke()
     }
 
     if (variant === 1) {
+        for (let py = 350; py < MAP_HEIGHT; py += 50) {
+            for (let px = 0; px < MAP_WIDTH; px += 50) {
+                drawPlatform(ROAD, { x: px, y: py, width: 50, height: 50 })
+            }
+        }
+        ctx.stroke()
+    }
+
+    if (variant === 2) {
+        rect(0, 0, MAP_WIDTH, MAP_HEIGHT)
+        ctx.fillStyle = 'grey'
+        ctx.fill()
+        const skyHeight = MAP_HEIGHT * (1/2)
 
         drawSprite({
-            ...WATER,
+            key: 'CLOUDS',
             x: 0,
-            y: MAP_HEIGHT * 1 / 4,
-            width: 100,
-            height: MAP_HEIGHT / 2,
-        })
-        rect(
-            (MAP_WIDTH * 1 / 2) - 100,
-            MAP_HEIGHT * 1 / 4,
-            200,
-            MAP_HEIGHT / 2,
-        )
-        ctx.stroke()
-        drawSprite({
-            ...WATER,
-            x: MAP_WIDTH - 100,
-            y: MAP_HEIGHT * 1 / 4,
-            width: 100,
-            height: MAP_HEIGHT / 2,
+            y: 0,
+            width: skyHeight*2,
+            height: skyHeight,
         })
     }
 }

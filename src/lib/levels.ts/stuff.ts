@@ -8,7 +8,7 @@ export const MAP_HEIGHT = 600
 export enum LEVEL_IDS {
     Caves = 'caves',
     Outside = 'first',
-    Tunnel = 'tunnel',
+    Bridge = 'bridge',
 }
 
 let npcId = 1

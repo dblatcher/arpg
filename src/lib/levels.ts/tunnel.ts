@@ -13,7 +13,7 @@ const makePlatform = (x: number, y: number, blocking = true): Platform => ({
 export const tunnelLevel = (): PlatformLevel => {
 
     return {
-        id: LEVEL_IDS.Tunnel,
+        id: LEVEL_IDS.Bridge,
         levelType: 'platform',
         npcs: [
             // standardNpc(TILE_SIZE * 5, 50)

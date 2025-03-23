@@ -15,6 +15,7 @@ import punisherWalk from "./assets/punisher/Walk_SpriteSheet.png"
 import punisherRun from "./assets/punisher/Run_SpriteSheet.png"
 import punisherHurt from "./assets/punisher/Hurt_SpriteSheet.png"
 import punisherAttack from "./assets/punisher/Attack_SpriteSheet.png"
+import clouds from "./assets/clouds.png"
 
 const buildAsset = (src: string, cols: number, rows: number, widthScale = 1, heightScale = 1): AssetData => ({ src, sprites: { cols, rows }, frameScale: { width: widthScale, height: heightScale } })
 
@@ -50,10 +51,14 @@ const RANGER_HIT: AssetData = {
     sprites: { cols: 4, rows: 1 },
     frameScale: { width: RANGER_FRAME_WIDTH_SCALE }
 }
-const RANGER_JUMP:AssetData = {
+const RANGER_JUMP: AssetData = {
     src: rangerJump,
     sprites: { cols: 4, rows: 1 },
     frameScale: { width: RANGER_FRAME_WIDTH_SCALE }
+}
+
+const CLOUDS: AssetData = {
+    src: clouds
 }
 
 const TILES_1 = buildAsset(tiles1, 8, 8)
@@ -75,8 +80,9 @@ export const assetParams = {
     RANGER_IDLE, RANGER_WALK, RANGER_RUN, RANGER_ATTACK, RANGER_HIT, RANGER_JUMP,
     TILES_1, TILES_2, TILES_3,
     CENTURION_IDLE,
-    PUNISHER_IDLE, PUNISHER_WALK, PUNISHER_RUN, PUNISHER_HURT, PUNISHER_ATTACK
-}
+    PUNISHER_IDLE, PUNISHER_WALK, PUNISHER_RUN, PUNISHER_HURT, PUNISHER_ATTACK,
+    CLOUDS,
+} satisfies Record<string, AssetData>
 
 export type AssetKey = keyof typeof assetParams;
 export type AssetMap = GenericAssetMap<AssetKey>;

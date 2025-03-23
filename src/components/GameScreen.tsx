@@ -32,7 +32,7 @@ export const GameScreen = ({ gameState, viewPort, magnify = 1 }: Props) => {
                         viewPort={viewPort}
                         magnify={magnify}
                         parallax={6}
-                        url={backdropUrlList[1]}
+                        url={backdropUrlList[2]}
                         mapWidth={gameState.mapWidth}
                         mapHeight={gameState.mapHeight}
                     />
