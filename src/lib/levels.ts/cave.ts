@@ -1,12 +1,12 @@
 import { OverheadLevel, Terrain, Traversability } from "../../game-state"
 import { TILE_SIZE } from "../../game-state/constants"
-import { makeObstaclesAndTileMap } from "./stuff";
+import { LEVEL_IDS, makeObstaclesAndTileMap } from "./stuff";
 
 
 const tilesLevel1 = `
 sssssssssssssss
-ssssssssssccsss
-ssssssssssccsss
+ssssccssssccsss
+ssssccssssccsss
 s            ss
 s            ss
 sr      wwwwwss
@@ -21,7 +21,7 @@ sssssssssssssss
 export const caveLevel = (): OverheadLevel => {
 
     return  {
-                id: 'caves',
+                id: LEVEL_IDS.Caves,
                 levelType: 'overhead',
                 exits: [
                     {
@@ -30,11 +30,22 @@ export const caveLevel = (): OverheadLevel => {
                         width: TILE_SIZE * 2,
                         height: TILE_SIZE * 1,
                         destination: {
-                            levelId: 'first',
+                            levelId: LEVEL_IDS.Outside,
                             x: TILE_SIZE * 4.5,
                             y: TILE_SIZE * 2,
                         }
-                    }
+                    },
+                    {
+                        x: TILE_SIZE * 3,
+                        y: TILE_SIZE * 1,
+                        width: TILE_SIZE * 2,
+                        height: TILE_SIZE * 1,
+                        destination: {
+                            levelId: LEVEL_IDS.Tunnel,
+                            x: TILE_SIZE * 4.5,
+                            y: TILE_SIZE * 2,
+                        }
+                    },
                 ],
                 npcs: [],
                 ...makeObstaclesAndTileMap(tilesLevel1, {

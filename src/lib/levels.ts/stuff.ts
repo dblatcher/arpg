@@ -5,6 +5,12 @@ import { stringToTileMap, tileMapToObstacles } from "../tile-maps"
 export const MAP_WIDTH = 600
 export const MAP_HEIGHT = 600
 
+export enum LEVEL_IDS {
+    Caves = 'caves',
+    Outside = 'first',
+    Tunnel = 'tunnel',
+}
+
 let npcId = 1
 export const standardNpc = (x: number, y: number): GameCharacter => (
     {

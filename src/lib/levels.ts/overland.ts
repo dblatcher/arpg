@@ -1,6 +1,6 @@
 import { OverheadLevel } from "../../game-state"
 import { TILE_SIZE } from "../../game-state/constants"
-import { makeObstaclesAndTileMap, standardNpc } from "./stuff";
+import { LEVEL_IDS, makeObstaclesAndTileMap, standardNpc } from "./stuff";
 
 
 const tilesLevel0 = `
@@ -17,7 +17,7 @@ const tilesLevel0 = `
 export const overlandLevel = (): OverheadLevel => {
 
     return {
-        id: 'first',
+        id: LEVEL_IDS.Outside,
         levelType: 'overhead',
         exits: [
             {
@@ -26,7 +26,7 @@ export const overlandLevel = (): OverheadLevel => {
                 y: TILE_SIZE * 0,
                 x: TILE_SIZE * 4,
                 destination: {
-                    levelId: 'caves',
+                    levelId: LEVEL_IDS.Caves,
                     x: TILE_SIZE * 10.5,
                     y: TILE_SIZE * 3,
                 }
