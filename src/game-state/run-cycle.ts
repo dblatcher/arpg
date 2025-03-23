@@ -1,5 +1,5 @@
 import { doRectsIntersect } from "../lib/geometry"
-import { spaceToRect } from "./helpers"
+import { rectMiddleSlice, spaceToRect } from "./helpers"
 import { progressCharacterStatus } from "./operations/character-status"
 import { attemptMove } from "./operations/movement"
 import { updateNpc } from "./operations/npc-automation"
@@ -8,7 +8,7 @@ import { findNpcsHitByPlayerAttack, getAttackZone, handlePlayerAttackHits } from
 import { handlePlayerNpcCollisions } from "./operations/player-damage"
 import { fallOrStayOnGround, getAltitudeAndFloorLevel } from "./platform-operations/gravity"
 import { attemptPlatformMovement } from "./platform-operations/movement"
-import { FeedbackEvent, FeedbackEventEventType, GameCharacter, GameState, InputState, PlatformLevel } from "./types"
+import { Exit, FeedbackEvent, FeedbackEventEventType, GameCharacter, GameState, InputState, Level, PlatformLevel } from "./types"
 
 const runPlatformLevel = (level: PlatformLevel, state: GameState, player: GameCharacter, inputs: InputState) => {
     const { floorLevel } = getAltitudeAndFloorLevel(player, level)
@@ -53,6 +53,34 @@ const runPlatformLevel = (level: PlatformLevel, state: GameState, player: GameCh
     })
 }
 
+const handleExits = (level: Level, player: GameCharacter, state: GameState): GameState | undefined => {
+    const playerRect = spaceToRect(player)
+    const findExit = level.levelType === 'platform'
+        ? (exit: Exit) => player.altitude === 0 && doRectsIntersect(spaceToRect(exit), rectMiddleSlice(playerRect))
+        : (exit: Exit) => doRectsIntersect(spaceToRect(exit), playerRect)
+
+    const exit = level.exits.find(findExit)
+    if (!exit) {
+        return undefined
+    }
+    const newLevelIndex = state.levels.findIndex(level => level.id === exit.destination.levelId)
+    if (newLevelIndex == -1) {
+        console.error(`no level ${exit.destination.levelId}`)
+        return undefined
+    }
+    return {
+        ...state,
+        currentLevelIndex: newLevelIndex,
+        player: {
+            ...player,
+            x: exit.destination.x,
+            y: exit.destination.y,
+            vector: { xd: 0, yd: 0 },
+            altitude: 0,
+        }
+    }
+}
+
 
 export const runCycle = (state: GameState, inputs: InputState): GameState => {
     const newEvents: FeedbackEvent[] = []
@@ -61,22 +89,16 @@ export const runCycle = (state: GameState, inputs: InputState): GameState => {
     const cycleNumber = state.cycleNumber
     const addFeedback = (type: FeedbackEventEventType) => newEvents.push({ type, cycleNumber })
 
-    const playerRect = spaceToRect(player)
     const { npcs } = level
+
+    const levelChangeState = handleExits(level, player, state);
+    if (levelChangeState) {
+        return levelChangeState
+    }
 
     if (level.levelType === 'platform') {
         runPlatformLevel(level, state, player, inputs)
     } else if (level.levelType === 'overhead') {
-
-        const exit = level.exits.find(exit => doRectsIntersect(spaceToRect(exit), playerRect))
-        if (exit) {
-            return {
-                ...state,
-                currentLevelIndex: exit.destination.levelIndex,
-                player: { ...player, x: exit.destination.x, y: exit.destination.y }
-            }
-        }
-
         updatePlayer(player, inputs, cycleNumber, newEvents)
         const playerWasReelingAtStart = !!player.reeling
         progressCharacterStatus(player, addFeedback)

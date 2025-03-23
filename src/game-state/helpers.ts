@@ -4,6 +4,15 @@ import { GameState, Space } from "./types";
 
 export const spaceToRect = (o: Space): Rect => ({ top: o.y, left: o.x, bottom: o.y + o.height, right: o.x + o.width })
 
+export const rectMiddleSlice = (rect: Rect) => {
+    const width = rect.right - rect.left
+    return {
+        ...rect,
+        left: rect.left + width / 2,
+        right: rect.right - width / 2,
+    }
+}
+
 export const getDirection = (xd: number, yd: number): Direction => {
     if (Math.abs(xd) > Math.abs(yd)) {
         return xd > 0 ? 'Right' : 'Left'

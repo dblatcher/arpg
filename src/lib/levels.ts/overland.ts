@@ -26,7 +26,7 @@ export const overlandLevel = (): OverheadLevel => {
                 y: TILE_SIZE * 0,
                 x: TILE_SIZE * 4,
                 destination: {
-                    levelIndex: 1,
+                    levelId: 'caves',
                     x: TILE_SIZE * 10.5,
                     y: TILE_SIZE * 3,
                 }

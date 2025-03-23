@@ -60,7 +60,7 @@ export type Tile = {
 
 export type Exit = Space & {
     destination: {
-        levelIndex: number,
+        levelId: string,
         x: number,
         y: number,
     }
@@ -85,6 +85,7 @@ export type PlatformLevel = {
     id: string,
     npcs: GameCharacter[];
     platforms: Platform[];
+    exits: Exit[];
 }
 
 export type Level = OverheadLevel | PlatformLevel

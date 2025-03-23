@@ -53,6 +53,7 @@ export const makeInitalState = (): GameState => ({
                 makePlatform(10.1, 7.0, false),
                 makePlatform(11, 9),
                 makePlatform(0, 10),
+                makePlatform(1, 10),
                 makePlatform(2, 10),
                 makePlatform(4, 10),
                 makePlatform(5, 10),
@@ -62,6 +63,19 @@ export const makeInitalState = (): GameState => ({
                 makePlatform(4, 12),
                 makePlatform(0, 14),
                 makePlatform(3, 14),
+            ],
+            exits: [
+                {
+                    x: 0,
+                    y: TILE_SIZE * 8,
+                    width: TILE_SIZE * 1,
+                    height: TILE_SIZE * 2,
+                    destination: {
+                        levelId: 'first',
+                        x: TILE_SIZE * 4.5,
+                        y: TILE_SIZE * 2,
+                    }
+                }
             ]
         },
         overlandLevel(),

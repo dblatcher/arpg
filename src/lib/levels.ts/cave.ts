@@ -21,7 +21,7 @@ sssssssssssssss
 export const caveLevel = (): OverheadLevel => {
 
     return  {
-                id: 'second',
+                id: 'caves',
                 levelType: 'overhead',
                 exits: [
                     {
@@ -30,7 +30,7 @@ export const caveLevel = (): OverheadLevel => {
                         width: TILE_SIZE * 2,
                         height: TILE_SIZE * 1,
                         destination: {
-                            levelIndex: 0,
+                            levelId: 'first',
                             x: TILE_SIZE * 4.5,
                             y: TILE_SIZE * 2,
                         }

@@ -112,7 +112,7 @@ const drawPlatformbackdrop = (
     viewport: ViewPort
 ) => {
 
-    const { ctx } = drawingMethods
+    const { ctx, rect } = drawingMethods
     const drawSprite = drawSpriteFunc(drawingMethods, assets, assetParams)
 
     ctx.clearRect(0, 0, viewport.width, viewport.height)
@@ -128,10 +128,15 @@ const drawPlatformbackdrop = (
             width,
         })
 
-    const { platforms } = level
+    const { platforms, exits } = level
 
     platforms.forEach((platform) => {
         drawPlatform(platform.blocking ? STONE : GRASS, platform)
+    })
+
+    exits.forEach(({ x, y, width, height }) => {
+        rect(x,y,width,height)
+        ctx.fill()
     })
 
     ctx.beginPath()
