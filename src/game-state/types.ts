@@ -64,28 +64,29 @@ export type Exit = Space & {
         x: number,
         y: number,
     }
-
 }
 
-export type OverheadLevel = {
-    levelType: 'overhead'
+type LevelBase = {
     id: string,
-    obstacles: Space[];
-    npcs: GameCharacter[];
-    tileMap: Tile[][];
     exits: Exit[];
+    npcs: GameCharacter[];
+    mapWidth: number
+    mapHeight: number
+}
+
+export type OverheadLevel = LevelBase & {
+    levelType: 'overhead'
+    obstacles: Space[];
+    tileMap: Tile[][];
 }
 
 export type Platform = Space & {
     blocking?: boolean
 }
 
-export type PlatformLevel = {
+export type PlatformLevel = LevelBase & {
     levelType: 'platform',
-    id: string,
-    npcs: GameCharacter[];
     platforms: Platform[];
-    exits: Exit[];
 }
 
 export type Level = OverheadLevel | PlatformLevel

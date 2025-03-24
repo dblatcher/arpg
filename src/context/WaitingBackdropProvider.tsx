@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import { BackdropContext, BackdropProviderProps } from "./backdrop-context"
 import { useAssets } from "./asset-context"
 import { generateBackdropUrl } from "../drawing"
+import { GameState } from "../game-state"
 
 
 export const WaitingBackdropProvider = ({ children, loadingContent, initialGameState, currentLevelIndex }: BackdropProviderProps) => {
@@ -9,9 +10,14 @@ export const WaitingBackdropProvider = ({ children, loadingContent, initialGameS
     const assets = useAssets()
 
     useEffect(() => {
+        const level = initialGameState.levels[currentLevelIndex];
+        if (!level) {
+            throw new Error('no such level')
+        }
+        const { mapHeight: height, mapWidth: width, id } = level;
+        const stateAtLevel: GameState = { ...initialGameState, currentLevelIndex, mapHeight: height, mapWidth: width }
 
-        console.log('generating backdrop urls for level', currentLevelIndex)
-        const stateAtLevel = {...initialGameState, currentLevelIndex}
+        console.log('generating backdrop urls for level', { id, width, height },)
         const urlsList = [
             generateBackdropUrl(0)(stateAtLevel, assets),
             generateBackdropUrl(1)(stateAtLevel, assets),

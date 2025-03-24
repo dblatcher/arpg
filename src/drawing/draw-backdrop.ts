@@ -3,7 +3,6 @@ import { AssetKey, AssetMap, assetParams } from "../assets-defs";
 import { GameState, OverheadLevel, PlatformLevel, Space, Terrain } from "../game-state";
 import { TILE_DIMS } from "./constants-and-types";
 import { getCurrentLevel } from "../game-state/helpers";
-import { MAP_HEIGHT, MAP_WIDTH } from "../lib/levels.ts/stuff";
 
 
 const STONE: SpriteFrame<AssetKey> = { key: 'TILES_1', fx: 1, fy: 5, }
@@ -141,8 +140,8 @@ const drawPlatformbackdrop = (
     }
 
     if (variant === 1) {
-        for (let py = 350; py < MAP_HEIGHT; py += 50) {
-            for (let px = 0; px < MAP_WIDTH; px += 50) {
+        for (let py = 350; py < level.mapHeight; py += 50) {
+            for (let px = 0; px < level.mapWidth; px += 50) {
                 drawPlatform(ROAD, { x: px, y: py, width: 50, height: 50 })
             }
         }
@@ -150,17 +149,22 @@ const drawPlatformbackdrop = (
     }
 
     if (variant === 2) {
-        rect(0, 0, MAP_WIDTH, MAP_HEIGHT)
+        rect(0, 0, level.mapWidth, level.mapHeight)
         ctx.fillStyle = 'grey'
         ctx.fill()
-        const skyHeight = MAP_HEIGHT * (1/2)
-
         drawSprite({
             key: 'CLOUDS',
             x: 0,
             y: 0,
-            width: skyHeight*2,
-            height: skyHeight,
+            width: 700,
+            height: 350,
+        })
+        drawSprite({
+            key: 'CLOUDS',
+            x: 700,
+            y: 0,
+            width: 700,
+            height: 350,
         })
     }
 }

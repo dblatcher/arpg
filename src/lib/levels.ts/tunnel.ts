@@ -14,6 +14,8 @@ export const tunnelLevel = (): PlatformLevel => {
 
     return {
         id: LEVEL_IDS.Bridge,
+        mapWidth: 1200,
+        mapHeight: 600,
         levelType: 'platform',
         npcs: [
             // standardNpc(TILE_SIZE * 5, 50)
@@ -27,6 +29,13 @@ export const tunnelLevel = (): PlatformLevel => {
             makePlatform(9.1, 6.8),
             makePlatform(10.1, 7.0, false),
             makePlatform(11, 9),
+            makePlatform(12, 9),
+            makePlatform(13, 9),
+            makePlatform(14, 9),
+            makePlatform(15, 9),
+            makePlatform(16, 9),
+            makePlatform(17, 9),
+            makePlatform(18, 9),
             makePlatform(0, 10),
             makePlatform(1, 10),
             makePlatform(2, 10),

@@ -68,8 +68,13 @@ const handleExits = (level: Level, player: GameCharacter, state: GameState): Gam
         console.error(`no level ${exit.destination.levelId}`)
         return undefined
     }
+
+    const newLevel = state.levels[newLevelIndex]
+
     return {
         ...state,
+        mapHeight: newLevel.mapHeight,
+        mapWidth: newLevel.mapWidth,
         currentLevelIndex: newLevelIndex,
         player: {
             ...player,

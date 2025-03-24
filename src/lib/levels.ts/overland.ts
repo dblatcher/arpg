@@ -16,8 +16,13 @@ const tilesLevel0 = `
 
 export const overlandLevel = (): OverheadLevel => {
 
+    const mapWidth = 1000;
+    const mapHeight = 600;
+
     return {
         id: LEVEL_IDS.Outside,
+        mapWidth,
+        mapHeight,
         levelType: 'overhead',
         exits: [
             {
@@ -47,6 +52,6 @@ export const overlandLevel = (): OverheadLevel => {
             standardNpc(500, 300),
             standardNpc(550, 440),
         ],
-        ...makeObstaclesAndTileMap(tilesLevel0)
+        ...makeObstaclesAndTileMap(tilesLevel0, mapWidth, mapHeight)
     };
 }

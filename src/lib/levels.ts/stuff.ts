@@ -2,9 +2,6 @@ import { GameCharacter, Tile } from "../../game-state"
 import { TILE_SIZE } from "../../game-state/constants"
 import { stringToTileMap, tileMapToObstacles } from "../tile-maps"
 
-export const MAP_WIDTH = 600
-export const MAP_HEIGHT = 600
-
 export enum LEVEL_IDS {
     Caves = 'caves',
     Outside = 'first',
@@ -32,8 +29,8 @@ export const standardNpc = (x: number, y: number): GameCharacter => (
     }
 )
 
-export const makeObstaclesAndTileMap = (tiles: string, defaultTile?: Tile) => {
-    const tileMap = stringToTileMap(tiles, MAP_WIDTH / TILE_SIZE, MAP_HEIGHT / TILE_SIZE, defaultTile)
+export const makeObstaclesAndTileMap = (tiles: string, width: number, height: number, defaultTile?: Tile) => {
+    const tileMap = stringToTileMap(tiles, width / TILE_SIZE, height / TILE_SIZE, defaultTile)
     const obstacles = tileMapToObstacles(tileMap)
     return {
         tileMap, obstacles

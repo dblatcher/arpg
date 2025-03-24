@@ -1,18 +1,18 @@
-import { GameState } from "../game-state";
+import { GameState, Level } from "../game-state";
 import { TILE_SIZE } from "../game-state/constants";
 import { caveLevel } from "./levels.ts/cave";
 import { overlandLevel } from "./levels.ts/overland";
-import { LEVEL_IDS, MAP_HEIGHT, MAP_WIDTH } from "./levels.ts/stuff";
 import { tunnelLevel } from "./levels.ts/tunnel";
 
 export const makeInitalState = (): GameState => {
-    const levels = [
+    const levels: [Level, Level, Level] = [
         tunnelLevel(),
         overlandLevel(),
         caveLevel(),
     ]
-    const currentLevelIndex = levels.findIndex(level => level.id === LEVEL_IDS.Bridge)
-
+    const currentLevelIndex = 0
+    const currentLevel = levels[currentLevelIndex]
+    const { mapWidth, mapHeight } = currentLevel
     return {
         score: 0,
         feedbackEvents: [],
@@ -23,7 +23,7 @@ export const makeInitalState = (): GameState => {
             direction: 'Down',
             altitude: 0,
             // x: TILE_SIZE * 5, y: TILE_SIZE * 2,
-            x: MAP_WIDTH/2, 
+            x: 300,
             y: TILE_SIZE * 4,
             width: 39,
             height: 39,
@@ -37,8 +37,8 @@ export const makeInitalState = (): GameState => {
             }
         },
 
-        mapHeight: MAP_HEIGHT,
-        mapWidth: MAP_WIDTH,
+        mapHeight,
+        mapWidth,
         cycleNumber: 0,
         paused: false,
     }

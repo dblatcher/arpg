@@ -20,37 +20,42 @@ sssssssssssssss
 
 export const caveLevel = (): OverheadLevel => {
 
-    return  {
-                id: LEVEL_IDS.Caves,
-                levelType: 'overhead',
-                exits: [
-                    {
-                        x: TILE_SIZE * 10,
-                        y: TILE_SIZE * 1,
-                        width: TILE_SIZE * 2,
-                        height: TILE_SIZE * 1,
-                        destination: {
-                            levelId: LEVEL_IDS.Outside,
-                            x: TILE_SIZE * 4.5,
-                            y: TILE_SIZE * 2,
-                        }
-                    },
-                    {
-                        x: TILE_SIZE * 3,
-                        y: TILE_SIZE * 1,
-                        width: TILE_SIZE * 2,
-                        height: TILE_SIZE * 1,
-                        destination: {
-                            levelId: LEVEL_IDS.Bridge,
-                            x: TILE_SIZE * 4.5,
-                            y: TILE_SIZE * 2,
-                        }
-                    },
-                ],
-                npcs: [],
-                ...makeObstaclesAndTileMap(tilesLevel1, {
-                    terrain: Terrain.MossyGround,
-                    traversability: Traversability.Open
-                })
-            }
+    const mapWidth = 600;
+    const mapHeight = 600;
+
+    return {
+        id: LEVEL_IDS.Caves,
+        mapWidth,
+        mapHeight,
+        levelType: 'overhead',
+        exits: [
+            {
+                x: TILE_SIZE * 10,
+                y: TILE_SIZE * 1,
+                width: TILE_SIZE * 2,
+                height: TILE_SIZE * 1,
+                destination: {
+                    levelId: LEVEL_IDS.Outside,
+                    x: TILE_SIZE * 4.5,
+                    y: TILE_SIZE * 2,
+                }
+            },
+            {
+                x: TILE_SIZE * 3,
+                y: TILE_SIZE * 1,
+                width: TILE_SIZE * 2,
+                height: TILE_SIZE * 1,
+                destination: {
+                    levelId: LEVEL_IDS.Bridge,
+                    x: TILE_SIZE * 4.5,
+                    y: TILE_SIZE * 2,
+                }
+            },
+        ],
+        npcs: [],
+        ...makeObstaclesAndTileMap(tilesLevel1, mapWidth, mapHeight, {
+            terrain: Terrain.MossyGround,
+            traversability: Traversability.Open
+        })
+    }
 }
