@@ -9,7 +9,7 @@ export type BackdropProviderProps = {
     children: ReactNode
     loadingContent?: ReactNode
     initialGameState: GameState
-    currentLevelIndex: number
+    currentLevelId: string
 }
 
 export const BackdropContext = createContext<BackdropContextProps>({ backdropUrls: [] })

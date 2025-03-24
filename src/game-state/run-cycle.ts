@@ -63,19 +63,18 @@ const handleExits = (level: Level, player: GameCharacter, state: GameState): Gam
     if (!exit) {
         return undefined
     }
-    const newLevelIndex = state.levels.findIndex(level => level.id === exit.destination.levelId)
-    if (newLevelIndex == -1) {
+    const newLevel = state.levels.find(level => level.id === exit.destination.levelId)
+    if (!newLevel) {
         console.error(`no level ${exit.destination.levelId}`)
         return undefined
     }
 
-    const newLevel = state.levels[newLevelIndex]
 
     return {
         ...state,
         mapHeight: newLevel.mapHeight,
         mapWidth: newLevel.mapWidth,
-        currentLevelIndex: newLevelIndex,
+        currentLevelId: newLevel.id,
         player: {
             ...player,
             x: exit.destination.x,
@@ -91,6 +90,10 @@ export const runCycle = (state: GameState, inputs: InputState): GameState => {
     const newEvents: FeedbackEvent[] = []
     const player = structuredClone(state.player)
     const level = structuredClone(getCurrentLevel(state))
+    if (!level) {
+        console.error('NO LEVEL')
+        return state
+    }
     const cycleNumber = state.cycleNumber
     const addFeedback = (type: FeedbackEventEventType) => newEvents.push({ type, cycleNumber })
 
@@ -134,12 +137,13 @@ export const runCycle = (state: GameState, inputs: InputState): GameState => {
 
     const feedbackEvents = [...state.feedbackEvents, ...newEvents]
     level.npcs = npcs.filter(npc => !npc.dying || npc.dying.remaining > 0)
+    const currentLevelIndex = state.levels.findIndex(l => l.id === state.currentLevelId)
 
     return {
         ...state,
         feedbackEvents,
         cycleNumber: cycleNumber + 1,
         player,
-        levels: [...state.levels.slice(0, state.currentLevelIndex), level, ...state.levels.slice(state.currentLevelIndex + 1)],
+        levels: [...state.levels.slice(0, currentLevelIndex), level, ...state.levels.slice(currentLevelIndex + 1)],
     }
 }

@@ -10,13 +10,13 @@ export const makeInitalState = (): GameState => {
         overlandLevel(),
         caveLevel(),
     ]
-    const currentLevelIndex = 0
-    const currentLevel = levels[currentLevelIndex]
-    const { mapWidth, mapHeight } = currentLevel
+  
+    const currentLevel = levels[0]
+    const { mapWidth, mapHeight, id:currentLevelId } = currentLevel
     return {
         score: 0,
         feedbackEvents: [],
-        currentLevelIndex,
+        currentLevelId,
         levels,
         player: {
             id: -1,

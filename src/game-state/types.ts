@@ -95,7 +95,7 @@ export type GameState = BaseGameState & {
     feedbackEvents: FeedbackEvent[],
     paused: boolean;
     player: GameCharacter;
-    currentLevelIndex: number;
+    currentLevelId: string;
     levels: Level[];
     score: number;
 }
