@@ -1,7 +1,13 @@
 import { hasXOverlap, hasYOverlap, lowestSpaceFirst } from "../helpers";
-import { GameCharacter, PlatformLevel, Space } from "../types";
+import { FeedbackEventEventType, GameCharacter, PlatformLevel, Space } from "../types";
 
-export const attemptPlatformMovement = (level: PlatformLevel, floorLevel = Infinity, character: GameCharacter) => {
+export const attemptPlatformMovement = (
+    level: PlatformLevel,
+    floorLevel = Infinity,
+    character: GameCharacter,
+    isPlayer: boolean,
+    addFeedback: ((type: FeedbackEventEventType) => void),
+) => {
     const { platforms } = level
     const afterYMovement: Space = {
         x: character.x,
@@ -31,6 +37,9 @@ export const attemptPlatformMovement = (level: PlatformLevel, floorLevel = Infin
     if (character.vector.yd > 0) {
         const floorAdjustedForHeight = (floorLevel ?? Infinity) - character.height;
         if (afterYMovement.y > floorAdjustedForHeight) { //would pass floor
+            if (isPlayer) {
+                addFeedback('player-land')
+            }
             character.vector.yd = 0
             afterYMovement.y = floorAdjustedForHeight
         }

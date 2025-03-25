@@ -1,7 +1,7 @@
 import { drawSpriteFunc, DrawToCanvasFunction, fullViewPort, makeDrawingMethods } from "@dblatcher/sprite-canvas";
 import { AssetKey, assetParams } from "../assets-defs";
 import { GameState } from "../game-state";
-import { getAttackZone } from "../game-state/operations/player-attacks";
+import { getAttackZone } from "../game-state/overhead-operations/player-attacks";
 import { drawCharacter } from "./draw-character";
 import { ranger } from "./ranger-sprite";
 import { punisher } from "./punisher-sprite";

@@ -30,6 +30,10 @@ export const runFeedback = (feedback: FeedbackEvent[], soundDeck: SoundDeck, gam
                 break
             case "reel-end":
                 break
+            case "player-land":
+                rumble(gamePad, { duration: 150, strongMagnitude: .8, weakMagnitude: .5 })
+                soundDeck.playNoise({ duration: .05, frequency: 300 }, { volume: .1 })
+                break
             case "player-hit":
                 rumble(gamePad, { duration: 500, strongMagnitude: .8, weakMagnitude: .5 })
                 soundDeck.playTone({ duration: .2, frequency: 300, endFrequency: 100, type: 'triangle' }, { volume: .2 })

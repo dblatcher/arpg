@@ -40,7 +40,7 @@ export type GameCharacter = Space & {
     altitude: number
 }
 
-export type FeedbackEventEventType = 'attack' | 'npc-hit' | 'attack-end' | 'reel-end' | 'player-hit'
+export type FeedbackEventEventType = 'attack' | 'npc-hit' | 'attack-end' | 'reel-end' | 'player-hit' | 'player-land'
 export type FeedbackEvent = {
     type: FeedbackEventEventType;
     cycleNumber: number;
