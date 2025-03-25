@@ -1,4 +1,4 @@
-import { drawOffScreen, drawSpriteFunc, DrawToCanvasFunction, fullViewPort, GenerateImageUrl, makeDrawingMethods, OffsetDrawMethods, SpriteFrame, ViewPort } from "@dblatcher/sprite-canvas";
+import { drawOffScreen, drawSpriteFunc, DrawSpriteFunction, DrawToCanvasFunction, fullViewPort, GenerateImageUrl, makeDrawingMethods, OffsetDrawMethods, SpriteFrame, ViewPort } from "@dblatcher/sprite-canvas";
 import { AssetKey, AssetMap, assetParams } from "../assets-defs";
 import { GameState, OverheadLevel, PlatformLevel, Space, Terrain } from "../game-state";
 import { TILE_DIMS } from "./constants-and-types";
@@ -36,30 +36,31 @@ const SPLASH = [
 
 type BackdropVariant = 0 | 1 | 2 | 3;
 
+const makeDrawTile = (drawSprite: DrawSpriteFunction<AssetKey>) => (frame: SpriteFrame<AssetKey>, x: number, y: number) =>
+    drawSprite({
+        ...frame,
+        x: -1 + (x * TILE_DIMS.width),
+        y: -1 + (y * TILE_DIMS.height),
+        height: TILE_DIMS.height + 2,
+        width: TILE_DIMS.width + 2
+    })
+
 
 const drawOverheadBackdrop = (variant: BackdropVariant, level: OverheadLevel, drawingMethods: OffsetDrawMethods, assets: AssetMap, viewport: ViewPort) => {
 
     const { ctx } = drawingMethods
     const drawSprite = drawSpriteFunc(drawingMethods, assets, assetParams)
-    const { tileMap } = level
-
-    ctx.clearRect(0, 0, viewport.width, viewport.height)
-    ctx.beginPath()
-
-    const drawTile = (frame: SpriteFrame<AssetKey>, x: number, y: number) =>
-        drawSprite({
-            ...frame,
-            x: -1 + (x * TILE_DIMS.width),
-            y: -1 + (y * TILE_DIMS.height),
-            height: TILE_DIMS.height + 2,
-            width: TILE_DIMS.width + 2
-        })
-
+    const drawTile = makeDrawTile(drawSprite)
     const drawTileIfBase = (frame: SpriteFrame<AssetKey>, x: number, y: number) => {
         if (variant === 0) {
             drawTile(frame, x, y)
         }
     }
+
+    const { tileMap } = level
+
+    ctx.clearRect(0, 0, viewport.width, viewport.height)
+    ctx.beginPath()
 
     tileMap.forEach((row, rowIndex) => {
         row.forEach((tile, tileIndex) => {
@@ -115,6 +116,7 @@ const drawPlatformbackdrop = (
 
     const { ctx, rect } = drawingMethods
     const drawSprite = drawSpriteFunc(drawingMethods, assets, assetParams)
+    const drawTile = makeDrawTile(drawSprite);
 
     ctx.clearRect(0, 0, viewport.width, viewport.height)
     ctx.beginPath()
@@ -139,34 +141,73 @@ const drawPlatformbackdrop = (
         })
     }
 
-    if (variant === 1) {
-        for (let py = 350; py < level.mapHeight; py += 50) {
-            for (let px = 0; px < level.mapWidth; px += 50) {
-                drawPlatform(ROAD, { x: px, y: py, width: 50, height: 50 })
-            }
-        }
-        ctx.stroke()
+    const backdrop = level.backdrops[variant - 1]
+    if (!backdrop) {
+        return
     }
 
-    if (variant === 2) {
+    const { baseColor, images = [], filter, terrainMap } = backdrop
+
+    ctx.filter = filter ?? ''
+
+    if (baseColor) {
+        ctx.beginPath()
         rect(0, 0, level.mapWidth, level.mapHeight)
-        ctx.fillStyle = 'grey'
+        ctx.fillStyle = baseColor
         ctx.fill()
-        drawSprite({
-            key: 'CLOUDS',
-            x: 0,
-            y: 0,
-            width: 700,
-            height: 350,
-        })
-        drawSprite({
-            key: 'CLOUDS',
-            x: 700,
-            y: 0,
-            width: 700,
-            height: 350,
-        })
     }
+
+    images.forEach(image => {
+        ctx.beginPath()
+        ctx.fillStyle = ctx.createPattern(assets[image.image], image.repeat ?? null) ?? ''
+        rect(...image.rect)
+        ctx.fill()
+    })
+
+    terrainMap?.forEach((row, rowIndex) => {
+        row.forEach((terrain, tileIndex) => {
+            switch (terrain) {
+                case Terrain.Grass:
+                    drawTile(GRASS, tileIndex, rowIndex)
+                    break
+                case Terrain.Road:
+                    drawTile(ROAD, tileIndex, rowIndex);
+                    break
+                case Terrain.Stone:
+                    drawTile(STONE, tileIndex, rowIndex);
+                    break
+                case Terrain.Water:
+                    drawTile(WATER, tileIndex, rowIndex);
+                    break
+                case Terrain.Waterfall:
+                    drawTile(WATERFALL[variant], tileIndex, rowIndex)
+                    break;
+                case Terrain.Splash:
+                    drawTile(SPLASH[variant], tileIndex, rowIndex)
+                    break;
+                case Terrain.Cave: {
+                    const isOnLeft = terrainMap[rowIndex]?.[tileIndex + 1] === Terrain.Cave
+                    const isOnTop = terrainMap[rowIndex + 1]?.[tileIndex] === Terrain.Cave
+                    const frame = isOnTop
+                        ? isOnLeft
+                            ? CAVE.topLeft
+                            : CAVE.topRight
+                        : isOnLeft
+                            ? CAVE.bottomLeft
+                            : CAVE.bottomRight
+                    drawTile(frame, tileIndex, rowIndex)
+                    break;
+                }
+                case Terrain.MossyGround:
+                    drawTile(MOSSY_GROUND, tileIndex, rowIndex);
+                    break;
+            }
+        })
+    });
+
+    ctx.filter = ''
+
+
 }
 
 const drawBackdrop = (variant: BackdropVariant): DrawToCanvasFunction<GameState, AssetKey> => (state, assets, viewport = fullViewPort(state)) => {

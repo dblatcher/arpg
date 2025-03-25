@@ -1,5 +1,6 @@
 import { BaseGameState, Direction } from "@dblatcher/sprite-canvas"
 import { XY } from "../lib/geometry"
+import { AssetKey } from "../assets-defs"
 
 export type Space = {
     x: number,
@@ -84,9 +85,24 @@ export type Platform = Space & {
     blocking?: boolean
 }
 
+
+
+type PlatformBackdrop = {
+    parallax: number,
+    filter?: string,
+    baseColor?: string,
+    images?: Array<{
+        image: AssetKey,
+        repeat?: "repeat" | "repeat-x" | "repeat-y" | "no-repeat",
+        rect: [number, number, number, number]
+    }>,
+    terrainMap?: (Terrain | undefined)[][]
+}
+
 export type PlatformLevel = LevelBase & {
     levelType: 'platform',
     platforms: Platform[];
+    backdrops: PlatformBackdrop[];
 }
 
 export type Level = OverheadLevel | PlatformLevel

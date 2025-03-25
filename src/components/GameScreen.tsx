@@ -3,7 +3,7 @@ import { useBackdrops } from "../context/backdrop-context"
 import { GameState } from "../game-state"
 import { ScrollingBackdrop } from "./ScrollingBackdrop"
 import { SpriteLayerCanvas } from "./SpriteLayerCanvas"
-import { getLevelType } from "../game-state/helpers"
+import { getCurrentLevel } from "../game-state/helpers"
 
 interface Props {
     gameState: GameState
@@ -15,7 +15,7 @@ export const GameScreen = ({ gameState, viewPort, magnify = 1 }: Props) => {
     const backdropUrlList = useBackdrops()
     const [baseBackdropUrl] = backdropUrlList
 
-    const levelType = getLevelType(gameState);
+    const level = getCurrentLevel(gameState)
     const backDropUrl = backdropUrlList ? backdropUrlList[Math.floor(gameState.cycleNumber / 10) % backdropUrlList.length] : undefined;
 
     return (
@@ -26,21 +26,21 @@ export const GameScreen = ({ gameState, viewPort, magnify = 1 }: Props) => {
             overflow: 'hidden',
             border: '8px inset red'
         }}>
-            {levelType === 'platform' && (
+            {level?.levelType === 'platform' && (
                 <>
                     <ScrollingBackdrop
                         viewPort={viewPort}
                         magnify={magnify}
-                        parallax={6}
-                        url={backdropUrlList[2]}
+                        parallax={level.backdrops[0]?.parallax}
+                        url={backdropUrlList[1]}
                         mapWidth={gameState.mapWidth}
                         mapHeight={gameState.mapHeight}
                     />
                     <ScrollingBackdrop
                         viewPort={viewPort}
                         magnify={magnify}
-                        parallax={3}
-                        url={backdropUrlList[1]}
+                        parallax={level.backdrops[1]?.parallax}
+                        url={backdropUrlList[2]}
                         mapWidth={gameState.mapWidth}
                         mapHeight={gameState.mapHeight}
                     />
@@ -53,7 +53,7 @@ export const GameScreen = ({ gameState, viewPort, magnify = 1 }: Props) => {
                 mapWidth={gameState.mapWidth}
                 mapHeight={gameState.mapHeight}
             />
-            {levelType === 'overhead' && (
+            {level?.levelType === 'overhead' && (
                 <ScrollingBackdrop
                     viewPort={viewPort}
                     magnify={magnify}

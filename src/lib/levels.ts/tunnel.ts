@@ -1,5 +1,6 @@
 import { Platform, PlatformLevel } from "../../game-state";
 import { TILE_SIZE } from "../../game-state/constants";
+import { stringToBackdropTiles } from "../tile-maps";
 import { LEVEL_IDS } from "./stuff";
 
 const makePlatform = (x: number, y: number, blocking = true): Platform => ({
@@ -10,18 +11,53 @@ const makePlatform = (x: number, y: number, blocking = true): Platform => ({
     blocking,
 })
 
+const tilesLevel0 = `
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ s  s  s  s  s  s  s  s  s  s
+ ssssssssssssssssssssssssssss
+ ssssssmsmmmsssssssssssssssss
+ ssssssmmmsssssssssssssssssss
+ ssssssssssssssssssssssssssss
+`;
+
 export const tunnelLevel = (): PlatformLevel => {
+
+    const mapWidth = 1200
+    const mapHeight = 450
 
     return {
         id: LEVEL_IDS.Bridge,
-        mapWidth: 1200,
-        mapHeight: 600,
+        mapWidth,
+        mapHeight,
         levelType: 'platform',
         npcs: [
             // standardNpc(TILE_SIZE * 5, 50)
         ],
+
+        backdrops: [
+            {
+                parallax: 10,
+                filter: 'sepia(70%)',
+                baseColor: '#31a2f2',
+                images: [{
+                    image: 'CLOUDS',
+                    repeat: 'repeat',
+                    rect: [0, 0, mapWidth, 200],
+                }],
+            },
+            {
+                parallax: 4,
+                filter: 'blur(1px) sepia(60%)',
+                terrainMap: stringToBackdropTiles(tilesLevel0, mapWidth / TILE_SIZE, mapHeight / TILE_SIZE)
+            }
+        ],
         platforms: [
-            makePlatform(0, 0),
             makePlatform(0, 5),
             makePlatform(7, 8),
             makePlatform(8, 9),

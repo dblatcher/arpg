@@ -1,7 +1,7 @@
 import { Space, Terrain, Tile, Traversability } from "../game-state";
 import { TILE_SIZE } from "../game-state/constants";
 
-const letterToTile = (letter: string, defaultTile: Tile): Tile => {
+const letterToTile = (letter: string): Tile | undefined => {
     switch (letter) {
         case 'r':
             return {
@@ -12,6 +12,11 @@ const letterToTile = (letter: string, defaultTile: Tile): Tile => {
             return {
                 terrain: Terrain.Stone,
                 traversability: Traversability.Blocking
+            }
+        case 'm':
+            return {
+                terrain: Terrain.MossyGround,
+                traversability: Traversability.Open
             }
         case 'w':
             return {
@@ -33,8 +38,6 @@ const letterToTile = (letter: string, defaultTile: Tile): Tile => {
                 terrain: Terrain.Cave,
                 traversability: Traversability.Open
             }
-        default:
-            return { ...defaultTile }
     }
 }
 
@@ -47,8 +50,20 @@ export const stringToTileMap = (input: string, width: number, height: number, de
         characterRows.push(" ")
     }
     const letterGrid = characterRows.map(row => row.padEnd(width, " ").split(''))
-    const tileGrid = letterGrid.map(row => row.map((letter) => letterToTile(letter, defaultTile)))
+    const tileGrid = letterGrid.map(row => row.map((letter) => letterToTile(letter) ?? defaultTile))
     return tileGrid
+}
+
+export const stringToBackdropTiles = (input: string, width: number, height: number,): (Terrain | undefined)[][] => {
+    const characterRows = input.split("\n").filter(row => row.length > 0)
+    while (characterRows.length < height) {
+        characterRows.push(" ")
+    }
+    const letterGrid = characterRows.map(row => row.padEnd(width, " ").split(''))
+
+    const tileGrid = letterGrid.map(row => row.map((letter) => letterToTile(letter)?.terrain))
+    return tileGrid
+
 }
 
 export const tileMapToObstacles = (tileMap: Tile[][]): Space[] => {
