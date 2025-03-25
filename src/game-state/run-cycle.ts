@@ -8,7 +8,7 @@ import { findNpcsHitByPlayerAttack, getAttackZone, handlePlayerAttackHits } from
 import { handlePlayerNpcCollisions } from "./operations/player-damage"
 import { fallOrStayOnGround, getAltitudeAndFloorLevel } from "./platform-operations/gravity"
 import { attemptPlatformMovement } from "./platform-operations/movement"
-import { Exit, FeedbackEvent, FeedbackEventEventType, GameCharacter, GameState, InputState, Level, PlatformLevel } from "./types"
+import { Exit, FeedbackEvent, FeedbackEventEventType, GameCharacter, GameState, InputState, Level, OverheadLevel, PlatformLevel } from "./types"
 
 const runPlatformLevel = (level: PlatformLevel, state: GameState, player: GameCharacter, inputs: InputState) => {
     const { floorLevel } = getAltitudeAndFloorLevel(player, level)
@@ -16,8 +16,13 @@ const runPlatformLevel = (level: PlatformLevel, state: GameState, player: GameCh
     if (player.altitude <= 0) { // on ground
         player.vector.xd = inputs.xd ?? 0
         if (inputs.yd && inputs?.yd < 0) {
-            player.vector.yd = -3
-            player.vector.xd = player.vector.xd * 3
+            if (Math.abs(player.vector.xd) > .5 ) {
+                player.vector.yd = -2
+                player.vector.xd = player.vector.xd * 5
+            } else {
+                player.vector.yd = -3
+                player.vector.xd = player.vector.xd * 3
+            }
         }
 
         switch (Math.sign(inputs.xd ?? 0)) {
@@ -53,6 +58,44 @@ const runPlatformLevel = (level: PlatformLevel, state: GameState, player: GameCh
     })
 }
 
+const runOverheadLevel = (
+    level: OverheadLevel,
+    state: GameState,
+    player: GameCharacter,
+    inputs: InputState,
+    addFeedback: { (event: FeedbackEventEventType): void }
+) => {
+
+    const { npcs } = level
+
+    updatePlayer(player, inputs, addFeedback)
+    const playerWasReelingAtStart = !!player.reeling
+    progressCharacterStatus(player, addFeedback)
+    const { collidedNpc } = attemptMove(player, level, state, true)
+    if (collidedNpc) {
+        handlePlayerNpcCollisions(player, collidedNpc, playerWasReelingAtStart, addFeedback)
+    }
+    // TO DO - how does the application react to player death?
+
+    const attackZone = getAttackZone(player)
+    if (attackZone) {
+        const hitNpcs = findNpcsHitByPlayerAttack(npcs, attackZone)
+        hitNpcs.forEach(npc => {
+            handlePlayerAttackHits(npc, state)
+            addFeedback('npc-hit')
+        })
+    }
+
+    npcs.forEach(npc => {
+        progressCharacterStatus(npc, addFeedback)
+        updateNpc(npc, state)
+        const { collidesWithPlayer } = attemptMove(npc, level, state)
+        if (collidesWithPlayer) {
+            handlePlayerNpcCollisions(player, npc, playerWasReelingAtStart, addFeedback)
+        }
+    })
+}
+
 const handleExits = (level: Level, player: GameCharacter, state: GameState): GameState | undefined => {
     const playerRect = spaceToRect(player)
     const findExit = level.levelType === 'platform'
@@ -68,7 +111,6 @@ const handleExits = (level: Level, player: GameCharacter, state: GameState): Gam
         console.error(`no level ${exit.destination.levelId}`)
         return undefined
     }
-
 
     return {
         ...state,
@@ -107,32 +149,7 @@ export const runCycle = (state: GameState, inputs: InputState): GameState => {
     if (level.levelType === 'platform') {
         runPlatformLevel(level, state, player, inputs)
     } else if (level.levelType === 'overhead') {
-        updatePlayer(player, inputs, cycleNumber, newEvents)
-        const playerWasReelingAtStart = !!player.reeling
-        progressCharacterStatus(player, addFeedback)
-        const { collidedNpc } = attemptMove(player, level, state, true)
-        if (collidedNpc) {
-            handlePlayerNpcCollisions(player, collidedNpc, playerWasReelingAtStart, addFeedback)
-        }
-        // TO DO - how does the application react to player death?
-
-        const attackZone = getAttackZone(player)
-        if (attackZone) {
-            const hitNpcs = findNpcsHitByPlayerAttack(npcs, attackZone)
-            hitNpcs.forEach(npc => {
-                handlePlayerAttackHits(npc, state)
-                addFeedback('npc-hit')
-            })
-        }
-
-        npcs.forEach(npc => {
-            progressCharacterStatus(npc, addFeedback)
-            updateNpc(npc, state)
-            const { collidesWithPlayer } = attemptMove(npc, level, state)
-            if (collidesWithPlayer) {
-                handlePlayerNpcCollisions(player, npc, playerWasReelingAtStart, addFeedback)
-            }
-        })
+        runOverheadLevel(level, state, player, inputs, addFeedback)
     }
 
     const feedbackEvents = [...state.feedbackEvents, ...newEvents]

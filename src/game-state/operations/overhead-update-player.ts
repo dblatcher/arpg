@@ -1,9 +1,9 @@
 import { ATTACK_DURATION } from "../constants";
 import { getDirection } from "../helpers";
-import { FeedbackEvent, GameCharacter, InputState } from "../types";
+import { FeedbackEventEventType, GameCharacter, InputState } from "../types";
 
 
-export const updatePlayer = (player: GameCharacter, inputs: InputState, cycleNumber: number, newEvents: FeedbackEvent[]) => {
+export const updatePlayer = (player: GameCharacter, inputs: InputState, addFeedback: { (event: FeedbackEventEventType): void }) => {
     if (player.attack || player.reeling) {
         return
     }
@@ -20,7 +20,7 @@ export const updatePlayer = (player: GameCharacter, inputs: InputState, cycleNum
             duration: ATTACK_DURATION,
             remaining: ATTACK_DURATION,
         }
-        newEvents.push({ type: 'attack', cycleNumber })
+        addFeedback('attack');
         return
     }
     player.vector = { xd, yd }
