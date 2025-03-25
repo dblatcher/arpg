@@ -48,11 +48,11 @@ export const tunnelLevel = (): PlatformLevel => {
                 images: [{
                     image: 'CLOUDS',
                     repeat: 'repeat',
-                    rect: [0, 0, mapWidth, 200],
+                    rect: [0, 100, mapWidth, 150],
                 }],
             },
             {
-                parallax: 4,
+                parallax: 2,
                 filter: 'blur(1px) sepia(60%)',
                 terrainMap: stringToBackdropTiles(tilesLevel0, mapWidth / TILE_SIZE, mapHeight / TILE_SIZE)
             }
