@@ -46,9 +46,11 @@ export const tunnelLevel = (): PlatformLevel => {
                 filter: 'sepia(70%)',
                 baseColor: '#31a2f2',
                 images: [{
-                    image: 'CLOUDS',
-                    repeat: 'repeat',
-                    rect: [0, 100, mapWidth, 150],
+                    assetKey: 'CLOUDS',
+                    repeat: 'repeat-x',
+                    rectArgs: [0, 50, mapWidth, 150],
+                    scaleX: 1.5,
+                    scaleY: 2,
                 }],
             },
             {

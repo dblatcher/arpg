@@ -92,9 +92,11 @@ type PlatformBackdrop = {
     filter?: string,
     baseColor?: string,
     images?: Array<{
-        image: AssetKey,
+        assetKey: AssetKey,
         repeat?: "repeat" | "repeat-x" | "repeat-y" | "no-repeat",
-        rect: [number, number, number, number]
+        rectArgs: [number, number, number, number],
+        scaleX?: number 
+        scaleY?: number 
     }>,
     terrainMap?: (Terrain | undefined)[][]
 }

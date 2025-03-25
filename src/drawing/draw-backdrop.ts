@@ -158,12 +158,13 @@ const drawPlatformbackdrop = (
     }
 
     images.forEach(image => {
+        const { rectArgs: rectArgs, assetKey, repeat = null, scaleX = 1, scaleY = 1 } = image
         ctx.beginPath()
-        const pattern = ctx.createPattern(assets[image.image], image.repeat ?? null)
-        const [x, y] = image.rect;
-        pattern?.setTransform(new DOMMatrix().translateSelf(-x, -y))
-        ctx.fillStyle = pattern ?? ''
-        rect(...image.rect)
+        const pattern = ctx.createPattern(assets[assetKey], repeat)
+        const [x, y] = rectArgs;
+        pattern?.setTransform(new DOMMatrix().translateSelf(x, y).scaleSelf(scaleX, scaleY))
+        ctx.fillStyle = pattern ?? '';
+        rect(...rectArgs)
         ctx.fill()
     })
 
