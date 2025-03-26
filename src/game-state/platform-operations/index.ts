@@ -1,14 +1,33 @@
+import { ATTACK_DURATION } from "../constants";
+import { progressCharacterStatus } from "../shared-operations/character-status";
 import { FeedbackEventEventType, GameCharacter, GameState, InputState, PlatformLevel } from "../types"
 import { getAltitudeAndFloorLevel, fallOrStayOnGround } from "./gravity"
 import { attemptPlatformMovement } from "./movement"
 
 
-export const runPlatformLevel = (level: PlatformLevel, state: GameState, player: GameCharacter, inputs: InputState, addFeedback: (type: FeedbackEventEventType) => void) => {
-    const { floorLevel } = getAltitudeAndFloorLevel(player, level)
+const handleInputs = (player: GameCharacter, inputs: InputState, addFeedback: { (type: FeedbackEventEventType): void; }) => {
+
+    const { xd, yd, attackButton } = inputs
 
     if (player.altitude <= 0) { // on ground
-        player.vector.xd = inputs.xd ?? 0
-        if (inputs.yd && inputs?.yd < 0) {
+        
+        if (player.attack || player.reeling) {
+            return
+        }
+
+        if (attackButton) {
+            player.vector.xd = 0
+            player.attack = {
+                duration: ATTACK_DURATION,
+                remaining: ATTACK_DURATION,
+            }
+            addFeedback('attack');
+            return
+        }
+
+        player.vector.xd = xd ?? 0
+
+        if (!player.attack && yd && yd < 0) {
             if (Math.abs(player.vector.xd) > .5) {
                 player.vector.yd = -2
                 player.vector.xd = player.vector.xd * 5
@@ -18,7 +37,7 @@ export const runPlatformLevel = (level: PlatformLevel, state: GameState, player:
             }
         }
 
-        switch (Math.sign(inputs.xd ?? 0)) {
+        switch (Math.sign(xd ?? 0)) {
             case -1:
                 player.direction = 'Left'
                 break
@@ -30,7 +49,14 @@ export const runPlatformLevel = (level: PlatformLevel, state: GameState, player:
     } else {
         fallOrStayOnGround(player)
     }
+}
 
+
+export const runPlatformLevel = (level: PlatformLevel, state: GameState, player: GameCharacter, inputs: InputState, addFeedback: (type: FeedbackEventEventType) => void) => {
+    const { floorLevel } = getAltitudeAndFloorLevel(player, level)
+
+    handleInputs(player, inputs, addFeedback)
+    progressCharacterStatus(player, addFeedback)
     attemptPlatformMovement(level, floorLevel, player, true, addFeedback)
 
     if (player.y > state.mapHeight) {

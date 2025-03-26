@@ -1,5 +1,5 @@
 import { OverheadLevel, GameState, GameCharacter, InputState, FeedbackEventEventType } from "../types"
-import { progressCharacterStatus } from "./character-status"
+import { progressCharacterStatus } from "../shared-operations/character-status"
 import { attemptMove } from "./movement"
 import { updateNpc } from "./npc-automation"
 import { updatePlayer } from "./overhead-update-player"
