@@ -1,4 +1,4 @@
-import { SoundDeck } from "sound-deck";
+import { presetNoises, SoundDeck } from "sound-deck";
 import { FeedbackEvent } from "../game-state";
 
 const rumble = (gamePad: Gamepad | undefined, params: GamepadEffectParameters & { duration: number }) => {
@@ -21,10 +21,18 @@ export const runFeedback = (feedback: FeedbackEvent[], soundDeck: SoundDeck, gam
         switch (event.type) {
             case "attack":
                 rumble(gamePad, { duration: 200, strongMagnitude: .2 })
-                soundDeck.playNoise({ duration: .1, frequency: 1000 }, { volume: .1 })
+                soundDeck.playNoise({
+                    duration: .1, frequency: 1000, volume: .1, playPattern: [
+                        { time: 0, vol: .5 },
+                        { time: 0.1, vol: 1 },
+                        { time: 0.7, vol: 1 },
+                        { time: 1, vol: .1 },
+                    ]
+                })
                 break
             case "npc-hit":
-                soundDeck.playTone({ duration: .2, frequency: 300, endFrequency: 100, type: 'triangle' }, { volume: .2 })
+                soundDeck.playNoise({ ...presetNoises.TAP, volume: .3 });
+                soundDeck.playTone({ duration: .2, frequency: 300, endFrequency: 100, type: 'triangle', volume: .2 })
                 break
             case "attack-end":
                 break
@@ -32,11 +40,12 @@ export const runFeedback = (feedback: FeedbackEvent[], soundDeck: SoundDeck, gam
                 break
             case "player-land":
                 rumble(gamePad, { duration: 150, strongMagnitude: .8, weakMagnitude: .5 })
-                soundDeck.playNoise({ duration: .05, frequency: 300 }, { volume: .1 })
+                soundDeck.playNoise({ ...presetNoises.TAP, volume: .1 });
+                soundDeck.playNoise({ ...presetNoises.SNAP, volume: .1 });
                 break
             case "player-hit":
                 rumble(gamePad, { duration: 500, strongMagnitude: .8, weakMagnitude: .5 })
-                soundDeck.playTone({ duration: .2, frequency: 300, endFrequency: 100, type: 'triangle' }, { volume: .2 })
+                soundDeck.playTone({ duration: .2, frequency: 300, endFrequency: 100, type: 'triangle', volume: .2 })
                 break
         }
     })

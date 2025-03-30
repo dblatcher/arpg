@@ -68,6 +68,7 @@ export const Game = ({ mode = 'normal', soundDeck }: Props) => {
     }, [gamePadRef])
 
     const handleFeedback = useCallback((feedback: FeedbackEvent[]) => {
+        soundDeck.enable()
         const remainingFeedback = runFeedback(feedback, soundDeck, getGamepad())
         dispatch({ type: 'set-feedback', events: remainingFeedback })
     }, [dispatch, getGamepad, soundDeck])
