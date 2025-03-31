@@ -1,13 +1,15 @@
 import { hasXOverlap, hasYOverlap, lowestSpaceFirst } from "../helpers";
-import { FeedbackEventEventType, GameCharacter, PlatformLevel, Space } from "../types";
+import { detectCharacterCollision } from "../shared-operations/character-collisions";
+import { FeedbackEventEventType, GameCharacter, GameState, PlatformLevel, Space } from "../types";
 
 export const attemptPlatformMovement = (
-    level: PlatformLevel,
-    floorLevel = Infinity,
     character: GameCharacter,
+    level: PlatformLevel,
+    state: GameState,
+    floorLevel = Infinity,
     isPlayer: boolean,
     addFeedback: ((type: FeedbackEventEventType) => void),
-) => {
+): { collidedNpc?: GameCharacter, collidesWithPlayer: boolean } => {
     const { platforms } = level
     const afterYMovement: Space = {
         x: character.x,
@@ -62,7 +64,11 @@ export const attemptPlatformMovement = (
             hasXOverlap(platform, afterXMovement)
         )
 
-    if (!platformsBlockingXMovement.length) {
+    const { collidedNpc, wereNpcsAlreadyInContact, collidesWithPlayer } = detectCharacterCollision(afterXMovement, character, level, state, isPlayer)
+
+    if (!platformsBlockingXMovement.length && !(collidedNpc && !wereNpcsAlreadyInContact) && !collidesWithPlayer) {
         character.x = afterXMovement.x
     }
+
+    return { collidedNpc, collidesWithPlayer }
 }

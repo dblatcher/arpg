@@ -1,7 +1,7 @@
 import { Platform, PlatformLevel } from "../../game-state";
 import { TILE_SIZE } from "../../game-state/constants";
 import { stringToBackdropTiles } from "../tile-maps";
-import { LEVEL_IDS } from "./stuff";
+import { LEVEL_IDS, standardNpc } from "./stuff";
 
 const makePlatform = (x: number, y: number, blocking = true): Platform => ({
     x: x * TILE_SIZE,
@@ -37,7 +37,7 @@ export const tunnelLevel = (): PlatformLevel => {
         mapHeight,
         levelType: 'platform',
         npcs: [
-            // standardNpc(TILE_SIZE * 5, 50)
+            standardNpc(TILE_SIZE * 5, 50)
         ],
 
         backdrops: [
