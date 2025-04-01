@@ -1,4 +1,6 @@
+import { getVectorFrom } from "../../lib/geometry";
 import { ATTACK_DURATION } from "../constants";
+import { findNpcsHitByPlayerAttack, getAttackZone, handlePlayerAttackHits } from "../overhead-operations/player-attacks";
 import { progressCharacterStatus } from "../shared-operations/character-status";
 import { FeedbackEventEventType, GameCharacter, GameState, InputState, PlatformLevel } from "../types"
 import { getAltitudeAndFloorLevel, followGravity } from "./gravity"
@@ -59,15 +61,17 @@ export const runPlatformLevel = (level: PlatformLevel, state: GameState, player:
     const { collidedNpc } = attemptPlatformMovement(player, level, state, floorLevel, true, addFeedback)
 
     if (collidedNpc) {
-        collidedNpc.reeling = {
-            remaining: 10,
-            duration: 10,
+        player.reeling = {
+            remaining: 30,
+            duration: 30,
             direction: 'Up',
             unitVector: { x: 0, y: 1 }
         }
+        player.vector.yd = -2
+        player.vector.xd = player.direction === 'Left' ? 1 : -1
+        player.health.current = player.health.current - 1
+        addFeedback('player-hit')
     }
-
-
 
     if (player.y > state.mapHeight) {
         player.health.current = 0
@@ -80,10 +84,38 @@ export const runPlatformLevel = (level: PlatformLevel, state: GameState, player:
 
     const { npcs } = level
 
+    const attackZone = getAttackZone(player)
+    if (attackZone) {
+        const hitNpcs = findNpcsHitByPlayerAttack(npcs, attackZone)
+
+
+
+        hitNpcs.forEach(npc => {
+            handlePlayerAttackHits(npc, state)
+            npc.reeling = {
+                remaining: 60,
+                duration: 60,
+                direction: 'Up',
+                unitVector: { x: 0, y: 1 }
+            }
+
+            addFeedback('npc-hit')
+            const vector = getVectorFrom(player, npc)
+            npc.vector.yd = -2
+            npc.vector.xd = 1 * Math.sign(vector.x)
+            console.log('V', npc.vector)
+        })
+    }
+
     npcs.forEach(npc => {
         const { floorLevel } = getAltitudeAndFloorLevel(npc, level)
         progressCharacterStatus(npc, addFeedback)
         followGravity(npc)
+        // TO DO - use reeling in attemptPlatformMovement
         attemptPlatformMovement(npc, level, state, floorLevel, false, addFeedback)
+
+        if (npc.altitude <= 0 && npc.vector.xd && !npc.reeling) {
+            npc.vector.xd = 0
+        }
     })
 }
