@@ -25,6 +25,7 @@ export const caveLevel = (): OverheadLevel => {
 
     return {
         id: LEVEL_IDS.Caves,
+        bgm: 'music-1',
         mapWidth,
         mapHeight,
         levelType: 'overhead',
@@ -47,8 +48,8 @@ export const caveLevel = (): OverheadLevel => {
                 height: TILE_SIZE * 1,
                 destination: {
                     levelId: LEVEL_IDS.Bridge,
-                    x: TILE_SIZE * 4.5,
-                    y: TILE_SIZE * 2,
+                    x: TILE_SIZE * 2,
+                    y: TILE_SIZE * 4,
                 }
             },
         ],

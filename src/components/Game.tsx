@@ -11,6 +11,8 @@ import { GameScreen } from "./GameScreen"
 import { HealthBar } from "./HealthBar"
 import { WaitingBackdropProvider } from "../context/WaitingBackdropProvider"
 import { ScoreDisplay } from "./ScoreDisplay"
+import { useBgm } from "../hooks/use-bgm"
+import { getCurrentLevel } from "../game-state/helpers"
 
 interface Props {
     mode?: string
@@ -100,6 +102,8 @@ export const Game = ({ mode = 'normal', soundDeck }: Props) => {
     ], keyMapRef)
 
     useGamepad(gamePadRef)
+
+    useBgm(getCurrentLevel(state)?.bgm, state.paused, soundDeck)
 
     return <div>
         <header style={{ display: 'flex' }}>

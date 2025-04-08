@@ -23,7 +23,7 @@ export const makeInitalState = (): GameState => {
             direction: 'Down',
             altitude: 0,
             // x: TILE_SIZE * 5, y: TILE_SIZE * 2,
-            x: 300,
+            x: 80,
             y: TILE_SIZE * 4,
             width: 39,
             height: 39,

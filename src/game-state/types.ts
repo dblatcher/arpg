@@ -73,6 +73,7 @@ type LevelBase = {
     npcs: GameCharacter[];
     mapWidth: number
     mapHeight: number
+    bgm?: string,
 }
 
 export type OverheadLevel = LevelBase & {
@@ -95,8 +96,8 @@ type PlatformBackdrop = {
         assetKey: AssetKey,
         repeat?: "repeat" | "repeat-x" | "repeat-y" | "no-repeat",
         rectArgs: [number, number, number, number],
-        scaleX?: number 
-        scaleY?: number 
+        scaleX?: number
+        scaleY?: number
     }>,
     terrainMap?: (Terrain | undefined)[][]
 }
