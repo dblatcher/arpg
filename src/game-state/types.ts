@@ -1,6 +1,7 @@
 import { BaseGameState, Direction } from "@dblatcher/sprite-canvas"
 import { XY } from "../lib/geometry"
 import { AssetKey } from "../assets-defs"
+import { SongKey } from "../lib/songs"
 
 export type Space = {
     x: number,
@@ -73,7 +74,7 @@ type LevelBase = {
     npcs: GameCharacter[];
     mapWidth: number
     mapHeight: number
-    bgm?: string,
+    bgm?: SongKey,
 }
 
 export type OverheadLevel = LevelBase & {
