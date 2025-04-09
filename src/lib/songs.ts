@@ -11,6 +11,11 @@ export const BOING: Instrument = {
     ...presetTones.SPRINGY_BOUNCE
 }
 
+export const BELL: Instrument = {
+    soundType: 'tone',
+    ...presetTones.NEUTRAL_BELL
+}
+
 export const SNARE: Instrument = {
     soundType: 'noise',
     ...presetNoises.TAP,
@@ -28,16 +33,18 @@ D2.D3.A2.D3.|D2.D3.A2.D3.|F2.F3.C2.C3.|D2.D3.A2...|`
 const drunkenSailorBase = parseStaveNotes(drunkenSailorBaseString)
 const drunkenSailorBaseHigher = parseStaveNotes(drunkenSailorBaseString.replace(/3/g, "4").replace(/2/g, "3"))
 
-const testStaveNotes1 = parseStaveNotes('CCC-B.G.');
+const caveMusicTreble = parseStaveNotes(' B4.C5#.F# G.F#.C#   | A4#.C5#.F#. G.F#.C#. | B4.C5#.F# G.F#.C# | G.F#.-F# D.B4.B4.');
+const caveMusicBase = parseStaveNotes(' B2.. D3#.F#.D.|'.repeat(4));
 
 export type SongKey = 'music-1' | 'music-2'
 
 export const songs: Record<SongKey, { staves: Stave[], tempo?: number }> = {
     'music-1': {
         staves: [
-            { notes: testStaveNotes1, instrument: BOING, volume: .05 }
+            { notes: caveMusicTreble, instrument: BELL, volume: .02 },
+            { notes: caveMusicBase, instrument: BOING, volume: .06 },
         ],
-        tempo: 1.2
+        tempo: 2
     },
     'music-2': {
         staves: [
