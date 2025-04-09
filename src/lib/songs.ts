@@ -36,17 +36,17 @@ const drunkenSailorBaseHigher = parseStaveNotes(drunkenSailorBaseString.replace(
 const caveMusicTreble = parseStaveNotes(' B4.C5#.F# G.F#.C#   | A4#.C5#.F#. G.F#.C#. | B4.C5#.F# G.F#.C# | G.F#.-F# D.B4.B4.');
 const caveMusicBase = parseStaveNotes(' B2.. D3#.F#.D.|'.repeat(4));
 
-export type SongKey = 'music-1' | 'music-2'
+export type SongKey = 'cave-song' | 'main-theme'
 
 export const songs: Record<SongKey, { staves: Stave[], tempo?: number }> = {
-    'music-1': {
+    'cave-song': {
         staves: [
             { notes: caveMusicTreble, instrument: BELL, volume: .02 },
             { notes: caveMusicBase, instrument: BOING, volume: .06 },
         ],
         tempo: 2
     },
-    'music-2': {
+    'main-theme': {
         staves: [
             { instrument: BOING, notes: drunkenSailorBase, volume: .025 },
             { instrument: BOING, notes: drunkenSailorBaseHigher, volume: .025 },

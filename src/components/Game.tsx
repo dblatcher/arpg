@@ -15,7 +15,7 @@ import { useBgm } from "../hooks/use-bgm"
 import { getCurrentLevel } from "../game-state/helpers"
 
 interface Props {
-    mode?: string
+    quit: { (): void }
     soundDeck: SoundDeck
 }
 
@@ -55,7 +55,7 @@ const myReducer: Reducer<GameState, GameStateAction> = (prevState: GameState, ac
 const VIEW_WIDTH = 450;
 const VIEW_HEIGHT = 400;
 
-export const Game = ({ mode = 'normal', soundDeck }: Props) => {
+export const Game = ({ soundDeck, quit }: Props) => {
     const keyMapRef = useRef<Record<string, boolean>>({})
     const gamePadRef = useRef<Record<number, Gamepad>>({})
     const [initialGameState] = useState(makeInitalState())
@@ -70,7 +70,6 @@ export const Game = ({ mode = 'normal', soundDeck }: Props) => {
     }, [gamePadRef])
 
     const handleFeedback = useCallback((feedback: FeedbackEvent[]) => {
-        soundDeck.enable()
         const remainingFeedback = runFeedback(feedback, soundDeck, getGamepad())
         dispatch({ type: 'set-feedback', events: remainingFeedback })
     }, [dispatch, getGamepad, soundDeck])
@@ -107,9 +106,9 @@ export const Game = ({ mode = 'normal', soundDeck }: Props) => {
 
     return <div>
         <header style={{ display: 'flex' }}>
-            <span>{mode} mode</span>
             <button onClick={togglePaused}>{state.paused ? 'resume' : 'pause'}</button>
             <button onClick={reset}>reset</button>
+            <button onClick={quit}>quit</button>
         </header>
         <div style={{ position: 'relative' }}>
             <WaitingBackdropProvider initialGameState={initialGameState} currentLevelId={state.currentLevelId}>

@@ -25,7 +25,7 @@ export const caveLevel = (): OverheadLevel => {
 
     return {
         id: LEVEL_IDS.Caves,
-        bgm: 'music-1',
+        bgm: 'cave-song',
         mapWidth,
         mapHeight,
         levelType: 'overhead',

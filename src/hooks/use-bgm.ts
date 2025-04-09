@@ -10,7 +10,6 @@ export const useBgm = (bgmInput: SongKey | undefined, gamePaused: boolean, sound
     useEffect(() => {
         const songKey: SongKey | undefined = bgmInput && bgmInput in songs ? bgmInput as SongKey : undefined
         if (songKey !== songKeyRef.current) {
-            console.log('changing', { from: songKeyRef.current, to: songKey })
             musicRef.current?.fadeOut(3)
             const fadePromise = musicRef.current ? musicRef.current.whenEnded : Promise.resolve(true)
             songKeyRef.current = songKey
@@ -21,6 +20,9 @@ export const useBgm = (bgmInput: SongKey | undefined, gamePaused: boolean, sound
                     musicRef.current = newMusicControl
                 }
             })
+        }
+        return () => {
+            musicRef.current?.stop()
         }
     }, [bgmInput, soundDeck])
 

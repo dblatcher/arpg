@@ -33,7 +33,7 @@ export const tunnelLevel = (): PlatformLevel => {
 
     return {
         id: LEVEL_IDS.Bridge,
-        bgm: 'music-2',
+        bgm: 'main-theme',
         mapWidth,
         mapHeight,
         levelType: 'platform',
