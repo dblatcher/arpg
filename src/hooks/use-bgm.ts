@@ -22,7 +22,7 @@ export const useBgm = (bgmInput: SongKey | undefined, gamePaused: boolean, sound
             })
         }
         return () => {
-            musicRef.current?.stop()
+            musicRef.current?.fadeOut(3)
         }
     }, [bgmInput, soundDeck])
 

@@ -52,8 +52,8 @@ export const inputsToInputState = (keyboard: Record<string, boolean>, gamepad?: 
         ]
 
     if (gamepad?.axes) {
-        const [leftRight, upDown] = gamepad.axes;
-        if (Math.abs(leftRight) > .15 || Math.abs(upDown) > .15) {
+        const [leftRight, upDown] = gamepad.axes.map(value => Math.abs(value) <= .15 ? 0 : value);
+        if (Math.abs(leftRight) || Math.abs(upDown)) {
             return { xd: leftRight, yd: upDown, attackButton, jumpButton }
         }
     }
