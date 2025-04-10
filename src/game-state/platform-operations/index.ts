@@ -9,7 +9,7 @@ import { attemptPlatformMovement } from "./movement"
 
 const handleInputs = (player: GameCharacter, inputs: InputState, addFeedback: { (type: FeedbackEventEventType): void; }) => {
 
-    const { xd, yd, attackButton } = inputs
+    const { xd, attackButton, jumpButton } = inputs
 
     if (player.altitude > 0) {
         return
@@ -31,13 +31,13 @@ const handleInputs = (player: GameCharacter, inputs: InputState, addFeedback: { 
 
     player.vector.xd = xd ?? 0
 
-    if (!player.attack && yd && yd < 0) {
+    if (!player.attack && jumpButton) {
         if (Math.abs(player.vector.xd) > .5) {
             player.vector.yd = -2
-            player.vector.xd = player.vector.xd * 5
+            player.vector.xd = Math.sign(player.vector.xd) * 2
         } else {
             player.vector.yd = -3
-            player.vector.xd = player.vector.xd * 3
+            player.vector.xd = Math.sign(player.vector.xd) * 1
         }
     }
 

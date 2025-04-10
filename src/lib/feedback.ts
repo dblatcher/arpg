@@ -39,7 +39,7 @@ export const runFeedback = (feedback: FeedbackEvent[], soundDeck: SoundDeck, gam
             case "reel-end":
                 break
             case "player-land":
-                rumble(gamePad, { duration: 150, strongMagnitude: .8, weakMagnitude: .5 })
+                rumble(gamePad, { duration: 150, strongMagnitude: .4, weakMagnitude: .2 })
                 soundDeck.playNoise({ ...presetNoises.TAP, volume: .1 });
                 soundDeck.playNoise({ ...presetNoises.SNAP, volume: .1 });
                 break

@@ -124,4 +124,5 @@ export type InputState = {
     xd?: number,
     yd?: number,
     attackButton?: boolean,
+    jumpButton?: boolean,
 }
