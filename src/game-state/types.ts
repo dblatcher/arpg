@@ -48,7 +48,7 @@ export type GameCharacter = Space & {
     mind: CharacterState;
 }
 
-export type FeedbackEventEventType = 'attack' | 'npc-hit' | 'attack-end' | 'reel-end' | 'player-hit' | 'player-land'
+export type FeedbackEventEventType = 'attack' | 'npc-hit' | 'attack-end' | 'reel-end' | 'player-hit' | 'player-land' | 'death'
 export type FeedbackEvent = {
     type: FeedbackEventEventType;
     cycleNumber: number;
@@ -126,6 +126,7 @@ export type GameState = BaseGameState & {
     currentLevelId: string;
     levels: Level[];
     score: number;
+    deathReset?: { countDown: number }
 }
 
 export type InputState = {

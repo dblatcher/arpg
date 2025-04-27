@@ -34,7 +34,7 @@ export const drawCharacter = (
     const levelType = getLevelType(state)
 
     const speed = levelType === 'platform' ? Math.abs(character.vector.xd) : Math.abs(character.vector.xd) + Math.abs(character.vector.yd)
-    const animation = (character.dying || character.reeling)
+    const animation = (character.dying || character.reeling || character.health.current <= 0)
         ? 'reel'
         : character.altitude > 0
             ? 'jump'

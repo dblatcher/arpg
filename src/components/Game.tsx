@@ -102,7 +102,9 @@ export const Game = ({ soundDeck, quit }: Props) => {
 
     useGamepad(gamePadRef)
 
-    useBgm(getCurrentLevel(state)?.bgm, state.paused, soundDeck)
+    const isDead = state.player.health.current <= 0
+    useBgm(isDead ? undefined : getCurrentLevel(state)?.bgm, state.paused, soundDeck)
+
 
     return <div>
         <header style={{ display: 'flex' }}>
@@ -133,5 +135,4 @@ export const Game = ({ soundDeck, quit }: Props) => {
             </WaitingBackdropProvider>
         </div>
     </div>
-
 }

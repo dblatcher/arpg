@@ -1,4 +1,5 @@
 import { doRectsIntersect } from "../lib/geometry"
+import { makeInitalState } from "../lib/initial-state"
 import { getCurrentLevel, rectMiddleSlice, spaceToRect } from "./helpers"
 import { runOverheadLevel } from "./overhead-operations"
 import { runPlatformLevel } from "./platform-operations"
@@ -48,6 +49,18 @@ export const runCycle = (state: GameState, inputs: InputState): GameState => {
     }
     const cycleNumber = state.cycleNumber
     const addFeedback = (type: FeedbackEventEventType) => newEvents.push({ type, cycleNumber })
+
+    const isDead = state.player.health.current <= 0
+    if (isDead && !state.deathReset) {
+        addFeedback('death')
+        state.deathReset = { countDown: 300 }
+    }
+    if (state.deathReset) {
+        state.deathReset.countDown--
+        if (state.deathReset?.countDown < 0) {
+            return makeInitalState()
+        }
+    }
 
     const { npcs } = level
 

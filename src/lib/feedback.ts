@@ -1,5 +1,6 @@
-import { presetNoises, SoundDeck } from "sound-deck";
+import { playMusic, presetNoises, SoundDeck } from "sound-deck";
 import { FeedbackEvent } from "../game-state";
+import { deathJingle } from "./songs";
 
 const rumble = (gamePad: Gamepad | undefined, params: GamepadEffectParameters & { duration: number }) => {
     // should return early if method not supported 
@@ -46,6 +47,9 @@ export const runFeedback = (feedback: FeedbackEvent[], soundDeck: SoundDeck, gam
             case "player-hit":
                 rumble(gamePad, { duration: 500, strongMagnitude: .8, weakMagnitude: .5 })
                 soundDeck.playTone({ duration: .2, frequency: 300, endFrequency: 100, type: 'triangle', volume: .2 })
+                break
+            case "death":
+                playMusic(soundDeck)(deathJingle)
                 break
         }
     })

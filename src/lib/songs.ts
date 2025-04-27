@@ -56,3 +56,9 @@ export const songs: Record<SongKey, { staves: Stave[], tempo?: number }> = {
     }
 }
 
+export const deathJingle: Stave[] = [
+    {
+        instrument: BELL,
+        notes: parseStaveNotes('C3 Eb C. G2. Eb3 | C3 Eb C3 Eb C...')
+    }
+]
