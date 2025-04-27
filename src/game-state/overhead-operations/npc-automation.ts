@@ -54,7 +54,7 @@ export const updateNpc = (npc: GameCharacter, state: GameState) => {
         return
     }
 
-    if (npc.health.current < npc.health.max) {
+    if (npc.mind.hostile) {
         chasePlayer(npc, state)
     } else {
         wanderAbout(npc, state)

@@ -11,6 +11,7 @@ export type Space = {
 }
 
 export type CharacterState = {
+    hostile?: boolean;
     direction?: Direction;
     blocked?: boolean;
 }
