@@ -11,7 +11,7 @@ const makePlatform = (x: number, y: number, blocking = true): Platform => ({
     blocking,
 })
 
-const tilesLevel0 = `
+const castleWall = `
  
  
  
@@ -24,6 +24,20 @@ const tilesLevel0 = `
  ssssssmsmmmsssssssssssssssss
  ssssssmmmsssssssssssssssssss
  ssssssssssssssssssssssssssss
+`;
+
+const castleGate = `
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ss
+ s
+ s
+sss
 `;
 
 export const tunnelLevel = (): PlatformLevel => {
@@ -57,7 +71,12 @@ export const tunnelLevel = (): PlatformLevel => {
             {
                 parallax: 2,
                 filter: 'blur(1px) sepia(60%)',
-                terrainMap: stringToBackdropTiles(tilesLevel0, mapWidth / TILE_SIZE, mapHeight / TILE_SIZE)
+                terrainMap: stringToBackdropTiles(castleWall, mapWidth / TILE_SIZE, mapHeight / TILE_SIZE)
+            },
+            {
+                parallax: 1,
+                filter: 'blur(1px) sepia(0%)',
+                terrainMap: stringToBackdropTiles(castleGate, mapWidth / TILE_SIZE, mapHeight / TILE_SIZE)
             }
         ],
         platforms: [
@@ -78,16 +97,13 @@ export const tunnelLevel = (): PlatformLevel => {
             makePlatform(0, 10),
             makePlatform(1, 10),
             makePlatform(2, 10),
-            makePlatform(4, 10),
+            // makePlatform(4, 10),
             makePlatform(5, 10),
             makePlatform(6, 10),
             makePlatform(6, 9.1, false),
             makePlatform(5, 9.1, false),
-            makePlatform(4, 9.1, false),
+            // makePlatform(4, 9.1, false),
             makePlatform(6, 8.3, false),
-            makePlatform(4, 12),
-            makePlatform(0, 14),
-            makePlatform(3, 14),
         ],
         exits: [
             {
