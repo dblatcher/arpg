@@ -2,9 +2,10 @@ import { getVectorFrom } from "../../lib/geometry";
 import { ATTACK_DURATION } from "../constants";
 import { findNpcsHitByPlayerAttack, getAttackZone, handlePlayerAttackHits } from "../overhead-operations/player-attacks";
 import { progressCharacterStatus } from "../shared-operations/character-status";
-import { FeedbackEventEventType, GameCharacter, GameState, InputState, PlatformLevel } from "../types"
+import { AddFeedbackFunc, FeedbackEventEventType, GameCharacter, GameState, InputState, PlatformLevel } from "../types"
 import { getAltitudeAndFloorLevel, followGravity } from "./gravity"
 import { attemptPlatformMovement } from "./movement"
+import { updateNpc } from "./npc-automation";
 
 
 const handleInputs = (player: GameCharacter, inputs: InputState, addFeedback: { (type: FeedbackEventEventType): void; }) => {
@@ -52,7 +53,23 @@ const handleInputs = (player: GameCharacter, inputs: InputState, addFeedback: { 
 }
 
 
-export const runPlatformLevel = (level: PlatformLevel, state: GameState, player: GameCharacter, inputs: InputState, addFeedback: (type: FeedbackEventEventType) => void) => {
+const handlePlayerNpcCollision = (player: GameCharacter, collidedNpc: GameCharacter, addFeedback: AddFeedbackFunc) => {
+    if (player.reeling) {
+        return
+    }
+    player.reeling = {
+        remaining: 30,
+        duration: 30,
+        direction: 'Up',
+        unitVector: { x: 0, y: 1 }
+    }
+    player.vector.yd = 2 * Math.sign(player.y - collidedNpc.y);
+    player.vector.xd = 1 * Math.sign(player.x - collidedNpc.x);
+    player.health.current = player.health.current - 1
+    addFeedback('player-hit')
+}
+
+export const runPlatformLevel = (level: PlatformLevel, state: GameState, player: GameCharacter, inputs: InputState, addFeedback: AddFeedbackFunc) => {
     const { floorLevel } = getAltitudeAndFloorLevel(player, level)
 
     handleInputs(player, inputs, addFeedback)
@@ -61,16 +78,7 @@ export const runPlatformLevel = (level: PlatformLevel, state: GameState, player:
     const { collidedNpc } = attemptPlatformMovement(player, level, state, floorLevel, true, addFeedback)
 
     if (collidedNpc) {
-        player.reeling = {
-            remaining: 30,
-            duration: 30,
-            direction: 'Up',
-            unitVector: { x: 0, y: 1 }
-        }
-        player.vector.yd = 2 * Math.sign(player.y - collidedNpc.y);
-        player.vector.xd = 1 * Math.sign(player.x - collidedNpc.x);
-        player.health.current = player.health.current - 1
-        addFeedback('player-hit')
+        handlePlayerNpcCollision(player, collidedNpc, addFeedback);
     }
 
     if (player.y > state.mapHeight) {
@@ -105,10 +113,14 @@ export const runPlatformLevel = (level: PlatformLevel, state: GameState, player:
 
     npcs.forEach(npc => {
         const { floorLevel } = getAltitudeAndFloorLevel(npc, level)
+        updateNpc(npc, state)
         progressCharacterStatus(npc, addFeedback)
         followGravity(npc)
         // TO DO - use reeling in attemptPlatformMovement
-        attemptPlatformMovement(npc, level, state, floorLevel, false, addFeedback)
+        const { collidesWithPlayer } = attemptPlatformMovement(npc, level, state, floorLevel, false, addFeedback)
+        if (collidesWithPlayer) {
+            handlePlayerNpcCollision(player, npc, addFeedback)
+        }
 
         if (npc.altitude <= 0 && npc.vector.xd && !npc.reeling) {
             npc.vector.xd = 0

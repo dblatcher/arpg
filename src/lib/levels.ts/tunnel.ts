@@ -82,6 +82,8 @@ export const tunnelLevel = (): PlatformLevel => {
             makePlatform(5, 10),
             makePlatform(6, 10),
             makePlatform(6, 9.1, false),
+            makePlatform(5, 9.1, false),
+            makePlatform(4, 9.1, false),
             makePlatform(6, 8.3, false),
             makePlatform(4, 12),
             makePlatform(0, 14),

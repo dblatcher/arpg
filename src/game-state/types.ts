@@ -46,6 +46,7 @@ export type FeedbackEvent = {
     type: FeedbackEventEventType;
     cycleNumber: number;
 }
+export type AddFeedbackFunc= {(type:FeedbackEventEventType): void}
 
 export enum Traversability {
     Open, Blocking
