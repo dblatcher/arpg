@@ -67,8 +67,8 @@ export const runPlatformLevel = (level: PlatformLevel, state: GameState, player:
             direction: 'Up',
             unitVector: { x: 0, y: 1 }
         }
-        player.vector.yd = -2
-        player.vector.xd = player.direction === 'Left' ? 1 : -1
+        player.vector.yd = 2 * Math.sign(player.y - collidedNpc.y);
+        player.vector.xd = 1 * Math.sign(player.x - collidedNpc.x);
         player.health.current = player.health.current - 1
         addFeedback('player-hit')
     }
@@ -88,8 +88,6 @@ export const runPlatformLevel = (level: PlatformLevel, state: GameState, player:
     if (attackZone) {
         const hitNpcs = findNpcsHitByPlayerAttack(npcs, attackZone)
 
-
-
         hitNpcs.forEach(npc => {
             handlePlayerAttackHits(npc, state)
             npc.reeling = {
@@ -98,12 +96,10 @@ export const runPlatformLevel = (level: PlatformLevel, state: GameState, player:
                 direction: 'Up',
                 unitVector: { x: 0, y: 1 }
             }
-
             addFeedback('npc-hit')
             const vector = getVectorFrom(player, npc)
             npc.vector.yd = -2
             npc.vector.xd = 1 * Math.sign(vector.x)
-            console.log('V', npc.vector)
         })
     }
 
