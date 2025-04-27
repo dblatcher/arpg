@@ -113,17 +113,13 @@ export const runPlatformLevel = (level: PlatformLevel, state: GameState, player:
 
     npcs.forEach(npc => {
         const { floorLevel } = getAltitudeAndFloorLevel(npc, level)
-        updateNpc(npc, state)
+        updateNpc(npc,floorLevel, state)
         progressCharacterStatus(npc, addFeedback)
         followGravity(npc)
         // TO DO - use reeling in attemptPlatformMovement
         const { collidesWithPlayer } = attemptPlatformMovement(npc, level, state, floorLevel, false, addFeedback)
         if (collidesWithPlayer) {
             handlePlayerNpcCollision(player, npc, addFeedback)
-        }
-
-        if (npc.altitude <= 0 && npc.vector.xd && !npc.reeling) {
-            npc.vector.xd = 0
         }
     })
 }

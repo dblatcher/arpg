@@ -26,6 +26,7 @@ export const standardNpc = (x: number, y: number): GameCharacter => (
             current: 3,
         },
         pointsForKilling: 25,
+        mind: {}
     }
 )
 

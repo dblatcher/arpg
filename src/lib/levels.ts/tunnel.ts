@@ -52,7 +52,7 @@ export const tunnelLevel = (): PlatformLevel => {
         mapHeight,
         levelType: 'platform',
         npcs: [
-            standardNpc(TILE_SIZE * 5, 50)
+            standardNpc(TILE_SIZE * 4.9, 50)
         ],
 
         backdrops: [
@@ -102,7 +102,7 @@ export const tunnelLevel = (): PlatformLevel => {
             makePlatform(6, 10),
             makePlatform(6, 9.1, false),
             makePlatform(5, 9.1, false),
-            // makePlatform(4, 9.1, false),
+            makePlatform(4, 9.1, false),
             makePlatform(6, 8.3, false),
         ],
         exits: [

@@ -32,6 +32,19 @@ export const directionToUnitVector = (direction: Direction): XY => {
     }
 }
 
+export const leftEdgeOf = (space: Space, width = 2): Space => ({
+    x: space.x,
+    y: space.y,
+    height: space.height,
+    width,
+})
+export const rightEdgeOf = (space: Space, width = 2): Space => ({
+    x: space.x + space.width - width,
+    y: space.y,
+    height: space.height,
+    width,
+})
+
 export const hasXOverlap = (spaceA: Space, spaceB: Space): boolean => {
     const rightEdge = spaceA.x + spaceA.width;
     return (

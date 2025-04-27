@@ -65,6 +65,8 @@ export const attemptPlatformMovement = (
             hasXOverlap(platform, afterXMovement)
         )
 
+    character.mind.blocked = platformsBlockingXMovement.length > 0;
+
     const { collidedNpc, wereNpcsAlreadyInContact, collidesWithPlayer } = detectCharacterCollision(afterXMovement, character, level, state, isPlayer)
 
     if (!platformsBlockingXMovement.length && !(collidedNpc && !wereNpcsAlreadyInContact) && !collidesWithPlayer) {

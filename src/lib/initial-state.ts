@@ -10,9 +10,9 @@ export const makeInitalState = (): GameState => {
         overlandLevel(),
         caveLevel(),
     ]
-  
+
     const currentLevel = levels[0]
-    const { mapWidth, mapHeight, id:currentLevelId } = currentLevel
+    const { mapWidth, mapHeight, id: currentLevelId } = currentLevel
     return {
         score: 0,
         feedbackEvents: [],
@@ -34,7 +34,8 @@ export const makeInitalState = (): GameState => {
             health: {
                 max: 10,
                 current: 10
-            }
+            },
+            mind: {},
         },
 
         mapHeight,

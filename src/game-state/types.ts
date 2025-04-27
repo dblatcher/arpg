@@ -10,6 +10,11 @@ export type Space = {
     height: number
 }
 
+export type CharacterState = {
+    direction?: Direction;
+    blocked?: boolean;
+}
+
 export type GameCharacter = Space & {
     id: number,
     direction: Direction;
@@ -38,7 +43,8 @@ export type GameCharacter = Space & {
         current: number;
     },
     pointsForKilling?: number
-    altitude: number
+    altitude: number;
+    mind: CharacterState;
 }
 
 export type FeedbackEventEventType = 'attack' | 'npc-hit' | 'attack-end' | 'reel-end' | 'player-hit' | 'player-land'
@@ -46,7 +52,7 @@ export type FeedbackEvent = {
     type: FeedbackEventEventType;
     cycleNumber: number;
 }
-export type AddFeedbackFunc= {(type:FeedbackEventEventType): void}
+export type AddFeedbackFunc = { (type: FeedbackEventEventType): void }
 
 export enum Traversability {
     Open, Blocking
