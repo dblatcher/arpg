@@ -54,5 +54,13 @@ export const ranger: CharacterSprite = new Sprite(
                 Right: [{ key: 'RANGER_HIT', fy: 0, fx: 0 }],
                 Up: [{ key: 'RANGER_HIT', fy: 0, fx: 2 }],
             }
+        },
+        'leap': {
+            frames: {
+                Down: [{ key: 'RANGER_RUN', fy: 2, fx: 1 }],
+                Left: [{ key: 'RANGER_RUN', fy: 1, fx: 0 }],
+                Right: [{ key: 'RANGER_RUN', fy: 3, fx: 3 }],
+                Up: [{ key: 'RANGER_RUN', fy: 0, fx: 2 }],
+            }
         }
     })

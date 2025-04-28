@@ -7,6 +7,6 @@ export const TILE_DIMS = {
     height: TILE_SIZE
 }
 
-export type CharacterAnimation = 'idle' | 'walk' | 'run' | 'attack' | 'run' | 'reel' | 'jump'
+export type CharacterAnimation = 'idle' | 'walk' | 'run' | 'attack' | 'run' | 'reel' | 'jump' | 'leap'
 
 export type CharacterSprite = Sprite<AssetKey, CharacterAnimation>

@@ -37,7 +37,9 @@ export const drawCharacter = (
     const animation = (character.dying || character.reeling || character.health.current <= 0)
         ? 'reel'
         : character.altitude > 0
-            ? 'jump'
+            ? Math.abs(character.vector.xd) > 1
+                ? 'leap'
+                : 'jump'
             : character.attack
                 ? 'attack'
                 : speed <= 0
