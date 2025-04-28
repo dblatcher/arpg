@@ -54,7 +54,7 @@ const handleInputs = (player: GameCharacter, inputs: InputState, addFeedback: { 
 
 
 const handlePlayerNpcCollision = (player: GameCharacter, collidedNpc: GameCharacter, addFeedback: AddFeedbackFunc) => {
-    if (player.reeling) {
+    if (player.reeling || collidedNpc.dying) {
         return
     }
     player.reeling = {
