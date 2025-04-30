@@ -13,6 +13,7 @@ import { WaitingBackdropProvider } from "../context/WaitingBackdropProvider"
 import { ScoreDisplay } from "./ScoreDisplay"
 import { useBgm } from "../hooks/use-bgm"
 import { getCurrentLevel } from "../game-state/helpers"
+import { useWindowSize } from "../hooks/use-window-size"
 
 interface Props {
     quit: { (): void }
@@ -52,8 +53,22 @@ const myReducer: Reducer<GameState, GameStateAction> = (prevState: GameState, ac
     }
 }
 
-const VIEW_WIDTH = 450;
-const VIEW_HEIGHT = 400;
+const calculateMagnification = (windowWidth: number) => {
+    if (windowWidth < 600) {
+        return 1
+    }
+    if (windowWidth > 1000) {
+        return 1.4
+    }
+    return 1.2
+}
+
+const calculateViewportSize = (windowWidth: number, windowHeight: number, magnify: number) => {
+    return {
+        width: (windowWidth) / magnify,
+        height: (windowHeight) / magnify,
+    }
+}
 
 export const Game = ({ soundDeck, quit }: Props) => {
     const keyMapRef = useRef<Record<string, boolean>>({})
@@ -105,6 +120,9 @@ export const Game = ({ soundDeck, quit }: Props) => {
     const isDead = state.player.health.current <= 0
     useBgm(isDead ? undefined : getCurrentLevel(state)?.bgm, state.paused, soundDeck)
 
+    const { windowWidth, windowHeight } = useWindowSize()
+    const magnify = calculateMagnification(windowWidth)
+    const vpDims = calculateViewportSize(windowWidth, windowHeight, magnify)
 
     return <div>
         <header style={{ display: 'flex' }}>
@@ -112,26 +130,26 @@ export const Game = ({ soundDeck, quit }: Props) => {
             <button onClick={reset}>reset</button>
             <button onClick={quit}>quit</button>
         </header>
-        <div style={{ position: 'relative' }}>
+        <div style={{
+            position: 'fixed',
+            top: 0,
+            left: 0
+        }}>
             <WaitingBackdropProvider initialGameState={initialGameState} currentLevelId={state.currentLevelId}>
                 <GameScreen
                     gameState={state}
-                    viewPort={centeredViewPort(state.player, VIEW_WIDTH, VIEW_HEIGHT, state)}
-                    magnify={1.2}
+                    viewPort={centeredViewPort(state.player, vpDims.width, vpDims.height, state)}
+                    magnify={magnify}
                 />
-                <HealthBar
-                    style={{
-                        position: 'absolute',
-                        left: 10,
-                        top: 10
-                    }}
-                    current={state.player.health.current}
-                    max={state.player.health.max} />
-                <ScoreDisplay score={state.score} style={{
-                    position: 'absolute',
-                    right: 10,
-                    top: 10
-                }} />
+                <header style={{ display: 'flex', position: 'absolute', top: 0, left: 0, width: '100%', }}>
+                    <button onClick={togglePaused}>{state.paused ? 'resume' : 'pause'}</button>
+                    <button onClick={reset}>reset</button>
+                    <button onClick={quit}>quit</button>
+                    <HealthBar
+                        current={state.player.health.current}
+                        max={state.player.health.max} />
+                    <ScoreDisplay score={state.score} />
+                </header>
             </WaitingBackdropProvider>
         </div>
     </div>

@@ -71,7 +71,7 @@ export const GameScreen = ({ gameState, viewPort, magnify = 1 }: Props) => {
             width: viewPort.width * magnify,
             height: viewPort.height * magnify,
             overflow: 'hidden',
-            border: '8px inset red'
+            // border: '8px inset red'
         }}>
             {level?.levelType === 'platform' && (
                 <PlatformBackdrops {...{ gameState, viewPort, magnify, backdropUrlList, level }} />

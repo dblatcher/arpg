@@ -27,7 +27,6 @@ function App() {
       {phase === Phase.Title && (
         <h1>Title Screen</h1>
       )}
-      <SoundToggle soundDeck={soundDeck} />
       <WaitingAssetProvider assetParams={assetParams} loadingContent={<p>Loading</p>}>
         {phase === Phase.Game && (
           <Game soundDeck={soundDeck} quit={() => setPhase(Phase.Title)} />
@@ -36,6 +35,7 @@ function App() {
           <button onClick={handleStart}>start</button>
         )}
       </WaitingAssetProvider>
+      <SoundToggle soundDeck={soundDeck} />
     </>
   )
 }
