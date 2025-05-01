@@ -77,6 +77,53 @@ const drawOverheadBackdrop = (variant: BackdropVariant, level: OverheadLevel, dr
 
 }
 
+// to do = move to library!
+const generatePattern = (ctx: CanvasRenderingContext2D, frame: SpriteFrame<AssetKey>, assets: AssetMap, size=50) => {
+    const pCanvas = document.createElement('canvas')
+    pCanvas.height = size
+    pCanvas.width = size
+    const pCtx = pCanvas.getContext('2d')!
+    const pMethods = makeDrawingMethods(pCtx, { x: 0, y: 0, width: size, height: size })
+
+    const pDrawSprite = drawSpriteFunc(pMethods, assets, assetParams);
+    pDrawSprite({ ...frame, x: 0, y: 0, height: size, width: size })
+
+    const pattern = ctx.createPattern(pCanvas, 'repeat')!;
+    return pattern
+}
+
+
+const drawPlatformLayer = (
+    level: PlatformLevel,
+    drawingMethods: OffsetDrawMethods,
+    assets: AssetMap,
+) => {
+    const { ctx, rect } = drawingMethods
+
+
+    const drawPlatform = (frame: SpriteFrame<AssetKey>, { x, y, width, height }: Space) => {
+
+        // TO DO - avoid generating a new pattern every time
+        const pattern = generatePattern(ctx, frame, assets, 50)
+        pattern.setTransform(new DOMMatrix().translateSelf(x, y));
+        ctx.fillStyle = pattern
+        ctx.beginPath()
+        rect(x, y, width, height);
+        ctx.fill()
+        
+    }
+
+    const { platforms, exits } = level
+    platforms.forEach((platform) => {
+        drawPlatform(platform.blocking ? STONE : GRASS, platform)
+    })
+    exits.forEach(({ x, y, width, height }) => {
+        rect(x, y, width, height)
+        ctx.fillStyle = 'black';
+        ctx.fill()
+    })
+}
+
 const drawPlatformbackdrop = (
     variant: BackdropVariant,
     level: PlatformLevel,
@@ -92,24 +139,8 @@ const drawPlatformbackdrop = (
     ctx.clearRect(0, 0, viewport.width, viewport.height)
     ctx.beginPath()
 
-    const drawPlatform = (frame: SpriteFrame<AssetKey>, { x, y, width, height }: Space) =>
-        drawSprite({
-            ...frame,
-            x,
-            y,
-            height,
-            width,
-        })
-
     if (variant === 0) {
-        const { platforms, exits } = level
-        platforms.forEach((platform) => {
-            drawPlatform(platform.blocking ? STONE : GRASS, platform)
-        })
-        exits.forEach(({ x, y, width, height }) => {
-            rect(x, y, width, height)
-            ctx.fill()
-        })
+        return drawPlatformLayer(level, drawingMethods, assets)
     }
 
     const backdrop = level.backdrops[variant - 1]
