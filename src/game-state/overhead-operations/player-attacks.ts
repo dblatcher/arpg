@@ -1,4 +1,4 @@
-import { Rect, doRectsIntersect } from "../../lib/geometry";
+import { Rect, XY, doRectsIntersect } from "../../lib/geometry";
 import { REEL_DURATION } from "../constants";
 import { directionToUnitVector, spaceToRect } from "../helpers";
 import { GameCharacter, GameState } from "../types";
@@ -37,6 +37,19 @@ const shiftZoneFromCharacter = (scalar: number, characterDimension: number, zone
     return zoneDimension * Math.sign(scalar)
 }
 
+const adjustZoneTop = (attackVector: XY, character: GameCharacter): number => {
+    if (!attackVector.x) {
+        return 0
+    }
+    return - character.height * .1
+}
+const adjustZoneLeft = (attackVector: XY, character: GameCharacter): number => {
+    if (!attackVector.y) {
+        return 0
+    }
+    return - character.width * .1
+}
+
 export const getAttackZone = (character: GameCharacter): (Rect & { width: number; height: number }) | undefined => {
     const { attack, direction } = character
     if (!attack) {
@@ -44,11 +57,11 @@ export const getAttackZone = (character: GameCharacter): (Rect & { width: number
     }
     const attackVector = directionToUnitVector(direction)
     const zoneDims = attackVector.x
-        ? { width: character.width * .5, height: character.height }
-        : { width: character.width, height: character.height * .5 }
+        ? { width: character.width * .3, height: character.height * 1.2 }
+        : { width: character.width * 1.2, height: character.height * .3 }
     const zonePos = {
-        left: character.x + shiftZoneFromCharacter(attackVector.x, character.width, zoneDims.width),
-        top: character.y + shiftZoneFromCharacter(attackVector.y, character.height, zoneDims.height),
+        left: character.x + shiftZoneFromCharacter(attackVector.x, character.width, zoneDims.width) + adjustZoneLeft(attackVector, character),
+        top: character.y + shiftZoneFromCharacter(attackVector.y, character.height, zoneDims.height) + adjustZoneTop(attackVector, character),
     }
 
     return {
