@@ -1,4 +1,4 @@
-import { drawOffScreen, drawSpriteFunc, DrawSpriteFunction, DrawToCanvasFunction, fullViewPort, GenerateImageUrl, makeDrawingMethods, OffsetDrawMethods, SpriteFrame, ViewPort } from "@dblatcher/sprite-canvas";
+import { drawOffScreen, drawSpriteFunc, DrawSpriteFunction, DrawToCanvasFunction, fullViewPort, GenerateImageUrl, generatePattern, makeDrawingMethods, OffsetDrawMethods, SpriteFrame, ViewPort } from "@dblatcher/sprite-canvas";
 import { AssetKey, AssetMap, assetParams } from "../assets-defs";
 import { GameState, OverheadLevel, PlatformLevel, Space, Terrain } from "../game-state";
 import { TILE_DIMS } from "./constants-and-types";
@@ -77,20 +77,7 @@ const drawOverheadBackdrop = (variant: BackdropVariant, level: OverheadLevel, dr
 
 }
 
-// to do = move to library!
-const generatePattern = (ctx: CanvasRenderingContext2D, frame: SpriteFrame<AssetKey>, assets: AssetMap, size=50) => {
-    const pCanvas = document.createElement('canvas')
-    pCanvas.height = size
-    pCanvas.width = size
-    const pCtx = pCanvas.getContext('2d')!
-    const pMethods = makeDrawingMethods(pCtx, { x: 0, y: 0, width: size, height: size })
 
-    const pDrawSprite = drawSpriteFunc(pMethods, assets, assetParams);
-    pDrawSprite({ ...frame, x: 0, y: 0, height: size, width: size })
-
-    const pattern = ctx.createPattern(pCanvas, 'repeat')!;
-    return pattern
-}
 
 
 const drawPlatformLayer = (
@@ -100,17 +87,23 @@ const drawPlatformLayer = (
 ) => {
     const { ctx, rect } = drawingMethods
 
+    const patternMap = new Map<SpriteFrame<AssetKey>, CanvasPattern | null>()
 
     const drawPlatform = (frame: SpriteFrame<AssetKey>, { x, y, width, height }: Space) => {
-
-        // TO DO - avoid generating a new pattern every time
-        const pattern = generatePattern(ctx, frame, assets, 50)
-        pattern.setTransform(new DOMMatrix().translateSelf(x, y));
-        ctx.fillStyle = pattern
+        let pattern: CanvasPattern | null = null
+        if (patternMap.has(frame)) {
+            pattern = patternMap.get(frame) ?? null
+        } else {
+            pattern = generatePattern(ctx, frame, assets, assetParams);
+            patternMap.set(frame, pattern);
+        }
+        if (pattern) {
+            pattern.setTransform(new DOMMatrix().translateSelf(x, y));
+            ctx.fillStyle = pattern
+        }
         ctx.beginPath()
         rect(x, y, width, height);
         ctx.fill()
-        
     }
 
     const { platforms, exits } = level
@@ -237,3 +230,4 @@ export const generateBackdropUrl = (variant: BackdropVariant): GenerateImageUrl<
         console.timeEnd(`gen backdrop url ${variant}`)
         return url
     }
+

@@ -17,6 +17,10 @@ export const drawSceneFunction: DrawToCanvasFunction<GameState, AssetKey> = (sta
     const drawSprite = drawSpriteFunc(drawingMethods, assets, assetParams)
     const { player } = state
     const level = getCurrentLevel(state)
+    if (!level) {
+        console.error('no level', state)
+        return
+    }
 
     ctx.beginPath()
     ctx.clearRect(0, 0, viewport.width, viewport.height)
