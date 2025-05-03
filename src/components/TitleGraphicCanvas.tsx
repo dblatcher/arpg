@@ -1,61 +1,34 @@
 
-import { generatePattern } from "@dblatcher/sprite-canvas";
 import { useRef } from "react";
-import { AssetMap, assetParams } from "../assets-defs";
 import { useAssets } from "../context/asset-context";
+import { plotGraphic } from "../drawing/title-animation";
 import { useSchedule } from "../hooks/use-schedule";
-
-const plotGraphic = (canvasElement: HTMLCanvasElement | null, assets: AssetMap, frame: number) => {
-    const ctx = canvasElement?.getContext('2d');
-    if (!canvasElement || !ctx) {
-        return
-    }
-    canvasElement.height = 200
-    canvasElement.width = 200
-    const pattern1 = generatePattern(ctx, { key: 'TILES_2', fx: 6, fy: 2 }, assets, assetParams);
-    ctx.beginPath()
-    if (pattern1) {
-        ctx.fillStyle = pattern1
-    }
-    ctx.fillRect(0, 0, 200, 200)
-
-
-    const pattern2 = generatePattern(ctx, { key: 'TILES_2', fx: 2, fy: 2 }, assets, assetParams);
-
-
-    pattern2?.setTransform(
-        new DOMMatrix()
-            .scaleSelf((50 + frame) / 50, (50 + frame) / 50)
-            .translateSelf(
-                -frame / 2,
-                -frame / 2,
-            )
-    )
-
-    ctx.beginPath()
-    ctx.filter = "contrast(.5)";
-    if (pattern2) {
-        ctx.fillStyle = pattern2
-    }
-
-    ctx.arc(100, 100, 50 + frame, 0, Math.PI * 2 * frame / 75)
-    ctx.fill();
-    ctx.stroke();
-}
+import { useWindowSize } from "../hooks/use-window-size";
 
 
 export const TitleGraphicCanvas = () => {
-    const frame = useRef(0)
+    const { windowWidth, windowHeight } = useWindowSize()
+    const cycle = useRef(0);
+    const iteration = useRef(0);
     const assets = useAssets();
 
     useSchedule(() => {
         const canvasElement = document.querySelector<HTMLCanvasElement>('canvas[data-title-cavas]');
-        plotGraphic(canvasElement, assets, frame.current)
-        frame.current = frame.current + 1;
-        if (frame.current > 75) {
-            frame.current = 0
+        const mapWidth = Math.min(windowWidth - 50, 400);
+        const mapHeight = Math.min(windowHeight - 50, 300);
+        plotGraphic(
+            { mapWidth, mapHeight, cycleNumber: cycle.current },
+            canvasElement,
+            assets,
+            iteration.current
+        )
+        cycle.current = cycle.current + 1;
+        if (cycle.current > 75) {
+            cycle.current = 0
+            iteration.current = iteration.current + 1
         }
     }, 50)
 
     return <canvas data-title-cavas='true'></canvas>
-} 
+}
+
