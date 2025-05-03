@@ -3,7 +3,7 @@ import { AssetKey, AssetMap, assetParams } from "../assets-defs";
 import { GameState, OverheadLevel, PlatformLevel, Space, Terrain } from "../game-state";
 import { TILE_DIMS } from "./constants-and-types";
 import { getCurrentLevel } from "../game-state/helpers";
-import { GRASS, ROAD, STONE, WATER, WATERFALL, SPLASH, CAVE, MOSSY_GROUND } from "./tile-frames";
+import { GRASS, ROAD, STONE, WATER, WATERFALL, SPLASH, CAVE, MOSSY_GROUND, WOOD } from "./tile-frames";
 
 
 type BackdropVariant = 0 | 1 | 2 | 3;
@@ -78,8 +78,6 @@ const drawOverheadBackdrop = (variant: BackdropVariant, level: OverheadLevel, dr
 }
 
 
-
-
 const drawPlatformLayer = (
     level: PlatformLevel,
     drawingMethods: OffsetDrawMethods,
@@ -108,9 +106,10 @@ const drawPlatformLayer = (
 
     const { platforms, exits } = level
     platforms.forEach((platform) => {
-        drawPlatform(platform.blocking ? STONE : GRASS, platform)
+        drawPlatform(platform.blocking ? STONE : WOOD, platform)
     })
     exits.forEach(({ x, y, width, height }) => {
+        ctx.beginPath()
         rect(x, y, width, height)
         ctx.fillStyle = 'black';
         ctx.fill()
