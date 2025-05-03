@@ -1,11 +1,12 @@
-import './App.css'
-import { Game } from './components/Game'
-import { WaitingAssetProvider } from './context/WaitingAssetProvider'
-import { assetParams } from './assets-defs'
 import { useMemo, useState } from 'react'
 import { SoundDeck } from 'sound-deck'
-import { useBgm } from './hooks/use-bgm'
+import './App.css'
+import { assetParams } from './assets-defs'
+import { Game } from './components/Game'
 import { SoundToggle } from './components/SoundToggle'
+import { TitleScreen } from './components/TitleScreen'
+import { WaitingAssetProvider } from './context/WaitingAssetProvider'
+import { useBgm } from './hooks/use-bgm'
 
 enum Phase {
   Title, Game
@@ -16,27 +17,19 @@ function App() {
   const [phase, setPhase] = useState(Phase.Title)
   const soundDeck = useMemo(() => new SoundDeck(), [])
 
-  const handleStart = () => {
-    setPhase(Phase.Game)
-  }
 
   useBgm(phase === Phase.Title ? 'main-theme' : undefined, false, soundDeck)
 
   return (
-    <>
+    <WaitingAssetProvider assetParams={assetParams} loadingContent={<p>Loading</p>}>
       {phase === Phase.Title && (
-        <h1>Title Screen</h1>
+        <TitleScreen startGame={() => setPhase(Phase.Game)} />
       )}
-      <WaitingAssetProvider assetParams={assetParams} loadingContent={<p>Loading</p>}>
-        {phase === Phase.Game && (
-          <Game soundDeck={soundDeck} quit={() => setPhase(Phase.Title)} />
-        )}
-        {phase === Phase.Title && (
-          <button onClick={handleStart}>start</button>
-        )}
-      </WaitingAssetProvider>
+      {phase === Phase.Game && (
+        <Game soundDeck={soundDeck} quit={() => setPhase(Phase.Title)} />
+      )}
       <SoundToggle soundDeck={soundDeck} />
-    </>
+    </WaitingAssetProvider>
   )
 }
 
