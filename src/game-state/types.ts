@@ -10,10 +10,13 @@ export type Space = {
     height: number
 }
 
+export type NpcTask = 'Guard'
+
 export type CharacterState = {
     hostile?: boolean;
     direction?: Direction;
     blocked?: boolean;
+    task?: NpcTask;
 }
 
 export type GameCharacter = Space & {

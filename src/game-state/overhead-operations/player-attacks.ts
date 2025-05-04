@@ -1,12 +1,11 @@
-import { Rect, XY, doRectsIntersect } from "../../lib/geometry";
+import { Rect, XY, doRectsIntersect, getDistance } from "../../lib/geometry";
 import { REEL_DURATION } from "../constants";
-import { directionToUnitVector, spaceToRect } from "../helpers";
+import { directionToUnitVector, getCurrentLevel, spaceToRect } from "../helpers";
 import { GameCharacter, GameState } from "../types";
 
 
 export const handlePlayerAttackHits = (npc: GameCharacter, state: GameState) => {
     npc.health.current = npc.health.current - 1
-    npc.mind.hostile = true;
     if (npc.health.current <= 0) {
         state.score += npc.pointsForKilling ?? 0;
         npc.dying = {
@@ -15,6 +14,16 @@ export const handlePlayerAttackHits = (npc: GameCharacter, state: GameState) => 
             unitVector: directionToUnitVector(state.player.direction),
         }
         return
+    }
+
+    // TO DO - belongs in the automation module
+    npc.mind.hostile = true;
+    if (npc.mind.task === 'Guard') {
+        const level = getCurrentLevel(state);
+        const otherNearbyGuards = level?.npcs.filter(otherNpc =>
+            otherNpc !== npc && otherNpc.mind.task === 'Guard' && getDistance(otherNpc, npc) < 400
+        );
+        otherNearbyGuards?.forEach(otherNpc => otherNpc.mind.hostile = true)
     }
 
     npc.reeling = {

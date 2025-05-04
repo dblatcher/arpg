@@ -6,12 +6,12 @@ import { LEVEL_IDS, makeObstaclesAndTileMap, standardNpc } from "./stuff";
 const tilesLevel0 = `
  rssccsssffssss
  rssccsssffssss
- r     wwFFww
- rrrrr wwwwww
- r   r     
-  ss rrrrrr
- sss      r   s
- sss      r   s
+ r     wwFFww s
+ rrrrr wwwwww s
+ r   r        s
+  ss rrrrrr   s
+ sss      r   sssss sssss 
+ sss      r   sssss sssss
 `;
 
 export const overlandLevel = (): OverheadLevel => {
@@ -38,16 +38,13 @@ export const overlandLevel = (): OverheadLevel => {
             }
         ],
         npcs: [
-            standardNpc(20, 100),
-            standardNpc(65, 100),
+            standardNpc(TILE_SIZE * 3.9, TILE_SIZE*2.1, {task:'Guard'}),
+            standardNpc(TILE_SIZE * 5.1, TILE_SIZE*2.5, {task:'Guard'}),
+            standardNpc(TILE_SIZE * 4.9, TILE_SIZE*5.5, {task:'Guard'}),
             standardNpc(100, 340),
             standardNpc(150, 440),
             standardNpc(150, 360),
-            standardNpc(180, 280),
             standardNpc(265, 260),
-            standardNpc(350, 360),
-            standardNpc(300, 300),
-            standardNpc(350, 440),
             standardNpc(550, 360),
             standardNpc(500, 300),
             standardNpc(550, 440),

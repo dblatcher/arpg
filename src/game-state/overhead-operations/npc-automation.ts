@@ -56,6 +56,8 @@ export const updateNpc = (npc: GameCharacter, state: GameState) => {
 
     if (npc.mind.hostile) {
         chasePlayer(npc, state)
+    } else if (npc.mind.task === 'Guard') {
+        return
     } else {
         wanderAbout(npc, state)
     }
