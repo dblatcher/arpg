@@ -1,4 +1,4 @@
-import { hasXOverlap, highestSpaceFirst } from "../helpers";
+import { hasXOverlap, highestSpaceFirst, middleOf } from "../helpers";
 import { GameCharacter, PlatformLevel } from "../types";
 
 export const getAltitudeAndFloorLevel = (
@@ -8,7 +8,7 @@ export const getAltitudeAndFloorLevel = (
     const footLevel = character.y + character.height;
     const platformsBelow = level.platforms
         .filter((platform) => platform.y >= footLevel)
-        .filter(platform => hasXOverlap(character, platform))
+        .filter(platform => hasXOverlap(middleOf(character), platform))
         .sort(highestSpaceFirst);
 
     // TO DO - coyote time?

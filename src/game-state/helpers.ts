@@ -45,6 +45,13 @@ export const rightEdgeOf = (space: Space, width = 2): Space => ({
     width,
 })
 
+export const middleOf = (space: Space, proportion = .5): Space => ({
+    x: space.x + (space.width * ((1 - proportion) / 2)),
+    y: space.y,
+    height: space.height,
+    width: space.width * proportion,
+})
+
 export const hasXOverlap = (spaceA: Space, spaceB: Space): boolean => {
     const rightEdge = spaceA.x + spaceA.width;
     return (

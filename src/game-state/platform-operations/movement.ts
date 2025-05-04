@@ -1,4 +1,4 @@
-import { hasXOverlap, hasYOverlap, lowestSpaceFirst } from "../helpers";
+import { hasXOverlap, hasYOverlap, lowestSpaceFirst, middleOf } from "../helpers";
 import { detectCharacterCollision } from "../shared-operations/character-collisions";
 import { FeedbackEventEventType, GameCharacter, GameState, PlatformLevel, Space } from "../types";
 
@@ -22,7 +22,7 @@ export const attemptPlatformMovement = (
     // if going up, check for ceilings above
     if (vector.yd < 0) {
         const lowestPlatformAbove = platforms
-            .filter(platform => platform.blocking && platform.y < (floorLevel) && hasXOverlap(afterYMovement, platform))
+            .filter(platform => platform.blocking && platform.y < (floorLevel) && hasXOverlap(middleOf(afterYMovement), platform))
             .sort(lowestSpaceFirst)
             .shift()
 
@@ -62,7 +62,7 @@ export const attemptPlatformMovement = (
             platform.blocking &&
             platform.y < floorLevel &&
             hasYOverlap(platform, afterXMovement) &&
-            hasXOverlap(platform, afterXMovement)
+            hasXOverlap(platform, middleOf(afterXMovement))
         )
 
     character.mind.blocked = platformsBlockingXMovement.length > 0;
