@@ -56,12 +56,14 @@ export const plotGraphic = (baseState: BaseGameState, canvasElement: HTMLCanvasE
 
     ctx.beginPath()
     if (cloudPattern) {
-        cloudPattern.setTransform(new DOMMatrix().scale(1, 2))
+        cloudPattern.setTransform(new DOMMatrix().scale(1, 2).translate(baseState.cycleNumber + 75 * iteration))
         ctx.fillStyle = cloudPattern
     }
 
     ctx.fillRect(0, 0, baseState.mapWidth, baseState.mapHeight)
 
-    const figureFrame = [SWING, GUARD, LEAP][iteration % 3];
-    zoomyFigure(baseState.mapWidth - 75, 45, figureFrame, baseState.cycleNumber, ctx, stonePattern, drawSprite);
+    const figureFrame1 = [SWING, GUARD, LEAP][iteration % 3];
+    const figureFrame2 = [SWING, GUARD, LEAP][(iteration + 1) % 3];
+    zoomyFigure(baseState.mapWidth - 75, 45, figureFrame1, baseState.cycleNumber, ctx, stonePattern, drawSprite);
+    zoomyFigure(75, baseState.mapHeight - 45, figureFrame2, baseState.cycleNumber, ctx, stonePattern, drawSprite);
 }
