@@ -3,7 +3,7 @@ import { AssetKey, AssetMap, assetParams } from "../assets-defs";
 import { GameState, OverheadLevel, PlatformLevel, Space, Terrain } from "../game-state";
 import { TILE_DIMS } from "./constants-and-types";
 import { getCurrentLevel } from "../game-state/helpers";
-import { GRASS, ROAD, STONE, WATER, WATERFALL, SPLASH, CAVE, MOSSY_GROUND, WOOD } from "./tile-frames";
+import { GRASS, ROAD, STONE, WATER, WATERFALL, SPLASH, CAVE, MOSSY_GROUND, WOOD, LADDER } from "./tile-frames";
 
 
 type BackdropVariant = 0 | 1 | 2 | 3;
@@ -44,6 +44,9 @@ const drawOverheadBackdrop = (variant: BackdropVariant, level: OverheadLevel, dr
                     break
                 case Terrain.Stone:
                     drawTileIfBase(STONE, tileIndex, rowIndex);
+                    break
+                case Terrain.Ladder:
+                    drawTileIfBase(LADDER, tileIndex, rowIndex);
                     break
                 case Terrain.Water:
                     drawTileIfBase(WATER, tileIndex, rowIndex);
@@ -173,6 +176,9 @@ const drawPlatformbackdrop = (
                     break
                 case Terrain.Stone:
                     drawTile(STONE, tileIndex, rowIndex);
+                    break
+                case Terrain.Ladder:
+                    drawTile(LADDER, tileIndex, rowIndex);
                     break
                 case Terrain.Water:
                     drawTile(WATER, tileIndex, rowIndex);

@@ -8,11 +8,10 @@ const tilesLevel0 = `
  rssccsssffssss
  r     wwFFww s
  rrrrr wwwwww s
- r   r        s
-  ss rrrrrr   s
- sss      r   sssss sssss 
- sss      r   sssss sssss
-`;
+ r   r        ssssslsssss
+  ss rrrrrr   ssssslsssss
+ sss      r   ssssslsssss
+ sss      r   ssssslsssss`;
 
 export const overlandLevel = (): OverheadLevel => {
 

@@ -1,7 +1,7 @@
 import { DrawSpriteFunction } from "@dblatcher/sprite-canvas";
 import { AssetKey } from "../assets-defs";
-import { GameCharacter, GameState } from "../game-state";
-import { CharacterSprite } from "./constants-and-types";
+import { GameCharacter, GameState, Level, Traversability } from "../game-state";
+import { CharacterAnimation, CharacterSprite } from "./constants-and-types";
 import { getLevelType } from "../game-state/helpers";
 
 const progressionFrame = ({ duration, remaining }: { duration: number, remaining: number }): number => {
@@ -23,6 +23,34 @@ const getFilter = (cycleNumber: number, { dying, reeling }: GameCharacter): stri
     return undefined
 }
 
+
+const getAnimation = (character: GameCharacter, levelType: Level['levelType']): CharacterAnimation => {
+    const speed = levelType === 'platform' ? Math.abs(character.vector.xd) : Math.abs(character.vector.xd) + Math.abs(character.vector.yd)
+
+    if (character.dying || character.reeling || character.health.current <= 0) {
+        return 'reel'
+    }
+    if (character.altitude > 0) {
+        return Math.abs(character.vector.xd) > 1
+            ? 'leap'
+            : 'jump'
+    }
+    if (character.attack) {
+        return 'attack'
+    }
+
+    if (character.currentTile?.traversability === Traversability.Climb) {
+        return speed <= 0 ? 'climbIdle' : 'climbing'
+    }
+
+    return speed <= 0
+        ? 'idle'
+        : speed < .6
+            ? 'walk'
+            : 'run'
+
+}
+
 export const drawCharacter = (
     character: GameCharacter,
     state: GameState,
@@ -31,22 +59,7 @@ export const drawCharacter = (
     baseFilter?: string,
 ) => {
 
-    const levelType = getLevelType(state)
-
-    const speed = levelType === 'platform' ? Math.abs(character.vector.xd) : Math.abs(character.vector.xd) + Math.abs(character.vector.yd)
-    const animation = (character.dying || character.reeling || character.health.current <= 0)
-        ? 'reel'
-        : character.altitude > 0
-            ? Math.abs(character.vector.xd) > 1
-                ? 'leap'
-                : 'jump'
-            : character.attack
-                ? 'attack'
-                : speed <= 0
-                    ? 'idle'
-                    : speed < .6
-                        ? 'walk'
-                        : 'run'
+    const animation = getAnimation(character, getLevelType(state))
 
     const direction = character.dying ? 'Up' : character.reeling?.direction ?? character.direction
 

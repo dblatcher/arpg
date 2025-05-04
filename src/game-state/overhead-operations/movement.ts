@@ -1,16 +1,26 @@
 import { translate, doRectsIntersect, XY } from "../../lib/geometry";
-import { BASE_REEL_SPEED } from "../constants";
+import { BASE_REEL_SPEED, TILE_SIZE } from "../constants";
 import { spaceToRect } from "../helpers";
 import { detectCharacterCollision } from "../shared-operations/character-collisions";
-import { GameCharacter, GameState, OverheadLevel } from "../types";
+import { GameCharacter, GameState, OverheadLevel, Tile } from "../types";
 
+const getTile = (character: GameCharacter, level: OverheadLevel): Tile | undefined => {
+    const yt = Math.floor((character.y + (character.height / 2)) / TILE_SIZE);
+    const xt = Math.floor((character.x + (character.width / 2)) / TILE_SIZE);
+
+    try {
+        return level.tileMap[yt][xt];
+    } catch {
+        return undefined
+    }
+}
 
 export const attemptMove = (
     character: GameCharacter,
     level: OverheadLevel,
     state: GameState,
     isPlayer = false
-): {collidedNpc?: GameCharacter, collidesWithPlayer: boolean } => {
+): { collidedNpc?: GameCharacter, collidesWithPlayer: boolean } => {
 
     // game thinking
     // characters don't move while attacking
@@ -40,6 +50,7 @@ export const attemptMove = (
     if (!collidedObstacle && !(collidedNpc && !wereNpcsAlreadyInContact) && !collidesWithPlayer) {
         character.x = newPosition.x
         character.y = newPosition.y
+        character.currentTile = getTile(character, level);
     }
     return { collidedNpc, collidesWithPlayer }
 };

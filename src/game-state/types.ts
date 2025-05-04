@@ -49,6 +49,7 @@ export type GameCharacter = Space & {
     pointsForKilling?: number
     altitude: number;
     mind: CharacterState;
+    currentTile?: Tile;
 }
 
 export type FeedbackEventEventType = 'attack' | 'npc-hit' | 'attack-end' | 'reel-end' | 'player-hit' | 'player-land' | 'death'
@@ -59,11 +60,11 @@ export type FeedbackEvent = {
 export type AddFeedbackFunc = { (type: FeedbackEventEventType): void }
 
 export enum Traversability {
-    Open, Blocking
+    Open, Blocking, Climb
 }
 
 export enum Terrain {
-    Grass, Road, Stone, Waterfall, Splash, Water, Cave, MossyGround
+    Grass, Road, Stone, Waterfall, Splash, Water, Cave, MossyGround, Ladder
 }
 
 export type Tile = {

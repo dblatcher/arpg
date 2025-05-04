@@ -1,4 +1,4 @@
-import { Sprite } from "@dblatcher/sprite-canvas";
+import { Sprite, SpriteFrame } from "@dblatcher/sprite-canvas";
 import { AssetKey } from "../assets-defs";
 import { CharacterSprite } from "./constants-and-types";
 
@@ -21,6 +21,13 @@ const animationFrames2 = (key: AssetKey) => ({
     Left: frameRow(key, 1),
     Up: frameRow(key, 2),
     Right: frameRow(key, 3)
+})
+
+const sameAllDirections = (frames: SpriteFrame<AssetKey>[]) => ({
+    Down: frames,
+    Left: frames,
+    Up: frames,
+    Right: frames
 })
 
 export const ranger: CharacterSprite = new Sprite(
@@ -62,5 +69,18 @@ export const ranger: CharacterSprite = new Sprite(
                 Right: [{ key: 'RANGER_RUN', fy: 3, fx: 3 }],
                 Up: [{ key: 'RANGER_RUN', fy: 0, fx: 2 }],
             }
+        },
+        'climbing': {
+            frames: sameAllDirections([
+                { key: 'RANGER_CLIMB', fy: 0, fx: 0 },
+                { key: 'RANGER_CLIMB', fy: 0, fx: 1 },
+                { key: 'RANGER_CLIMB', fy: 0, fx: 2 },
+                { key: 'RANGER_CLIMB', fy: 0, fx: 3 },
+            ])
+        },
+        'climbIdle': {
+            frames: sameAllDirections([
+                { key: 'RANGER_CLIMB', fy: 0, fx: 2 }
+            ])
         }
     })

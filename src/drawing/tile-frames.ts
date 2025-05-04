@@ -8,6 +8,7 @@ const ROAD: SpriteFrame<AssetKey> = { key: 'TILES_2', fx: 4, fy: 0, }
 const WATER: SpriteFrame<AssetKey> = { key: 'TILES_2', fx: 6, fy: 2, }
 const MOSSY_GROUND: SpriteFrame<AssetKey> = { key: 'TILES_2', fx: 6, fy: 5 }
 const WOOD: SpriteFrame<AssetKey> = { key: 'TILES_1', fx: 2, fy: 7 }
+const LADDER: SpriteFrame<AssetKey> = { key: 'TILES_2', fx: 5, fy: 6 }
 
 const CAVE = {
     topLeft: { key: 'TILES_3', fx: 4, fy: 0 },
@@ -30,4 +31,4 @@ const SPLASH = [
     { key: 'TILES_3', fx: 0, fy: 4 },
 ] satisfies SpriteFrame<AssetKey>[];
 
-export { STONE, GRASS, ROAD, WATER, MOSSY_GROUND, CAVE, WATERFALL, SPLASH, WOOD }
+export { STONE, GRASS, ROAD, WATER, MOSSY_GROUND, CAVE, WATERFALL, SPLASH, WOOD, LADDER }
