@@ -10,15 +10,18 @@ const progressionFrame = ({ duration, remaining }: { duration: number, remaining
 
 const PINKY_FLASH = "brightness(400%) hue-rotate(310deg) saturate(490%)";
 
-const getFilter = (cycleNumber: number, { dying, reeling }: GameCharacter): string | undefined => {
+const getFilter = (cycleNumber: number, { dying, reeling, collisionsOff }: GameCharacter): string | undefined => {
     const blink = cycleNumber % 25 <= 10;
+    if (collisionsOff) {
+        return blink ? `opacity(${0}%)` : undefined
+    }
     if (dying) {
         const { duration, remaining } = dying;
         const percent = 100 * remaining / duration;
         return blink ? `${PINKY_FLASH} opacity(${percent}%)` : `opacity(${percent}%)`
     }
-    if (reeling && blink) {
-        return PINKY_FLASH
+    if (reeling) {
+        return blink ? PINKY_FLASH : undefined
     }
     return undefined
 }

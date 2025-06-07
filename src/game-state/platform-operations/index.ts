@@ -20,7 +20,7 @@ const handleInputs = (player: GameCharacter, inputs: InputState, addFeedback: { 
         return
     }
 
-    if (attackButton) {
+    if (attackButton && !player.collisionsOff) {
         player.vector.xd = 0
         player.attack = {
             duration: ATTACK_DURATION,
@@ -74,7 +74,7 @@ export const runPlatformLevel = (level: PlatformLevel, state: GameState, player:
 
     handleInputs(player, inputs, addFeedback)
     followGravity(player)
-    progressCharacterStatus(player, addFeedback)
+    progressCharacterStatus(player, addFeedback, true)
     const { collidedNpc } = attemptPlatformMovement(player, level, state, floorLevel, true, addFeedback)
 
     if (collidedNpc) {
@@ -113,7 +113,7 @@ export const runPlatformLevel = (level: PlatformLevel, state: GameState, player:
 
     npcs.forEach(npc => {
         const { floorLevel } = getAltitudeAndFloorLevel(npc, level)
-        updateNpc(npc,floorLevel, state)
+        updateNpc(npc, floorLevel, state)
         progressCharacterStatus(npc, addFeedback)
         followGravity(npc)
         // TO DO - use reeling in attemptPlatformMovement

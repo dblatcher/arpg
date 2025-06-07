@@ -15,7 +15,7 @@ export const updatePlayer = (player: GameCharacter, inputs: InputState, addFeedb
 
     const { xd = 0, yd = 0, attackButton } = inputs;
     player.direction = xd || yd ? getDirection(xd, yd) : player.direction;
-    if (attackButton) {
+    if (attackButton && !player.collisionsOff) {
         player.attack = {
             duration: ATTACK_DURATION,
             remaining: ATTACK_DURATION,

@@ -1,9 +1,11 @@
+import { PLAYER_RECOVER_TIME } from "../constants";
 import { GameCharacter, FeedbackEventEventType } from "../types";
 
 
 export const progressCharacterStatus = (
     character: GameCharacter,
-    addFeedback: { (type: FeedbackEventEventType): void }
+    addFeedback: { (type: FeedbackEventEventType): void },
+    isPlayer?: boolean
 ) => {
 
     if (character.dying) {
@@ -18,8 +20,20 @@ export const progressCharacterStatus = (
             addFeedback('reel-end')
             delete character.reeling
             delete character.attack
+            if (isPlayer) {
+                character.collisionsOff = {
+                    remaining: PLAYER_RECOVER_TIME
+                }
+            }
         }
         return true
+    }
+
+    if (character.collisionsOff) {
+        character.collisionsOff.remaining -= 1
+        if (character.collisionsOff.remaining <= 0) {
+            delete character.collisionsOff
+        }
     }
 
     if (character.attack) {

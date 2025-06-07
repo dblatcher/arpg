@@ -20,7 +20,7 @@ export const runOverheadLevel = (
 
     updatePlayer(player, inputs, addFeedback)
     const playerWasReelingAtStart = !!player.reeling
-    progressCharacterStatus(player, addFeedback)
+    progressCharacterStatus(player, addFeedback, true)
     const { collidedNpc } = attemptMove(player, level, state, true)
     if (collidedNpc) {
         handlePlayerNpcCollisions(player, collidedNpc, playerWasReelingAtStart, addFeedback)

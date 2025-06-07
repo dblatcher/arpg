@@ -8,13 +8,25 @@ export const detectCharacterCollision = (
     level: Level,
     state: GameState,
     isPlayer: boolean,
-) => {
-  
+): {
+    wereNpcsAlreadyInContact: boolean;
+    collidedNpc: GameCharacter | undefined;
+    collidesWithPlayer: boolean;
+} => {
+
+    if (character.collisionsOff) {
+        return {
+            wereNpcsAlreadyInContact: false,
+            collidedNpc: undefined,
+            collidesWithPlayer: false
+        }
+    }
+
     const newPositionRect = spaceToRect(newPosition)
     const ignoreNpcCollisions = !isPlayer && (character.reeling || character.dying)
-    const collidedNpc = ignoreNpcCollisions ? undefined : level.npcs.filter(npc => !npc.dying).find(npc => npc.id !== character.id && doRectsIntersect(spaceToRect(npc), newPositionRect))
+    const collidedNpc = ignoreNpcCollisions ? undefined : level.npcs.filter(npc => !npc.dying && !npc.collisionsOff).find(npc => npc.id !== character.id && doRectsIntersect(spaceToRect(npc), newPositionRect))
     const wereNpcsAlreadyInContact = !isPlayer && !!collidedNpc && doRectsIntersect(spaceToRect(collidedNpc), spaceToRect(character))
-    const collidesWithPlayer = isPlayer ? false : doRectsIntersect(spaceToRect(state.player), newPositionRect)
+    const collidesWithPlayer = isPlayer ? false : state.player.collisionsOff ? false : doRectsIntersect(spaceToRect(state.player), newPositionRect)
 
     return { wereNpcsAlreadyInContact, collidedNpc, collidesWithPlayer }
 }

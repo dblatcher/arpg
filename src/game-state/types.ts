@@ -42,6 +42,9 @@ export type GameCharacter = Space & {
         direction: Direction;
         unitVector: XY;
     }
+    collisionsOff? : {
+        remaining: number;
+    }
     health: {
         max: number;
         current: number;
