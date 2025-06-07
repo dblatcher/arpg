@@ -20,10 +20,11 @@ export const makeInitalState = (): GameState => {
         levels,
         player: {
             id: -1,
+            spriteKey: 'ranger',
             direction: 'Down',
             altitude: 0,
             // x: TILE_SIZE * 5, y: TILE_SIZE * 2,
-            x: TILE_SIZE* 10,
+            x: TILE_SIZE * 10,
             y: TILE_SIZE * 10,
             width: 35,
             height: 35,

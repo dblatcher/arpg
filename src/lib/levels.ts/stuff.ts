@@ -1,4 +1,4 @@
-import { CharacterState, GameCharacter, Tile } from "../../game-state"
+import { CharacterSpriteKey, CharacterState, GameCharacter, Tile } from "../../game-state"
 import { TILE_SIZE } from "../../game-state/constants"
 import { stringToTileMap, tileMapToObstacles } from "../tile-maps"
 
@@ -9,9 +9,17 @@ export enum LEVEL_IDS {
 }
 
 let npcId = 1
-export const standardNpc = (x: number, y: number, mind: CharacterState = {}): GameCharacter => (
+export const standardNpc = (
+    x: number,
+    y: number,
+    mind: CharacterState = {},
+    filter?: string,
+    spriteKey: CharacterSpriteKey = 'punisher'
+): GameCharacter => (
     {
         altitude: 0,
+        spriteKey,
+        spriteFilter: filter,
         id: npcId++,
         direction: 'Down',
         x, y,

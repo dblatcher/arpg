@@ -1,8 +1,15 @@
 import { DrawSpriteFunction } from "@dblatcher/sprite-canvas";
 import { AssetKey } from "../assets-defs";
-import { GameCharacter, GameState, Level, Traversability } from "../game-state";
+import { CharacterSpriteKey, GameCharacter, GameState, Level, Traversability } from "../game-state";
 import { CharacterAnimation, CharacterSprite } from "./constants-and-types";
 import { getLevelType } from "../game-state/helpers";
+import { punisher } from "./punisher-sprite";
+import { ranger } from "./ranger-sprite";
+
+
+const characterSprites: Record<CharacterSpriteKey, CharacterSprite> = {
+    ranger, punisher
+}
 
 const progressionFrame = ({ duration, remaining }: { duration: number, remaining: number }): number => {
     return Math.round(((duration - remaining) / duration) * 3)
@@ -57,11 +64,11 @@ const getAnimation = (character: GameCharacter, levelType: Level['levelType']): 
 export const drawCharacter = (
     character: GameCharacter,
     state: GameState,
-    sprite: CharacterSprite,
     drawSprite: DrawSpriteFunction<AssetKey>,
-    baseFilter?: string,
 ) => {
 
+    const { spriteFilter = '', spriteKey } = character
+    const sprite = characterSprites[spriteKey]
     const animation = getAnimation(character, getLevelType(state))
 
     const direction = character.dying ? 'Up' : character.reeling?.direction ?? character.direction
@@ -70,7 +77,7 @@ export const drawCharacter = (
         ? progressionFrame(character.attack)
         : Math.floor(state.cycleNumber / 25) % 4;
 
-    const filter = [baseFilter, getFilter(state.cycleNumber, character)].flatMap(i => i ? i : []).join(" ")
+    const filter = [spriteFilter, getFilter(state.cycleNumber, character)].flatMap(i => i ? i : []).join(" ")
 
     drawSprite({
         ...sprite.getFrame(animation, direction, frameIndex),

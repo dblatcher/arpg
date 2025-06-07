@@ -19,9 +19,13 @@ export type CharacterState = {
     task?: NpcTask;
 }
 
+export type CharacterSpriteKey = "ranger" | "punisher"
+
 export type GameCharacter = Space & {
     id: number,
     direction: Direction;
+    spriteKey: CharacterSpriteKey;
+    spriteFilter?: string;
     speed: number;
     vector: {
         xd: number;

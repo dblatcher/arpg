@@ -1,14 +1,13 @@
 import { drawSpriteFunc, DrawToCanvasFunction, fullViewPort, makeDrawingMethods } from "@dblatcher/sprite-canvas";
 import { AssetKey, assetParams } from "../assets-defs";
 import { GameState } from "../game-state";
+import { getCurrentLevel } from "../game-state/helpers";
 import { getAttackZone } from "../game-state/overhead-operations/player-attacks";
 import { drawCharacter } from "./draw-character";
-import { ranger } from "./ranger-sprite";
-import { punisher } from "./punisher-sprite";
-import { getCurrentLevel } from "../game-state/helpers";
 
 
 const SHOW_HITBOX = true as boolean;
+
 
 export const drawSceneFunction: DrawToCanvasFunction<GameState, AssetKey> = (state, assets, viewport = fullViewPort(state)) => (canvas) => {
     const ctx = canvas?.getContext('2d');
@@ -25,9 +24,9 @@ export const drawSceneFunction: DrawToCanvasFunction<GameState, AssetKey> = (sta
     ctx.beginPath()
     ctx.clearRect(0, 0, viewport.width, viewport.height)
 
-    drawCharacter(player, state, ranger, drawSprite)
+    drawCharacter(player, state, drawSprite)
     level.npcs.forEach(character => {
-        drawCharacter(character, state, punisher, drawSprite)
+        drawCharacter(character, state, drawSprite)
     })
 
     if (SHOW_HITBOX) {

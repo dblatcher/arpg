@@ -37,9 +37,9 @@ export const overlandLevel = (): OverheadLevel => {
             }
         ],
         npcs: [
-            standardNpc(TILE_SIZE * 3.9, TILE_SIZE*2.1, {task:'Guard'}),
-            standardNpc(TILE_SIZE * 5.1, TILE_SIZE*2.5, {task:'Guard'}),
-            standardNpc(TILE_SIZE * 4.9, TILE_SIZE*5.5, {task:'Guard'}),
+            standardNpc(TILE_SIZE * 3.9, TILE_SIZE * 2.1, { task: 'Guard' }, 'hue-rotate(60deg)', 'ranger'),
+            standardNpc(TILE_SIZE * 5.1, TILE_SIZE * 2.5, { task: 'Guard' }, 'hue-rotate(60deg)', 'ranger'),
+            standardNpc(TILE_SIZE * 4.9, TILE_SIZE * 5.5, { task: 'Guard' }, 'hue-rotate(60deg)', 'ranger'),
             standardNpc(100, 340),
             standardNpc(150, 440),
             standardNpc(150, 360),
