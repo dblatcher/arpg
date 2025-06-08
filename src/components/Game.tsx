@@ -94,7 +94,7 @@ export const Game = ({ soundDeck, quit }: Props) => {
         if (state.paused) { return }
         handleFeedback(state.feedbackEvents)
         const keyMap = keyMapRef.current;
-        const inputState = inputsToInputState(keyMap, getGamepad())
+        const inputState = inputsToInputState(keyMap, getGamepad(), state.previousInput)
         dispatch({
             type: 'tick',
             inputs: inputState,

@@ -92,7 +92,7 @@ export const runPlatformLevel = (level: PlatformLevel, state: GameState, player:
 
     const { npcs } = level
 
-    const attackZone = getAttackZone(player)
+    const attackZone = player.attack && getAttackZone(player);
     if (attackZone) {
         const hitNpcs = findNpcsHitByPlayerAttack(npcs, attackZone)
 

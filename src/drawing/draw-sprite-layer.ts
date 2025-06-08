@@ -34,7 +34,7 @@ export const drawSceneFunction: DrawToCanvasFunction<GameState, AssetKey> = (sta
             drawingMethods.rect(character.x, character.y, character.width, character.height)
         })
         drawingMethods.rect(player.x, player.y, player.width, player.height)
-        const attackVector = getAttackZone(player)
+        const attackVector = player.attack && getAttackZone(player)
         if (attackVector) {
             drawingMethods.rect(attackVector.left, attackVector.top, attackVector.width, attackVector.height)
         }

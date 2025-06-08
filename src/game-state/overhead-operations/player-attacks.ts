@@ -59,11 +59,8 @@ const adjustZoneLeft = (attackVector: XY, character: GameCharacter): number => {
     return - character.width * .1
 }
 
-export const getAttackZone = (character: GameCharacter): (Rect & { width: number; height: number }) | undefined => {
-    const { attack, direction } = character
-    if (!attack) {
-        return undefined
-    }
+export const getAttackZone = (character: GameCharacter): (Rect & { width: number; height: number }) => {
+    const { direction } = character
     const attackVector = directionToUnitVector(direction)
     const zoneDims = attackVector.x
         ? { width: character.width * .3, height: character.height * 1.2 }

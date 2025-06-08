@@ -21,6 +21,10 @@ export type CharacterState = {
 
 export type CharacterSpriteKey = "ranger" | "punisher"
 
+export type Interaction = {
+    text: string
+}
+
 export type GameCharacter = Space & {
     id: number,
     direction: Direction;
@@ -58,6 +62,7 @@ export type GameCharacter = Space & {
     altitude: number;
     mind: CharacterState;
     currentTile?: Tile;
+    interaction?: Interaction;
 }
 
 export type FeedbackEventEventType = 'attack' | 'npc-hit' | 'attack-end' | 'reel-end' | 'player-hit' | 'player-land' | 'death'
@@ -139,6 +144,7 @@ export type GameState = BaseGameState & {
     levels: Level[];
     score: number;
     deathReset?: { countDown: number }
+    previousInput?: InputState;
 }
 
 export type InputState = {
@@ -146,4 +152,6 @@ export type InputState = {
     yd?: number,
     attackButton?: boolean,
     jumpButton?: boolean,
+    interactButton?: boolean,
+    interactDown?: boolean,
 }

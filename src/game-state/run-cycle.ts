@@ -85,5 +85,6 @@ export const runCycle = (state: GameState, inputs: InputState): GameState => {
         cycleNumber: cycleNumber + 1,
         player,
         levels: [...state.levels.slice(0, currentLevelIndex), level, ...state.levels.slice(currentLevelIndex + 1)],
+        previousInput: inputs,
     }
 }
