@@ -1,6 +1,6 @@
 import { OverheadLevel } from "../../game-state"
 import { TILE_SIZE } from "../../game-state/constants"
-import { LEVEL_IDS, makeObstaclesAndTileMap, standardNpc } from "./stuff";
+import { LEVEL_IDS, makeObstaclesAndTileMap, safeNpc, standardNpc } from "./stuff";
 
 
 const tilesLevel0 = `
@@ -41,11 +41,11 @@ export const overlandLevel = (): OverheadLevel => {
             standardNpc(TILE_SIZE * 5.1, TILE_SIZE * 2.5, { task: 'Guard' }, 'hue-rotate(60deg)', 'ranger'),
             standardNpc(TILE_SIZE * 4.9, TILE_SIZE * 5.5, { task: 'Guard' }, 'hue-rotate(60deg)', 'ranger'),
             standardNpc(100, 340),
-            standardNpc(150, 440),
+            safeNpc(150, 440, {}, 'hue-rotate(-90deg) brightness(1.6)'),
             standardNpc(150, 360),
             standardNpc(265, 260),
-            standardNpc(550, 360),
-            standardNpc(500, 300),
+            safeNpc(550, 360, { task: 'Guard' }, 'hue-rotate(-90deg) brightness(1.6)'),
+            safeNpc(500, 300, {}, 'hue-rotate(-90deg) brightness(1.6)'),
             standardNpc(550, 440),
         ],
         ...makeObstaclesAndTileMap(tilesLevel0, mapWidth, mapHeight)

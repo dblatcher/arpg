@@ -21,9 +21,9 @@ export const runOverheadLevel = (
     updatePlayer(player, inputs, addFeedback)
     const playerWasReelingAtStart = !!player.reeling
     progressCharacterStatus(player, addFeedback, true)
-    const { collidedNpc } = attemptMove(player, level, state, true)
+    const { collidedNpc, wasPlayerAndNpcInContact } = attemptMove(player, level, state, true)
     if (collidedNpc) {
-        handlePlayerNpcCollisions(player, collidedNpc, playerWasReelingAtStart, addFeedback)
+        handlePlayerNpcCollisions(player, collidedNpc, playerWasReelingAtStart, wasPlayerAndNpcInContact, addFeedback)
     }
     // TO DO - how does the application react to player death?
 
@@ -41,7 +41,7 @@ export const runOverheadLevel = (
         updateNpc(npc, state)
         const { collidesWithPlayer } = attemptMove(npc, level, state)
         if (collidesWithPlayer) {
-            handlePlayerNpcCollisions(player, npc, playerWasReelingAtStart, addFeedback)
+            handlePlayerNpcCollisions(player, npc, playerWasReelingAtStart, undefined, addFeedback)
         }
     })
 }

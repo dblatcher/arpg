@@ -20,7 +20,7 @@ export const attemptMove = (
     level: OverheadLevel,
     state: GameState,
     isPlayer = false
-): { collidedNpc?: GameCharacter, collidesWithPlayer: boolean } => {
+): { collidedNpc?: GameCharacter, collidesWithPlayer: boolean, wasPlayerAndNpcInContact:boolean } => {
 
     // game thinking
     // characters don't move while attacking
@@ -28,7 +28,8 @@ export const attemptMove = (
     // of attack that involve movement (charge?)
     if (character.attack && !character.reeling) {
         return {
-            collidesWithPlayer: false
+            collidesWithPlayer: false,
+            wasPlayerAndNpcInContact: false,
         }
     }
 
@@ -45,14 +46,16 @@ export const attemptMove = (
     const newPositionRect = spaceToRect({ ...character, ...newPosition })
     const collidedObstacle = level.obstacles.find(obstacle => doRectsIntersect(spaceToRect(obstacle), newPositionRect))
 
-    const { collidedNpc, wereNpcsAlreadyInContact, collidesWithPlayer } = detectCharacterCollision({ ...character, ...newPosition }, character, level, state, isPlayer)
+    const { collidedNpc, wereNpcsAlreadyInContact, collidesWithPlayer, wasPlayerAndNpcInContact } = detectCharacterCollision({ ...character, ...newPosition }, character, level, state, isPlayer)
 
-    if (!collidedObstacle && !(collidedNpc && !wereNpcsAlreadyInContact) && !collidesWithPlayer) {
+
+
+    if (!collidedObstacle && !(collidedNpc && !wereNpcsAlreadyInContact) && !(collidesWithPlayer && !wasPlayerAndNpcInContact)) {
         character.x = newPosition.x
         character.y = newPosition.y
         character.currentTile = getTile(character, level);
     }
-    return { collidedNpc, collidesWithPlayer }
+    return { collidedNpc, collidesWithPlayer, wasPlayerAndNpcInContact }
 };
 
 export const reelVector = (character: GameCharacter): XY => {

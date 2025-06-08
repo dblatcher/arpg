@@ -38,6 +38,16 @@ export const standardNpc = (
     }
 )
 
+export const safeNpc = (
+    x: number,
+    y: number,
+    mind: CharacterState = {},
+    filter?: string,
+    spriteKey: CharacterSpriteKey = 'punisher'
+) => {
+    return { ...standardNpc(x, y, mind, filter, spriteKey), safe: true }
+}
+
 export const makeObstaclesAndTileMap = (tiles: string, width: number, height: number, defaultTile?: Tile) => {
     const tileMap = stringToTileMap(tiles, width / TILE_SIZE, height / TILE_SIZE, defaultTile)
     const obstacles = tileMapToObstacles(tileMap)

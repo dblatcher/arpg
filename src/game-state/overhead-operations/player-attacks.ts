@@ -5,6 +5,10 @@ import { GameCharacter, GameState } from "../types";
 
 
 export const handlePlayerAttackHits = (npc: GameCharacter, state: GameState) => {
+    // game thinking - do not want to deal with player attacking friendlies
+    if (npc.safe) {
+        return
+    }
     npc.health.current = npc.health.current - 1
     if (npc.health.current <= 0) {
         state.score += npc.pointsForKilling ?? 0;
@@ -21,7 +25,7 @@ export const handlePlayerAttackHits = (npc: GameCharacter, state: GameState) => 
     if (npc.mind.task === 'Guard') {
         const level = getCurrentLevel(state);
         const otherNearbyGuards = level?.npcs.filter(otherNpc =>
-            otherNpc !== npc && otherNpc.mind.task === 'Guard' && getDistance(otherNpc, npc) < 400
+            !otherNpc.safe && otherNpc !== npc && otherNpc.mind.task === 'Guard' && getDistance(otherNpc, npc) < 400
         );
         otherNearbyGuards?.forEach(otherNpc => otherNpc.mind.hostile = true)
     }

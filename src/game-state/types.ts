@@ -10,7 +10,7 @@ export type Space = {
     height: number
 }
 
-export type NpcTask = 'Guard'
+export type NpcTask = 'Guard' | 'Wander'
 
 export type CharacterState = {
     hostile?: boolean;
@@ -46,13 +46,14 @@ export type GameCharacter = Space & {
         direction: Direction;
         unitVector: XY;
     }
-    collisionsOff? : {
+    collisionsOff?: {
         remaining: number;
     }
     health: {
         max: number;
         current: number;
     },
+    safe?: boolean,
     pointsForKilling?: number
     altitude: number;
     mind: CharacterState;

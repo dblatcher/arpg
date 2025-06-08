@@ -19,18 +19,19 @@ export const getDirection = (xd: number, yd: number): Direction => {
     }
     return yd > 0 ? 'Down' : 'Up'
 }
-export const directionToUnitVector = (direction: Direction): XY => {
+export const directionToVector = (direction: Direction, distance: number): XY => {
     switch (direction) {
         case "Up":
-            return { x: 0, y: -1 }
+            return { x: 0, y: -distance }
         case "Down":
-            return { x: 0, y: 1 }
+            return { x: 0, y: distance }
         case "Left":
-            return { x: -1, y: 0 }
+            return { x: -distance, y: 0 }
         case "Right":
-            return { x: 1, y: 0 }
+            return { x: distance, y: 0 }
     }
 }
+export const directionToUnitVector = (direction: Direction): XY => directionToVector(direction, 1);
 
 export const leftEdgeOf = (space: Space, width = 2): Space => ({
     x: space.x,
