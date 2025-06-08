@@ -1,3 +1,4 @@
+import { getDistance } from "../../lib/geometry"
 import { progressCharacterStatus } from "../shared-operations/character-status"
 import { FeedbackEventEventType, GameCharacter, GameState, InputState, OverheadLevel } from "../types"
 import { findInteractionTarget, handleInteraction } from "./interactions"
@@ -21,11 +22,23 @@ export const runOverheadLevel = (
 
     updatePlayer(player, inputs, addFeedback)
     if (inputs.interactDown) {
-        const target = findInteractionTarget(player, level);
-        if (target) {
-            handleInteraction(target)
+        if (state.interactionAndTarget) {
+            delete state.interactionAndTarget;
+        } else {
+            const target = findInteractionTarget(player, level);
+            if (target) {
+                handleInteraction(target, state)
+            }
         }
     }
+
+    if (state.interactionAndTarget) {
+        const distance = getDistance(player, state.interactionAndTarget.target)
+        if (distance > 100) {
+            delete state.interactionAndTarget;
+        }
+    }
+
     const playerWasReelingAtStart = !!player.reeling
     progressCharacterStatus(player, addFeedback, true)
     const { collidedNpc, wasPlayerAndNpcInContact } = attemptMove(player, level, state, true)

@@ -44,7 +44,7 @@ export const overlandLevel = (): OverheadLevel => {
             safeNpc(150, 440, {}, 'hue-rotate(-90deg) brightness(1.6)'),
             standardNpc(150, 360),
             standardNpc(265, 260),
-            { ...safeNpc(550, 360, { task: 'Guard' }, 'hue-rotate(-90deg) brightness(1.6)'), interaction: { 'text': 'I am guard' } },
+            { ...safeNpc(550, 360, { task: 'Guard' }, 'hue-rotate(-90deg) brightness(1.6)'), interaction: { 'text': 'Hello, I am standing still.' } },
             safeNpc(500, 300, {}, 'hue-rotate(-90deg) brightness(1.6)'),
             standardNpc(550, 440),
         ],

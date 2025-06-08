@@ -4,6 +4,7 @@ import { GameState, OverheadLevel, PlatformLevel } from "../game-state"
 import { ScrollingBackdrop } from "./ScrollingBackdrop"
 import { SpriteLayerCanvas } from "./SpriteLayerCanvas"
 import { getCurrentLevel } from "../game-state/helpers"
+import { ConversationBox } from "./ConversationBox"
 
 interface Props {
     gameState: GameState
@@ -83,6 +84,9 @@ export const GameScreen = ({ gameState, viewPort, magnify = 1 }: Props) => {
                 gameState={gameState}
                 viewPort={viewPort}
             />
+            {gameState.interactionAndTarget && (
+                <ConversationBox interaction={gameState.interactionAndTarget.interaction} />
+            )}
         </div>
     )
 }

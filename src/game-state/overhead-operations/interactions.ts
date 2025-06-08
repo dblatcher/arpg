@@ -1,6 +1,6 @@
 import { doRectsIntersect } from "../../lib/geometry";
 import { spaceToRect } from "../helpers";
-import { GameCharacter, Level } from "../types";
+import { GameCharacter, GameState, Level } from "../types";
 import { getAttackZone } from "./player-attacks";
 
 export const findInteractionTarget = (player: GameCharacter, level: Level) => {
@@ -9,6 +9,12 @@ export const findInteractionTarget = (player: GameCharacter, level: Level) => {
     return target;
 }
 
-export const handleInteraction = (target: GameCharacter) => {
-    console.log('interaction', target.interaction)
+export const handleInteraction = (target: GameCharacter, state: GameState) => {
+    const {interaction} = target
+    if (interaction) {
+        state.interactionAndTarget = {
+            interaction,
+            target
+        }
+    }
 }

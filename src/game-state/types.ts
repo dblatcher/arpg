@@ -145,6 +145,10 @@ export type GameState = BaseGameState & {
     score: number;
     deathReset?: { countDown: number }
     previousInput?: InputState;
+    interactionAndTarget?: {
+        interaction: Interaction,
+        target: GameCharacter,
+    };
 }
 
 export type InputState = {
