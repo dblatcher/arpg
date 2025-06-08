@@ -14,6 +14,7 @@ import { ScoreDisplay } from "./ScoreDisplay"
 import { useBgm } from "../hooks/use-bgm"
 import { getCurrentLevel } from "../game-state/helpers"
 import { useWindowSize } from "../hooks/use-window-size"
+import { SoundToggle } from "./SoundToggle"
 
 interface Props {
     quit: { (): void }
@@ -124,33 +125,26 @@ export const Game = ({ soundDeck, quit }: Props) => {
     const magnify = calculateMagnification(windowWidth)
     const vpDims = calculateViewportSize(windowWidth, windowHeight, magnify)
 
-    return <div>
-        <header style={{ display: 'flex' }}>
-            <button onClick={togglePaused}>{state.paused ? 'resume' : 'pause'}</button>
-            <button onClick={reset}>reset</button>
-            <button onClick={quit}>quit</button>
-        </header>
-        <div style={{
-            position: 'fixed',
-            top: 0,
-            left: 0
-        }}>
-            <WaitingBackdropProvider initialGameState={initialGameState} currentLevelId={state.currentLevelId}>
-                <GameScreen
-                    gameState={state}
-                    viewPort={centeredViewPort(state.player, vpDims.width, vpDims.height, state)}
-                    magnify={magnify}
-                />
-                <header style={{ display: 'flex', position: 'absolute', top: 0, left: 0, width: '100%', }}>
-                    <button onClick={togglePaused}>{state.paused ? 'resume' : 'pause'}</button>
-                    <button onClick={reset}>reset</button>
-                    <button onClick={quit}>quit</button>
-                    <HealthBar
-                        current={state.player.health.current}
-                        max={state.player.health.max} />
-                    <ScoreDisplay score={state.score} />
-                </header>
-            </WaitingBackdropProvider>
-        </div>
+    return <div style={{
+        position: 'fixed',
+        inset: 0
+    }}>
+        <WaitingBackdropProvider initialGameState={initialGameState} currentLevelId={state.currentLevelId}>
+            <GameScreen
+                gameState={state}
+                viewPort={centeredViewPort(state.player, vpDims.width, vpDims.height, state)}
+                magnify={magnify}
+            />
+            <header style={{ display: 'flex', position: 'absolute', top: 0, left: 0, width: '100%', gap:5, padding:3 }}>
+                <button className="ui-button" onClick={togglePaused}>{state.paused ? 'resume' : 'pause'}</button>
+                <button className="ui-button" onClick={reset}>reset</button>
+                <button className="ui-button" onClick={quit}>quit</button>
+                <HealthBar
+                    current={state.player.health.current}
+                    max={state.player.health.max} />
+                <ScoreDisplay score={state.score} />
+                <SoundToggle soundDeck={soundDeck} corner/>
+            </header>
+        </WaitingBackdropProvider>
     </div>
 }

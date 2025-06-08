@@ -9,7 +9,7 @@ const ScoreDisplayInner: React.FunctionComponent<Props> = ({ score, style }) => 
 
     return (
         <div style={style} className="ui-panel">
-            <span>{score}</span>
+            <span className="ui-text">{score} points</span>
         </div>
     )
 }

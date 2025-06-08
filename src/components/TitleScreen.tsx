@@ -1,14 +1,20 @@
+import { SoundDeck } from "sound-deck";
+import { useBgm } from "../hooks/use-bgm";
+import { SoundToggle } from "./SoundToggle";
 import { TitleGraphicCanvas } from "./TitleGraphicCanvas";
 import "./TitleScreen.css";
 
 interface Props {
     startGame: { (): void }
+    soundDeck: SoundDeck
 }
 
 
 
 
-export const TitleScreen = ({ startGame }: Props) => {
+export const TitleScreen = ({ startGame, soundDeck }: Props) => {
+
+    useBgm('main-theme', false, soundDeck)
 
     return (
         <main className="title-screen">
@@ -17,8 +23,9 @@ export const TitleScreen = ({ startGame }: Props) => {
             </div>
             <div className="title-contents">
                 <h1>Title Screen</h1>
-                <button onClick={startGame}>start</button>
+                <button className="ui-button" onClick={startGame}>start</button>
             </div>
+            <SoundToggle soundDeck={soundDeck} corner />
         </main>
     )
 }

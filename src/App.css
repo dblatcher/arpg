@@ -6,6 +6,11 @@
 }
 
 .sound-toggle {
+  padding: 2px 8px;
+  background-color: gray;
+}
+
+.sound-toggle--corner {
   position: fixed;
   right: 0;
   top: 0;
@@ -14,21 +19,55 @@
 .ui-panel {
   border-radius: 4px;
   padding: 2px 8px;
-  backdrop-filter: blur(3px);
+  backdrop-filter: blur(1px) contrast(.5);
   color: white;
 }
+
+.ui-text {
+  color: black;
+  font-weight: bold;
+  text-shadow: 1px 1px 1px lightgrey;
+}
+
+.ui-button {
+  border-radius: 2px;
+  border: 3px solid darkgray;
+
+  border-top-color: lightgray;
+  border-left-color: lightgray;
+  border-bottom-color: darkgray;
+  border-right-color: darkgray;
+
+  box-sizing: border-box;
+  padding: 0.3em .6em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: darkgray;
+  cursor: pointer;
+  transition: border-color 1.0s;
+  position: relative;
+  z-index: 2;
+}
+
+.ui-button:hover {
+  border-top-color: black;
+  border-left-color: black;
+  border-bottom-color: lightgray;
+  border-right-color: lightgray;
+}
+
+
 
 .health-heart {
   color: red;
   font-size: 25px;
   line-height: 1;
   padding-right: 2px;
-  filter: 
-    drop-shadow(1px 1px black) 
-    drop-shadow(-1px -1px black) 
-    drop-shadow(1px -1px black) 
-    drop-shadow(-1px 1px black);
+  filter:
+    drop-shadow(1px 1px black) drop-shadow(-1px -1px black) drop-shadow(1px -1px black) drop-shadow(-1px 1px black);
 }
+
 .health-heart--empty {
   color: white;
 }
