@@ -5,10 +5,6 @@ import { GameCharacter, GameState } from "../types";
 
 
 export const handlePlayerAttackHits = (npc: GameCharacter, state: GameState) => {
-    // game thinking - do not want to deal with player attacking friendlies
-    if (npc.safe) {
-        return
-    }
     npc.health.current = npc.health.current - 1
     if (npc.health.current <= 0) {
         state.score += npc.pointsForKilling ?? 0;

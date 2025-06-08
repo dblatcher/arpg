@@ -29,7 +29,8 @@ export const runOverheadLevel = (
 
     const attackZone = getAttackZone(player)
     if (attackZone) {
-        const hitNpcs = findNpcsHitByPlayerAttack(npcs, attackZone)
+        // game thinking - do not want to deal with player attacking friendlies
+        const hitNpcs = findNpcsHitByPlayerAttack(npcs.filter(npc => !npc.safe), attackZone)
         hitNpcs.forEach(npc => {
             handlePlayerAttackHits(npc, state)
             addFeedback('npc-hit')
