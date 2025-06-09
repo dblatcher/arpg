@@ -10,7 +10,7 @@ export const findInteractionTarget = (player: GameCharacter, level: Level) => {
 }
 
 export const handleInteraction = (target: GameCharacter, state: GameState) => {
-    const {interaction} = target
+    const { interaction } = target
     if (interaction) {
         state.interactionAndTarget = {
             interaction,

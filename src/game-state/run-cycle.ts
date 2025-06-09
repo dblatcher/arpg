@@ -28,6 +28,7 @@ const handleExits = (level: Level, player: GameCharacter, state: GameState): Gam
         mapHeight: newLevel.mapHeight,
         mapWidth: newLevel.mapWidth,
         currentLevelId: newLevel.id,
+        interactionAndTarget: undefined,
         player: {
             ...player,
             x: exit.destination.x,
