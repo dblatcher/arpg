@@ -5,13 +5,14 @@ import { LEVEL_IDS, makeObstaclesAndTileMap, safeNpc, standardNpc } from "./stuf
 
 const tilesLevel0 = `
  rssccsssffssss
- rssccsssffssss
+ rssccsssffssss B
  r     wwFFww s
  rrrrr wwwwww s
  r   r        ssssslsssss
   ss rrrrrr   ssssslsssss
  sss      r   ssssslsssss
- sss      r   ssssslsssss`;
+ sss      r   ssssslsssss
+       B  r   ssssslsssss`;
 
 export const overlandLevel = (): OverheadLevel => {
 

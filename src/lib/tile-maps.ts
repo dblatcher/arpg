@@ -39,6 +39,12 @@ const letterToTile = (letter: string): Tile | undefined => {
                 terrain: Terrain.Splash,
                 traversability: Traversability.Blocking
             }
+        case 'B': {
+            return {
+                terrain: Terrain.Wall,
+                traversability: Traversability.Blocking
+            }
+        }
         case 'c':
             return {
                 terrain: Terrain.Cave,

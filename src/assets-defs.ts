@@ -17,6 +17,7 @@ import punisherRun from "./assets/punisher/Run_SpriteSheet.png"
 import punisherHurt from "./assets/punisher/Hurt_SpriteSheet.png"
 import punisherAttack from "./assets/punisher/Attack_SpriteSheet.png"
 import clouds from "./assets/clouds.png"
+import castleTiles from "./assets/Castle Tile Set Sheet.png"
 
 const buildAsset = (src: string, cols: number, rows: number, widthScale = 1, heightScale = 1): AssetData => ({ src, sprites: { cols, rows }, frameScale: { width: widthScale, height: heightScale } })
 
@@ -81,6 +82,8 @@ const PUNISHER_RUN = buildAsset(punisherRun, 4, 4, PUNISHER_FRAME_WIDTH, PUNISHE
 const PUNISHER_ATTACK = buildAsset(punisherAttack, 1, 4, PUNISHER_FRAME_WIDTH, PUNISHER_FRAME_HEIGHT);
 const PUNISHER_HURT = buildAsset(punisherHurt, 1, 4, PUNISHER_FRAME_WIDTH, PUNISHER_FRAME_HEIGHT);
 
+const CASTLE_TILES = buildAsset(castleTiles, 8, 8);
+
 export const assetParams = {
     MISC,
     RANGER_IDLE, RANGER_WALK, RANGER_RUN, RANGER_ATTACK, RANGER_HIT, RANGER_JUMP, RANGER_CLIMB,
@@ -88,6 +91,7 @@ export const assetParams = {
     CENTURION_IDLE,
     PUNISHER_IDLE, PUNISHER_WALK, PUNISHER_RUN, PUNISHER_HURT, PUNISHER_ATTACK,
     CLOUDS,
+    CASTLE_TILES,
 } satisfies Record<string, AssetData>
 
 export type AssetKey = keyof typeof assetParams;
