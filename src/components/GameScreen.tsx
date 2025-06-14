@@ -1,10 +1,9 @@
 import { ViewPort } from "@dblatcher/sprite-canvas"
-import { useBackdrops } from "../context/backdrop-context"
-import { GameState, OverheadLevel, PlatformLevel } from "../game-state"
+import { OverheadBackdropSet, PlatformBackdropSet, useBackdrops } from "../context/backdrop-context"
+import { GameState } from "../game-state"
+import { ConversationBox } from "./ConversationBox"
 import { ScrollingBackdrop } from "./ScrollingBackdrop"
 import { SpriteLayerCanvas } from "./SpriteLayerCanvas"
-import { getCurrentLevel } from "../game-state/helpers"
-import { ConversationBox } from "./ConversationBox"
 
 interface Props {
     gameState: GameState
@@ -16,16 +15,17 @@ const PlatformBackdrops = ({
     gameState,
     viewPort,
     magnify = 1,
-    level,
-    backdropUrlList }: Props & { level: PlatformLevel, backdropUrlList: string[] }) => {
-    const [platformsLayer, ...backgroundLayers] = backdropUrlList;
+    backdropSet
+}: Props & { backdropSet: PlatformBackdropSet }) => {
+    const { platformLayerUrl, backgroundLayers } = backdropSet;
+
     return <>
-        {backgroundLayers.map((layerUrl, index) => (
+        {backgroundLayers.map((layer, index) => (
             <ScrollingBackdrop key={index}
                 viewPort={viewPort}
                 magnify={magnify}
-                parallax={level.backdrops[index]?.parallax}
-                url={layerUrl}
+                parallax={layer.parallax}
+                url={layer.url}
                 mapWidth={gameState.mapWidth}
                 mapHeight={gameState.mapHeight}
             />
@@ -33,29 +33,33 @@ const PlatformBackdrops = ({
         <ScrollingBackdrop
             viewPort={viewPort}
             magnify={magnify}
-            url={platformsLayer}
+            url={platformLayerUrl}
             mapWidth={gameState.mapWidth}
             mapHeight={gameState.mapHeight}
         />
     </>
 }
 
-const OverheadBackdrops = ({ gameState, viewPort, magnify = 1, backdropUrlList }: Props & { level: OverheadLevel, backdropUrlList: string[] }) => {
-    const [baseBackdropUrl] = backdropUrlList
-    const backDropUrl = backdropUrlList ? backdropUrlList[Math.floor(gameState.cycleNumber / 10) % backdropUrlList.length] : undefined;
+const OverheadBackdrops = ({ gameState, viewPort, magnify = 1, backdropSet }: Props & { backdropSet: OverheadBackdropSet }) => {
+
+    const { baseTilesUrl, animationTilesUrls } = backdropSet
+
+    //use length +1 so there is an empty frame with the base showing
+    const frameNumber = Math.floor(gameState.cycleNumber / 10) % (animationTilesUrls.length + 1);
+    const animatedTilesFrameUrl: string | undefined = animationTilesUrls[frameNumber];
 
     return <>
         <ScrollingBackdrop
             viewPort={viewPort}
             magnify={magnify}
-            url={baseBackdropUrl}
+            url={baseTilesUrl}
             mapWidth={gameState.mapWidth}
             mapHeight={gameState.mapHeight}
         />
         <ScrollingBackdrop
             viewPort={viewPort}
             magnify={magnify}
-            url={backDropUrl}
+            url={animatedTilesFrameUrl}
             mapWidth={gameState.mapWidth}
             mapHeight={gameState.mapHeight}
         />
@@ -63,8 +67,7 @@ const OverheadBackdrops = ({ gameState, viewPort, magnify = 1, backdropUrlList }
 }
 
 export const GameScreen = ({ gameState, viewPort, magnify = 1 }: Props) => {
-    const backdropUrlList = useBackdrops()
-    const level = getCurrentLevel(gameState)
+    const backdropSet = useBackdrops()
 
     return (
         <div style={{
@@ -74,11 +77,11 @@ export const GameScreen = ({ gameState, viewPort, magnify = 1 }: Props) => {
             overflow: 'hidden',
             // border: '8px inset red'
         }}>
-            {level?.levelType === 'platform' && (
-                <PlatformBackdrops {...{ gameState, viewPort, magnify, backdropUrlList, level }} />
+            {backdropSet?.levelType === 'platform'&& (
+                <PlatformBackdrops {...{ gameState, viewPort, magnify, backdropSet }} />
             )}
-            {level?.levelType === 'overhead' && (
-                <OverheadBackdrops {...{ gameState, viewPort, magnify, backdropUrlList, level }} />
+            {backdropSet?.levelType === 'overhead' && (
+                <OverheadBackdrops {...{ gameState, viewPort, magnify, backdropSet }} />
             )}
             <SpriteLayerCanvas
                 gameState={gameState}
