@@ -11,7 +11,7 @@ s            ss
 s            ss
 sr      wwwwwss
 srrr   wwwwwwss
-sr    wwwwwwwss
+sr  . wwwwwwwss
 sr   wwww    ss
 sr          sss
 sss    s s  sss
@@ -29,6 +29,50 @@ export const caveLevel = (): OverheadLevel => {
         mapWidth,
         mapHeight,
         levelType: 'overhead',
+        scenery: [
+            {
+                x: TILE_SIZE * 10,
+                y: TILE_SIZE * 5,
+                width: TILE_SIZE * 1,
+                height: TILE_SIZE * 2,
+                traversability: Traversability.Blocking,
+                image: {
+                    key: 'TREE'
+                }
+            },
+            {
+                x: TILE_SIZE * 3.5,
+                y: TILE_SIZE * 5.75,
+                width: TILE_SIZE * 2,
+                height: TILE_SIZE * 2.5,
+                traversability: Traversability.Open,
+                image: {
+                    key: 'TREE'
+                }
+            },
+            {
+                x: TILE_SIZE * 1.5,
+                y: TILE_SIZE * 8,
+                width: TILE_SIZE * 1,
+                height: TILE_SIZE * 1,
+                traversability: Traversability.Blocking,
+                image: {
+                    key: 'MISC',
+                    fx: 1,
+                }
+            },
+            {
+                x: TILE_SIZE * 1,
+                y: TILE_SIZE * 3,
+                width: TILE_SIZE * 1,
+                height: TILE_SIZE * 1,
+                traversability: Traversability.Blocking,
+                image: {
+                    key: 'MISC',
+                    fx: 1,
+                }
+            },
+        ],
         exits: [
             {
                 x: TILE_SIZE * 10,

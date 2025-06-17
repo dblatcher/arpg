@@ -37,6 +37,7 @@ export const overlandLevel = (): OverheadLevel => {
                 }
             }
         ],
+        scenery: [],
         npcs: [
             standardNpc(TILE_SIZE * 3.9, TILE_SIZE * 2.1, { task: 'Guard' }, 'hue-rotate(60deg)', 'ranger'),
             standardNpc(TILE_SIZE * 5.1, TILE_SIZE * 2.5, { task: 'Guard' }, 'hue-rotate(60deg)', 'ranger'),

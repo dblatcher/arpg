@@ -1,13 +1,20 @@
 import { drawSpriteFunc, DrawToCanvasFunction, fullViewPort, makeDrawingMethods } from "@dblatcher/sprite-canvas";
 import { AssetKey, assetParams } from "../assets-defs";
-import { GameState } from "../game-state";
+import { GameCharacter, GameState, Scenery } from "../game-state";
 import { getCurrentLevel } from "../game-state/helpers";
 import { getAttackZone } from "../game-state/overhead-operations/player-attacks";
 import { drawCharacter } from "./draw-character";
+import { drawScenery } from "./draw-scenery";
 
 
 const SHOW_HITBOX = true as boolean;
 
+enum PlotType {
+    GameCharacter,
+    Scenery,
+}
+
+type SpritePlot = { type: PlotType.GameCharacter, item: GameCharacter } | { type: PlotType.Scenery, item: Scenery }
 
 export const drawSceneFunction: DrawToCanvasFunction<GameState, AssetKey> = (state, assets, viewport = fullViewPort(state)) => (canvas) => {
     const ctx = canvas?.getContext('2d');
@@ -24,10 +31,25 @@ export const drawSceneFunction: DrawToCanvasFunction<GameState, AssetKey> = (sta
     ctx.beginPath()
     ctx.clearRect(0, 0, viewport.width, viewport.height)
 
-    drawCharacter(player, state, drawSprite)
-    level.npcs.forEach(character => {
-        drawCharacter(character, state, drawSprite)
+    drawCharacter(player, state, drawSprite);
+
+    const toPlot: SpritePlot[] = [
+        { type: PlotType.GameCharacter, item: player },
+        ...level.npcs.map((item): SpritePlot => ({ type: PlotType.GameCharacter, item })),
+        ...level.scenery.map((item): SpritePlot => ({ type: PlotType.Scenery, item })),
+    ];
+
+    toPlot.sort((a, b) => (a.item.y + a.item.height) - (b.item.y + b.item.height)).forEach(({ type, item }) => {
+        switch (type) {
+            case PlotType.GameCharacter:
+                drawCharacter(item, state, drawSprite)
+                break;
+            case PlotType.Scenery:
+                drawScenery(item, state, drawSprite)
+                break;
+        }
     })
+
 
     if (SHOW_HITBOX) {
         level.npcs.forEach(character => {

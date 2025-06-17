@@ -50,8 +50,8 @@ export const safeNpc = (
 
 export const makeObstaclesAndTileMap = (tiles: string, width: number, height: number, defaultTile?: Tile) => {
     const tileMap = stringToTileMap(tiles, width / TILE_SIZE, height / TILE_SIZE, defaultTile)
-    const obstacles = tileMapToObstacles(tileMap)
+    const tileObstacles = tileMapToObstacles(tileMap)
     return {
-        tileMap, obstacles
+        tileMap, tileObstacles
     }
 }

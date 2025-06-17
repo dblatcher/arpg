@@ -2,7 +2,7 @@ import { translate, doRectsIntersect, XY } from "../../lib/geometry";
 import { BASE_REEL_SPEED, TILE_SIZE } from "../constants";
 import { spaceToRect } from "../helpers";
 import { detectCharacterCollision } from "../shared-operations/character-collisions";
-import { GameCharacter, GameState, OverheadLevel, Tile } from "../types";
+import { GameCharacter, GameState, OverheadLevel, Tile, Traversability } from "../types";
 
 const getTile = (character: GameCharacter, level: OverheadLevel): Tile | undefined => {
     const yt = Math.floor((character.y + (character.height / 2)) / TILE_SIZE);
@@ -40,11 +40,17 @@ export const attemptMove = (
             y: character.vector.yd * character.speed
         }
 
-    const newPosition = translate(character, vector)
+    const newPosition = translate(character, vector);
     // TO DO - bind new position by edge of map? 
     // detect player walking off to next screen?
-    const newPositionRect = spaceToRect({ ...character, ...newPosition })
-    const collidedObstacle = level.obstacles.find(obstacle => doRectsIntersect(spaceToRect(obstacle), newPositionRect))
+
+    const newPositionRect = spaceToRect({ ...character, ...newPosition });
+    const collidedObstacle = 
+        level.tileObstacles
+            .find(obstacle => doRectsIntersect(spaceToRect(obstacle), newPositionRect)) || 
+        level.scenery
+            .filter(item=> item.traversability === Traversability.Blocking)
+            .find(obstacle => doRectsIntersect(spaceToRect(obstacle), newPositionRect))
 
     const { collidedNpc, wereNpcsAlreadyInContact, collidesWithPlayer, wasPlayerAndNpcInContact } = detectCharacterCollision({ ...character, ...newPosition }, character, level, state, isPlayer)
 

@@ -55,7 +55,7 @@ export const tunnelLevel = (): PlatformLevel => {
         npcs: [
             standardNpc(TILE_SIZE * 4.9, 50)
         ],
-
+        scenery: [],
         backdrops: [
             {
                 parallax: 10,

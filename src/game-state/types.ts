@@ -1,4 +1,4 @@
-import { BaseGameState, Direction } from "@dblatcher/sprite-canvas"
+import { BaseGameState, Direction, SpriteFrame } from "@dblatcher/sprite-canvas"
 import { XY } from "../lib/geometry"
 import { AssetKey } from "../assets-defs"
 import { SongKey } from "../lib/songs"
@@ -98,14 +98,20 @@ type LevelBase = {
     id: string,
     exits: Exit[];
     npcs: GameCharacter[];
-    mapWidth: number
-    mapHeight: number
-    bgm?: SongKey,
+    mapWidth: number;
+    mapHeight: number;
+    bgm?: SongKey;
+    scenery: Scenery[];
+}
+
+export type Scenery = Space & {
+    traversability: Traversability,
+    image: SpriteFrame<AssetKey>
 }
 
 export type OverheadLevel = LevelBase & {
     levelType: 'overhead'
-    obstacles: Space[];
+    tileObstacles: Space[];
     tileMap: Tile[][];
 }
 
