@@ -18,6 +18,11 @@ const letterToTile = (letter: string, defaultTerrain?: Terrain): Tile | undefine
                 terrain: Terrain.MossyGround,
                 traversability: Traversability.Open
             }
+        case 'p':
+            return {
+                terrain: Terrain.WoodFloor,
+                traversability: Traversability.Open
+            }
         case 'l': {
             return {
                 terrain: Terrain.Ladder,

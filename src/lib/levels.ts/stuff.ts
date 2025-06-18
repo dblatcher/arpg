@@ -6,6 +6,7 @@ export enum LEVEL_IDS {
     Caves = 'caves',
     Outside = 'first',
     Bridge = 'bridge',
+    House = 'house',
 }
 
 let npcId = 1

@@ -32,5 +32,6 @@ const SPLASH = [
 ] satisfies SpriteFrame<AssetKey>[];
 
 const BRICKWALL: SpriteFrame<AssetKey> = { key: 'CASTLE_TILES', fx: 0, fy: 2 }
+const WOOD_FLOOR: SpriteFrame<AssetKey> = { key: 'CASTLE_TILES', fx: 2, fy: 7 }
 
-export { STONE, GRASS, ROAD, WATER, MOSSY_GROUND, CAVE, WATERFALL, SPLASH, WOOD, LADDER, BRICKWALL }
+export { STONE, GRASS, ROAD, WATER, MOSSY_GROUND, CAVE, WATERFALL, SPLASH, WOOD, LADDER, BRICKWALL, WOOD_FLOOR }

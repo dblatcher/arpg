@@ -1,17 +1,20 @@
 import { GameState, Level } from "../game-state";
 import { TILE_SIZE } from "../game-state/constants";
 import { caveLevel } from "./levels.ts/cave";
+import { houseLevel } from "./levels.ts/house";
 import { overlandLevel } from "./levels.ts/overland";
 import { tunnelLevel } from "./levels.ts/tunnel";
 
 export const makeInitalState = (): GameState => {
-    const levels: [Level, Level, Level] = [
+    const levels: [Level, Level, Level, Level] = [
         overlandLevel(),
         tunnelLevel(),
         caveLevel(),
+        houseLevel(),
     ]
 
     const currentLevel = levels[0]
+    // const currentLevel = levels[2]
     const { mapWidth, mapHeight, id: currentLevelId } = currentLevel
     return {
         score: 0,
@@ -23,7 +26,8 @@ export const makeInitalState = (): GameState => {
             spriteKey: 'ranger',
             direction: 'Down',
             altitude: 0,
-            // x: TILE_SIZE * 5, y: TILE_SIZE * 2,
+            // x: TILE_SIZE * 5,
+            // y: TILE_SIZE * 3,
             x: TILE_SIZE * 10,
             y: TILE_SIZE * 10,
             width: 35,
