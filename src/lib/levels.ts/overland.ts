@@ -15,9 +15,10 @@ const tilesLevel0 = `
        B  r   ssssslsssss
           r              
    ....   r              
-   ....   r              
-   .  .   r              
-   .  .   r              
+   ....   r  ....        
+   .  .   r  ....        
+   .  .   r  ....        
+          r  .  .        
 `;
 
 export const overlandLevel = (): OverheadLevel => {
@@ -56,27 +57,37 @@ export const overlandLevel = (): OverheadLevel => {
         ],
         scenery: [
             {
-                x: TILE_SIZE * 3,
-                y: TILE_SIZE * 9,
-                width: TILE_SIZE * 4,
-                height: TILE_SIZE * 5,
+                x: TILE_SIZE * 2.5,
+                y: TILE_SIZE * 8.75,
+                width: TILE_SIZE * 5,
+                height: TILE_SIZE * 5.5,
                 traversability: Traversability.Open,
                 image: {
                     key: 'HOUSE3'
                 }
-            }
+            },
+            {
+                x: TILE_SIZE * 12.5,
+                y: TILE_SIZE * 9.75,
+                width: TILE_SIZE * 5,
+                height: TILE_SIZE * 5.5,
+                traversability: Traversability.Open,
+                image: {
+                    key: 'HOUSE3'
+                }
+            },
         ],
         npcs: [
             standardNpc(TILE_SIZE * 3.9, TILE_SIZE * 2.1, { task: 'Guard' }, 'hue-rotate(60deg)', 'ranger'),
             standardNpc(TILE_SIZE * 5.1, TILE_SIZE * 2.5, { task: 'Guard' }, 'hue-rotate(60deg)', 'ranger'),
             standardNpc(TILE_SIZE * 4.9, TILE_SIZE * 5.5, { task: 'Guard' }, 'hue-rotate(60deg)', 'ranger'),
             standardNpc(100, 340),
-            safeNpc(150, 440, {}, 'hue-rotate(-90deg) brightness(1.6)'),
-            standardNpc(150, 360),
+            safeNpc(50, 440, {}, 'hue-rotate(-90deg) brightness(1.6)'),
+            standardNpc(150, 300),
             standardNpc(265, 260),
-            { ...safeNpc(550, 360, { task: 'Guard' }, 'hue-rotate(-90deg) brightness(1.6)'), interaction: { 'text': 'Hello, I am standing still.' } },
+            { ...safeNpc(550, TILE_SIZE*15, { task: 'Guard' }, 'hue-rotate(-90deg) brightness(1.6)'), interaction: { 'text': 'Hello, I am standing still.' } },
             safeNpc(500, 300, {}, 'hue-rotate(-90deg) brightness(1.6)'),
-            standardNpc(550, 440),
+            standardNpc(700, 440),
         ],
         ...makeObstaclesAndTileMap(tilesLevel0, mapWidth, mapHeight)
     };
