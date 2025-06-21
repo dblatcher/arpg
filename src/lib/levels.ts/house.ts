@@ -44,7 +44,10 @@ export const houseLevel = (): OverheadLevel => {
             },
         ],
         npcs: [
-            { ...safeNpc(TILE_SIZE * 4, TILE_SIZE * 5, { task: 'Guard' }), interaction: { 'text': 'It is dangerous to go alone... too bad.' } },
+            {
+                ...safeNpc(TILE_SIZE * 4, TILE_SIZE * 5, { task: 'Guard' }),
+                interaction: { dialog: { text: 'It is dangerous to go alone... too bad.' } }
+            },
         ],
         ...makeObstaclesAndTileMap(tiles, mapWidth, mapHeight, {
             terrain: Terrain.WoodFloor,

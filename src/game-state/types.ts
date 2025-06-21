@@ -2,12 +2,19 @@ import { BaseGameState, Direction, SpriteFrame } from "@dblatcher/sprite-canvas"
 import { XY } from "../lib/geometry"
 import { AssetKey } from "../assets-defs"
 import { SongKey } from "../lib/songs"
+import { Interaction } from "./interactions"
 
 export type Space = {
     x: number,
     y: number
     width: number
     height: number
+}
+
+export enum EntityType {
+    Player,
+    NPC,
+    Scenery,
 }
 
 export type NpcTask = 'Guard' | 'Wander'
@@ -21,11 +28,10 @@ export type CharacterState = {
 
 export type CharacterSpriteKey = "ranger" | "punisher"
 
-export type Interaction = {
-    text: string
-}
+
 
 export type GameCharacter = Space & {
+    type: EntityType.NPC | EntityType.Player,
     id: number,
     direction: Direction;
     spriteKey: CharacterSpriteKey;
@@ -105,8 +111,10 @@ type LevelBase = {
 }
 
 export type Scenery = Space & {
+    type: EntityType.Scenery,
     traversability: Traversability,
-    image: SpriteFrame<AssetKey>
+    image: SpriteFrame<AssetKey>,
+    interaction?: Interaction,
 }
 
 export type OverheadLevel = LevelBase & {
@@ -154,7 +162,7 @@ export type GameState = BaseGameState & {
     previousInput?: InputState;
     interactionAndTarget?: {
         interaction: Interaction,
-        target: GameCharacter,
+        target: GameCharacter | Scenery,
     };
 }
 

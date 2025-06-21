@@ -1,4 +1,4 @@
-import { GameState, Level } from "../game-state";
+import { EntityType, GameState, Level } from "../game-state";
 import { TILE_SIZE } from "../game-state/constants";
 import { caveLevel } from "./levels.ts/cave";
 import { houseLevel } from "./levels.ts/house";
@@ -22,6 +22,7 @@ export const makeInitalState = (): GameState => {
         currentLevelId,
         levels,
         player: {
+            type: EntityType.Player,
             id: -1,
             spriteKey: 'ranger',
             direction: 'Down',

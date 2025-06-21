@@ -1,4 +1,4 @@
-import { CharacterSpriteKey, CharacterState, GameCharacter, Tile } from "../../game-state"
+import { CharacterSpriteKey, CharacterState, EntityType, GameCharacter, Tile } from "../../game-state"
 import { TILE_SIZE } from "../../game-state/constants"
 import { stringToTileMap, tileMapToObstacles } from "../tile-maps"
 
@@ -18,6 +18,7 @@ export const standardNpc = (
     spriteKey: CharacterSpriteKey = 'punisher'
 ): GameCharacter => (
     {
+        type: EntityType.NPC,
         altitude: 0,
         spriteKey,
         spriteFilter: filter,

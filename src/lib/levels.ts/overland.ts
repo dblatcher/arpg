@@ -1,4 +1,4 @@
-import { OverheadLevel, Traversability } from "../../game-state"
+import { EffectType, EntityType, OverheadLevel, Traversability } from "../../game-state"
 import { TILE_SIZE } from "../../game-state/constants"
 import { LEVEL_IDS, makeObstaclesAndTileMap, safeNpc, standardNpc } from "./stuff";
 
@@ -57,6 +57,7 @@ export const overlandLevel = (): OverheadLevel => {
         ],
         scenery: [
             {
+                type: EntityType.Scenery,
                 x: TILE_SIZE * 2.5,
                 y: TILE_SIZE * 8.75,
                 width: TILE_SIZE * 5,
@@ -67,6 +68,7 @@ export const overlandLevel = (): OverheadLevel => {
                 }
             },
             {
+                type: EntityType.Scenery,
                 x: TILE_SIZE * 12.5,
                 y: TILE_SIZE * 9.75,
                 width: TILE_SIZE * 5,
@@ -74,6 +76,31 @@ export const overlandLevel = (): OverheadLevel => {
                 traversability: Traversability.Open,
                 image: {
                     key: 'HOUSE3'
+                }
+            },
+            {
+                type: EntityType.Scenery,
+                x: TILE_SIZE * 11.5,
+                y: TILE_SIZE * 8,
+                width: TILE_SIZE * 1,
+                height: TILE_SIZE * 1,
+                traversability: Traversability.Blocking,
+                image: {
+                    key: 'MISC',
+                    fx: 1,
+                },
+                interaction: {
+                    effects: [
+                        { type: EffectType.Log, contents: ["running interaction effects"] },
+                        {
+                            type: EffectType.ModTargetScenery, mod: {
+                                image: {
+                                    key: 'MISC',
+                                    fx: 2,
+                                },
+                            }
+                        }
+                    ]
                 }
             },
         ],
@@ -85,7 +112,10 @@ export const overlandLevel = (): OverheadLevel => {
             safeNpc(50, 440, {}, 'hue-rotate(-90deg) brightness(1.6)'),
             standardNpc(150, 300),
             standardNpc(265, 260),
-            { ...safeNpc(550, TILE_SIZE*15, { task: 'Guard' }, 'hue-rotate(-90deg) brightness(1.6)'), interaction: { 'text': 'Hello, I am standing still.' } },
+            {
+                ...safeNpc(550, TILE_SIZE * 15, { task: 'Guard' }, 'hue-rotate(-90deg) brightness(1.6)'),
+                interaction: { dialog: { text: 'Hello, I am standing still.' } }
+            },
             safeNpc(500, 300, {}, 'hue-rotate(-90deg) brightness(1.6)'),
             standardNpc(700, 440),
         ],

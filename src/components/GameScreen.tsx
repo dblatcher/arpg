@@ -77,7 +77,7 @@ export const GameScreen = ({ gameState, viewPort, magnify = 1 }: Props) => {
             overflow: 'hidden',
             // border: '8px inset red'
         }}>
-            {backdropSet?.levelType === 'platform'&& (
+            {backdropSet?.levelType === 'platform' && (
                 <PlatformBackdrops {...{ gameState, viewPort, magnify, backdropSet }} />
             )}
             {backdropSet?.levelType === 'overhead' && (
@@ -87,8 +87,8 @@ export const GameScreen = ({ gameState, viewPort, magnify = 1 }: Props) => {
                 gameState={gameState}
                 viewPort={viewPort}
             />
-            {gameState.interactionAndTarget && (
-                <ConversationBox interaction={gameState.interactionAndTarget.interaction} />
+            {gameState.interactionAndTarget?.target.interaction?.dialog && (
+                <ConversationBox dialog={gameState.interactionAndTarget.target.interaction.dialog} />
             )}
         </div>
     )

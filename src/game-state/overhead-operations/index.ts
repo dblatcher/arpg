@@ -27,7 +27,7 @@ export const runOverheadLevel = (
         } else {
             const target = findInteractionTarget(player, level);
             if (target) {
-                handleInteraction(target, state)
+                handleInteraction(target, level, state)
             }
         }
     }
