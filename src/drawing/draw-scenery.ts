@@ -1,6 +1,7 @@
 import { DrawSpriteFunction } from "@dblatcher/sprite-canvas";
 import { AssetKey } from "../assets-defs";
 import { GameState, Scenery } from "../game-state";
+import { scenerySprites } from "./scenery-sprites";
 
 
 
@@ -10,11 +11,12 @@ export const drawScenery = (
     drawSprite: DrawSpriteFunction<AssetKey>,
 ) => {
 
-    const { image } = sceneryItem
+    const { spriteKey } = sceneryItem
 
+    const sprite = scenerySprites[spriteKey];
 
     drawSprite({
-        ...image,
+        ...sprite.getFrame('base', 'Down', 0),
         x: sceneryItem.x,
         y: sceneryItem.y,
         width: sceneryItem.width,

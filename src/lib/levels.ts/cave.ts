@@ -31,49 +31,33 @@ export const caveLevel = (): OverheadLevel => {
         levelType: 'overhead',
         scenery: [
             makeScenery({
+                spriteKey: 'tree',
                 x: TILE_SIZE * 10,
                 y: TILE_SIZE * 5,
                 width: TILE_SIZE * 1,
                 height: TILE_SIZE * 2,
                 traversability: Traversability.Blocking,
-                image: {
-                    key: 'TREE'
-                }
             }),
             makeScenery({
+                spriteKey: 'tree',
                 type: EntityType.Scenery,
                 x: TILE_SIZE * 3.5,
                 y: TILE_SIZE * 5.75,
                 width: TILE_SIZE * 2,
                 height: TILE_SIZE * 2.5,
                 traversability: Traversability.Open,
-                image: {
-                    key: 'TREE'
-                }
             }),
             makeScenery({
+                spriteKey: 'rock',
                 type: EntityType.Scenery,
                 x: TILE_SIZE * 1.5,
                 y: TILE_SIZE * 8,
-                width: TILE_SIZE * 1,
-                height: TILE_SIZE * 1,
-                traversability: Traversability.Blocking,
-                image: {
-                    key: 'MISC',
-                    fx: 1,
-                }
             }),
             makeScenery({
+                spriteKey: 'rock',
                 type: EntityType.Scenery,
                 x: TILE_SIZE * 1,
                 y: TILE_SIZE * 3,
-                width: TILE_SIZE * 1,
-                height: TILE_SIZE * 1,
-                traversability: Traversability.Blocking,
-                image: {
-                    key: 'MISC',
-                    fx: 1,
-                }
             }),
         ],
         exits: [

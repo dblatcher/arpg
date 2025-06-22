@@ -1,4 +1,4 @@
-import { BaseGameState, Direction, SpriteFrame } from "@dblatcher/sprite-canvas"
+import { BaseGameState, Direction } from "@dblatcher/sprite-canvas"
 import { XY } from "../lib/geometry"
 import { AssetKey } from "../assets-defs"
 import { SongKey } from "../lib/songs"
@@ -110,11 +110,13 @@ type LevelBase = {
     scenery: Scenery[];
 }
 
+export type ScenerySpriteKey = 'house' | 'rock' | 'tree'
+
 export type Scenery = Space & {
     id: number,
+    spriteKey: ScenerySpriteKey,
     type: EntityType.Scenery,
     traversability: Traversability,
-    image: SpriteFrame<AssetKey>,
     interaction?: Interaction,
 }
 

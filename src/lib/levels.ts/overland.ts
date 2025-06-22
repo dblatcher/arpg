@@ -56,7 +56,8 @@ export const overlandLevel = (): OverheadLevel => {
             }
         ],
         scenery: [
-             makeScenery({
+            makeScenery({
+                spriteKey: 'house',
                 x: TILE_SIZE * 2.5,
                 y: TILE_SIZE * 8.75,
                 width: TILE_SIZE * 5,
@@ -67,6 +68,7 @@ export const overlandLevel = (): OverheadLevel => {
                 }
             }),
             makeScenery({
+                spriteKey: 'house',
                 x: TILE_SIZE * 12.5,
                 y: TILE_SIZE * 9.75,
                 width: TILE_SIZE * 5,
@@ -77,6 +79,7 @@ export const overlandLevel = (): OverheadLevel => {
                 }
             }),
             makeScenery({
+                spriteKey: 'rock',
                 x: TILE_SIZE * 11.5,
                 y: TILE_SIZE * 8,
                 width: TILE_SIZE * 1,

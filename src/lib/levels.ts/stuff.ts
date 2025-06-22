@@ -51,18 +51,13 @@ export const safeNpc = (
     return { ...standardNpc(x, y, mind, filter, spriteKey), safe: true }
 }
 
-export const makeScenery = (input: Partial<Scenery>): Scenery => {
+export const makeScenery = (input: Partial<Scenery> & Pick<Scenery, 'spriteKey' | 'x' | 'y'>): Scenery => {
     return {
         id: sceneryId++,
         type: EntityType.Scenery,
-        x: TILE_SIZE * 0,
-        y: TILE_SIZE * 0,
-        width: TILE_SIZE * 5,
-        height: TILE_SIZE * 5.5,
-        traversability: Traversability.Open,
-        image: {
-            key: 'HOUSE3'
-        },
+        width: TILE_SIZE * 1,
+        height: TILE_SIZE * 1,
+        traversability: Traversability.Blocking,
         ...input
     };
 }
