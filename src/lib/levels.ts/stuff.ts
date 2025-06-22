@@ -1,4 +1,4 @@
-import { CharacterSpriteKey, CharacterState, EntityType, GameCharacter, Tile } from "../../game-state"
+import { CharacterSpriteKey, CharacterState, EntityType, GameCharacter, Scenery, Tile, Traversability } from "../../game-state"
 import { TILE_SIZE } from "../../game-state/constants"
 import { stringToTileMap, tileMapToObstacles } from "../tile-maps"
 
@@ -9,7 +9,8 @@ export enum LEVEL_IDS {
     House = 'house',
 }
 
-let npcId = 1
+let npcId = 1;
+let sceneryId = 1;
 export const standardNpc = (
     x: number,
     y: number,
@@ -48,6 +49,22 @@ export const safeNpc = (
     spriteKey: CharacterSpriteKey = 'punisher'
 ) => {
     return { ...standardNpc(x, y, mind, filter, spriteKey), safe: true }
+}
+
+export const makeScenery = (input: Partial<Scenery>): Scenery => {
+    return {
+        id: sceneryId++,
+        type: EntityType.Scenery,
+        x: TILE_SIZE * 0,
+        y: TILE_SIZE * 0,
+        width: TILE_SIZE * 5,
+        height: TILE_SIZE * 5.5,
+        traversability: Traversability.Open,
+        image: {
+            key: 'HOUSE3'
+        },
+        ...input
+    };
 }
 
 export const makeObstaclesAndTileMap = (tiles: string, width: number, height: number, defaultTile?: Tile) => {

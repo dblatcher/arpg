@@ -1,6 +1,6 @@
 import { EntityType, OverheadLevel, Terrain, Traversability } from "../../game-state";
 import { TILE_SIZE } from "../../game-state/constants";
-import { LEVEL_IDS, makeObstaclesAndTileMap } from "./stuff";
+import { LEVEL_IDS, makeObstaclesAndTileMap, makeScenery } from "./stuff";
 
 
 const tilesLevel1 = `
@@ -30,8 +30,7 @@ export const caveLevel = (): OverheadLevel => {
         mapHeight,
         levelType: 'overhead',
         scenery: [
-            {
-                type: EntityType.Scenery,
+            makeScenery({
                 x: TILE_SIZE * 10,
                 y: TILE_SIZE * 5,
                 width: TILE_SIZE * 1,
@@ -40,8 +39,8 @@ export const caveLevel = (): OverheadLevel => {
                 image: {
                     key: 'TREE'
                 }
-            },
-            {
+            }),
+            makeScenery({
                 type: EntityType.Scenery,
                 x: TILE_SIZE * 3.5,
                 y: TILE_SIZE * 5.75,
@@ -51,8 +50,8 @@ export const caveLevel = (): OverheadLevel => {
                 image: {
                     key: 'TREE'
                 }
-            },
-            {
+            }),
+            makeScenery({
                 type: EntityType.Scenery,
                 x: TILE_SIZE * 1.5,
                 y: TILE_SIZE * 8,
@@ -63,8 +62,8 @@ export const caveLevel = (): OverheadLevel => {
                     key: 'MISC',
                     fx: 1,
                 }
-            },
-            {
+            }),
+            makeScenery({
                 type: EntityType.Scenery,
                 x: TILE_SIZE * 1,
                 y: TILE_SIZE * 3,
@@ -75,7 +74,7 @@ export const caveLevel = (): OverheadLevel => {
                     key: 'MISC',
                     fx: 1,
                 }
-            },
+            }),
         ],
         exits: [
             {

@@ -1,6 +1,6 @@
-import { EffectType, EntityType, OverheadLevel, Traversability } from "../../game-state"
-import { TILE_SIZE } from "../../game-state/constants"
-import { LEVEL_IDS, makeObstaclesAndTileMap, safeNpc, standardNpc } from "./stuff";
+import { EffectType, OverheadLevel, Traversability } from "../../game-state";
+import { TILE_SIZE } from "../../game-state/constants";
+import { LEVEL_IDS, makeObstaclesAndTileMap, makeScenery, safeNpc, standardNpc } from "./stuff";
 
 
 const tilesLevel0 = `
@@ -56,8 +56,7 @@ export const overlandLevel = (): OverheadLevel => {
             }
         ],
         scenery: [
-            {
-                type: EntityType.Scenery,
+             makeScenery({
                 x: TILE_SIZE * 2.5,
                 y: TILE_SIZE * 8.75,
                 width: TILE_SIZE * 5,
@@ -66,9 +65,8 @@ export const overlandLevel = (): OverheadLevel => {
                 image: {
                     key: 'HOUSE3'
                 }
-            },
-            {
-                type: EntityType.Scenery,
+            }),
+            makeScenery({
                 x: TILE_SIZE * 12.5,
                 y: TILE_SIZE * 9.75,
                 width: TILE_SIZE * 5,
@@ -77,9 +75,8 @@ export const overlandLevel = (): OverheadLevel => {
                 image: {
                     key: 'HOUSE3'
                 }
-            },
-            {
-                type: EntityType.Scenery,
+            }),
+            makeScenery({
                 x: TILE_SIZE * 11.5,
                 y: TILE_SIZE * 8,
                 width: TILE_SIZE * 1,
@@ -102,7 +99,7 @@ export const overlandLevel = (): OverheadLevel => {
                         }
                     ]
                 }
-            },
+            }),
         ],
         npcs: [
             standardNpc(TILE_SIZE * 3.9, TILE_SIZE * 2.1, { task: 'Guard' }, 'hue-rotate(60deg)', 'ranger'),

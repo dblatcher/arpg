@@ -111,6 +111,7 @@ type LevelBase = {
 }
 
 export type Scenery = Space & {
+    id: number,
     type: EntityType.Scenery,
     traversability: Traversability,
     image: SpriteFrame<AssetKey>,

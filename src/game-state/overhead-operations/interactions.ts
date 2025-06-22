@@ -30,7 +30,7 @@ export const handleInteraction = (target: GameCharacter | Scenery, level: Level,
 
                 case EffectType.ModTargetScenery:
                     if (target.type === EntityType.Scenery) {
-                        level.scenery = level.scenery.filter(i => i !== target);
+                        level.scenery = level.scenery.filter(i => i.id !== target.id);
                         level.scenery.push({ ...target, ...effect.mod });
                     }
             }
