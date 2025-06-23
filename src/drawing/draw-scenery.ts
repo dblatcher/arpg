@@ -1,7 +1,8 @@
 import { DrawSpriteFunction } from "@dblatcher/sprite-canvas";
 import { AssetKey } from "../assets-defs";
-import { GameState, Scenery } from "../game-state";
+import { GameState, Scenery, SceneryCondition } from "../game-state";
 import { scenerySprites } from "./scenery-sprites";
+import { SceneryAnimation } from "./constants-and-types";
 
 
 
@@ -11,16 +12,17 @@ export const drawScenery = (
     drawSprite: DrawSpriteFunction<AssetKey>,
 ) => {
 
-    const { spriteKey } = sceneryItem
+    const { spriteKey, spriteFilter= '' } = sceneryItem
 
     const sprite = scenerySprites[spriteKey];
+    const animation:SceneryAnimation = sceneryItem.condition === SceneryCondition.Active ? 'active':'base'
 
     drawSprite({
-        ...sprite.getFrame('base', 'Down', 0),
+        ...sprite.getFrame(animation, 'Down', 0),
         x: sceneryItem.x,
         y: sceneryItem.y,
         width: sceneryItem.width,
         height: sceneryItem.height,
-        filter: undefined,
+        filter: spriteFilter,
     })
 }

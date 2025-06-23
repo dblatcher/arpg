@@ -16,7 +16,7 @@ export const house: ScenerySprite = new Sprite(
         },
     });
 
-    export const tree: ScenerySprite = new Sprite(
+export const tree: ScenerySprite = new Sprite(
     'Down',
     { key: 'TREE' },
     {
@@ -25,6 +25,11 @@ export const house: ScenerySprite = new Sprite(
                 Down: [
                     { key: 'TREE' }
                 ]
+            }
+        },
+        'active': {
+            frames: {
+                Down: [{ key: 'MISC', fx: 2, }]
             }
         },
     });
@@ -38,12 +43,12 @@ export const rock: ScenerySprite = new Sprite(
     {
         'base': {
             frames: {
-                Down: [
-                    {
-                        key: 'MISC',
-                        fx: 1,
-                    }
-                ]
+                Down: [{ key: 'MISC', fx: 1, }]
+            }
+        },
+        'active': {
+            frames: {
+                Down: [{ key: 'MISC', fx: 0, }]
             }
         },
     });

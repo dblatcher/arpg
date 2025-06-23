@@ -112,9 +112,17 @@ type LevelBase = {
 
 export type ScenerySpriteKey = 'house' | 'rock' | 'tree'
 
+export enum SceneryCondition {
+    Base,
+    Active,
+}
+
 export type Scenery = Space & {
     id: number,
+    ref?: string,
+    condition?: SceneryCondition,
     spriteKey: ScenerySpriteKey,
+    spriteFilter?: string;
     type: EntityType.Scenery,
     traversability: Traversability,
     interaction?: Interaction,

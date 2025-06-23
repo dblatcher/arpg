@@ -1,4 +1,4 @@
-import { CharacterSpriteKey, CharacterState, EntityType, GameCharacter, Scenery, Tile, Traversability } from "../../game-state"
+import { CharacterSpriteKey, CharacterState, EntityType, GameCharacter, Scenery, SceneryCondition, Tile, Traversability } from "../../game-state"
 import { TILE_SIZE } from "../../game-state/constants"
 import { stringToTileMap, tileMapToObstacles } from "../tile-maps"
 
@@ -54,6 +54,7 @@ export const safeNpc = (
 export const makeScenery = (input: Partial<Scenery> & Pick<Scenery, 'spriteKey' | 'x' | 'y'>): Scenery => {
     return {
         id: sceneryId++,
+        condition: SceneryCondition.Base,
         type: EntityType.Scenery,
         width: TILE_SIZE * 1,
         height: TILE_SIZE * 1,

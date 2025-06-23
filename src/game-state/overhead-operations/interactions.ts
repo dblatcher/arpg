@@ -1,7 +1,7 @@
 import { doRectsIntersect } from "../../lib/geometry";
 import { spaceToRect } from "../helpers";
 import { EffectType } from "../interactions";
-import { EntityType, GameCharacter, GameState, Level, Scenery } from "../types";
+import { EntityType, GameCharacter, GameState, Level, Scenery, SceneryCondition } from "../types";
 import { getAttackZone } from "./player-attacks";
 
 export const findInteractionTarget = (player: GameCharacter, level: Level) => {
@@ -33,6 +33,16 @@ export const handleInteraction = (target: GameCharacter | Scenery, level: Level,
                         level.scenery = level.scenery.filter(i => i.id !== target.id);
                         level.scenery.push({ ...target, ...effect.mod });
                     }
+                    break;
+                case EffectType.ToggleCondition: {
+                    const effectTarget = effect.ref
+                        ? level.scenery.find(i => i.ref === effect.ref)
+                        : target.type === EntityType.Scenery ? target : undefined;
+                    if (effectTarget) {
+                        effectTarget.condition = effectTarget.condition === SceneryCondition.Base ? SceneryCondition.Active : SceneryCondition.Base
+                    }
+                    break;
+                }
             }
         })
     }

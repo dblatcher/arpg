@@ -63,9 +63,6 @@ export const overlandLevel = (): OverheadLevel => {
                 width: TILE_SIZE * 5,
                 height: TILE_SIZE * 5.5,
                 traversability: Traversability.Open,
-                image: {
-                    key: 'HOUSE3'
-                }
             }),
             makeScenery({
                 spriteKey: 'house',
@@ -74,9 +71,6 @@ export const overlandLevel = (): OverheadLevel => {
                 width: TILE_SIZE * 5,
                 height: TILE_SIZE * 5.5,
                 traversability: Traversability.Open,
-                image: {
-                    key: 'HOUSE3'
-                }
             }),
             makeScenery({
                 spriteKey: 'rock',
@@ -85,24 +79,26 @@ export const overlandLevel = (): OverheadLevel => {
                 width: TILE_SIZE * 1,
                 height: TILE_SIZE * 1,
                 traversability: Traversability.Blocking,
-                image: {
-                    key: 'MISC',
-                    fx: 1,
-                },
+                condition: 1,
                 interaction: {
                     effects: [
                         { type: EffectType.Log, contents: ["running interaction effects"] },
                         {
-                            type: EffectType.ModTargetScenery, mod: {
-                                image: {
-                                    key: 'MISC',
-                                    fx: 2,
-                                },
-                            }
-                        }
+                            type: EffectType.ToggleCondition,
+                        },
+                        {
+                            type: EffectType.ToggleCondition,
+                            ref: 'magic-tree'
+                        },
                     ]
                 }
             }),
+            makeScenery({
+                ref: 'magic-tree',
+                spriteKey: 'tree',
+                x: TILE_SIZE * 12,
+                y: TILE_SIZE * 6,
+            })
         ],
         npcs: [
             standardNpc(TILE_SIZE * 3.9, TILE_SIZE * 2.1, { task: 'Guard' }, 'hue-rotate(60deg)', 'ranger'),

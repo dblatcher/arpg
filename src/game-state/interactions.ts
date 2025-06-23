@@ -5,6 +5,7 @@ export type Conversation = { text: string }
 export enum EffectType {
     Log,
     ModTargetScenery,
+    ToggleCondition,
 }
 
 type LogEffect = {
@@ -17,7 +18,12 @@ type ModTargetSceneryEffect = {
     mod: Partial<Scenery>,
 }
 
-type Effect = LogEffect | ModTargetSceneryEffect
+type ToggleTargetConditionEffect = {
+    type: EffectType.ToggleCondition
+    ref?: string
+}
+
+type Effect = LogEffect | ModTargetSceneryEffect | ToggleTargetConditionEffect
 
 export type Interaction = {
     dialog?: Conversation;
