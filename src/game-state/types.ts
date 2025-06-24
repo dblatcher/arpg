@@ -69,6 +69,7 @@ export type GameCharacter = Space & {
     mind: CharacterState;
     currentTile?: Tile;
     interaction?: Interaction;
+    drawFlat: undefined;
 }
 
 export type FeedbackEventEventType = 'attack' | 'npc-hit' | 'attack-end' | 'reel-end' | 'player-hit' | 'player-land' | 'death'
@@ -126,6 +127,7 @@ export type Scenery = Space & {
     type: EntityType.Scenery,
     traversabilityMap: Record<SceneryCondition, Traversability>,
     interaction?: Interaction,
+    drawFlat?: boolean,
 }
 
 export type OverheadLevel = LevelBase & {

@@ -100,7 +100,8 @@ export const overlandLevel = (): OverheadLevel => {
                 traversabilityMap: {
                     [SceneryCondition.Active]: Traversability.Open,
                     [SceneryCondition.Base]: Traversability.Blocking,
-                }
+                },
+                drawFlat: true
             })
         ],
         npcs: [

@@ -16,6 +16,9 @@ enum PlotType {
 
 type SpritePlot = { type: PlotType.GameCharacter, item: GameCharacter } | { type: PlotType.Scenery, item: Scenery }
 
+const byBase = (a: SpritePlot, b: SpritePlot) => (a.item.y + a.item.height) - (b.item.y + b.item.height);
+const byFlatFirst = (a: SpritePlot, b: SpritePlot) => (a.item.drawFlat ? 0 : 1) - (b.item.drawFlat ? 0 : 1);
+
 export const drawSceneFunction: DrawToCanvasFunction<GameState, AssetKey> = (state, assets, viewport = fullViewPort(state)) => (canvas) => {
     const ctx = canvas?.getContext('2d');
     if (!ctx) { return }
@@ -39,7 +42,7 @@ export const drawSceneFunction: DrawToCanvasFunction<GameState, AssetKey> = (sta
         ...level.scenery.map((item): SpritePlot => ({ type: PlotType.Scenery, item })),
     ];
 
-    toPlot.sort((a, b) => (a.item.y + a.item.height) - (b.item.y + b.item.height)).forEach(({ type, item }) => {
+    toPlot.sort(byBase).sort(byFlatFirst).forEach(({ type, item }) => {
         switch (type) {
             case PlotType.GameCharacter:
                 drawCharacter(item, state, drawSprite)
