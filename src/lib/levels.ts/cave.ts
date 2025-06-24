@@ -36,7 +36,7 @@ export const caveLevel = (): OverheadLevel => {
                 y: TILE_SIZE * 5,
                 width: TILE_SIZE * 1,
                 height: TILE_SIZE * 2,
-                traversability: Traversability.Blocking,
+                traversabilityMap: Traversability.Blocking,
             }),
             makeScenery({
                 spriteKey: 'tree',
@@ -45,7 +45,7 @@ export const caveLevel = (): OverheadLevel => {
                 y: TILE_SIZE * 5.75,
                 width: TILE_SIZE * 2,
                 height: TILE_SIZE * 2.5,
-                traversability: Traversability.Open,
+                traversabilityMap: Traversability.Open,
             }),
             makeScenery({
                 spriteKey: 'rock',

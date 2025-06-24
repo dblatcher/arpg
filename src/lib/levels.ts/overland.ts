@@ -1,6 +1,6 @@
-import { EffectType, OverheadLevel, Traversability } from "../../game-state";
+import { EffectType, OverheadLevel, SceneryCondition, Traversability } from "../../game-state";
 import { TILE_SIZE } from "../../game-state/constants";
-import { LEVEL_IDS, makeObstaclesAndTileMap, makeScenery, safeNpc, standardNpc } from "./stuff";
+import { LEVEL_IDS, makeObstaclesAndTileMap, makeScenery, makeTraversabilityMap, safeNpc, standardNpc } from "./stuff";
 
 
 const tilesLevel0 = `
@@ -62,7 +62,7 @@ export const overlandLevel = (): OverheadLevel => {
                 y: TILE_SIZE * 8.75,
                 width: TILE_SIZE * 5,
                 height: TILE_SIZE * 5.5,
-                traversability: Traversability.Open,
+                traversabilityMap: makeTraversabilityMap(Traversability.Open),
             }),
             makeScenery({
                 spriteKey: 'house',
@@ -70,7 +70,7 @@ export const overlandLevel = (): OverheadLevel => {
                 y: TILE_SIZE * 9.75,
                 width: TILE_SIZE * 5,
                 height: TILE_SIZE * 5.5,
-                traversability: Traversability.Open,
+                traversabilityMap: makeTraversabilityMap(Traversability.Open),
             }),
             makeScenery({
                 spriteKey: 'rock',
@@ -78,7 +78,6 @@ export const overlandLevel = (): OverheadLevel => {
                 y: TILE_SIZE * 8,
                 width: TILE_SIZE * 1,
                 height: TILE_SIZE * 1,
-                traversability: Traversability.Blocking,
                 condition: 1,
                 interaction: {
                     effects: [
@@ -98,6 +97,10 @@ export const overlandLevel = (): OverheadLevel => {
                 spriteKey: 'tree',
                 x: TILE_SIZE * 12,
                 y: TILE_SIZE * 6,
+                traversabilityMap: {
+                    [SceneryCondition.Active]: Traversability.Open,
+                    [SceneryCondition.Base]: Traversability.Blocking,
+                }
             })
         ],
         npcs: [

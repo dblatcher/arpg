@@ -124,7 +124,7 @@ export type Scenery = Space & {
     spriteKey: ScenerySpriteKey,
     spriteFilter?: string;
     type: EntityType.Scenery,
-    traversability: Traversability,
+    traversabilityMap: Record<SceneryCondition, Traversability>,
     interaction?: Interaction,
 }
 

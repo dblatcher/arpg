@@ -51,6 +51,11 @@ export const safeNpc = (
     return { ...standardNpc(x, y, mind, filter, spriteKey), safe: true }
 }
 
+export const makeTraversabilityMap = (traversabilityForAll: Traversability) => ({
+    [SceneryCondition.Base]: traversabilityForAll,
+    [SceneryCondition.Active]: traversabilityForAll,
+})
+
 export const makeScenery = (input: Partial<Scenery> & Pick<Scenery, 'spriteKey' | 'x' | 'y'>): Scenery => {
     return {
         id: sceneryId++,
@@ -58,7 +63,7 @@ export const makeScenery = (input: Partial<Scenery> & Pick<Scenery, 'spriteKey' 
         type: EntityType.Scenery,
         width: TILE_SIZE * 1,
         height: TILE_SIZE * 1,
-        traversability: Traversability.Blocking,
+        traversabilityMap: makeTraversabilityMap(Traversability.Blocking),
         ...input
     };
 }
