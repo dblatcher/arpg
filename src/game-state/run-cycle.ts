@@ -1,5 +1,4 @@
 import { doRectsIntersect } from "../lib/geometry"
-import { makeInitalState } from "../lib/initial-state"
 import { getCurrentLevel, rectMiddleSlice, spaceToRect } from "./helpers"
 import { runOverheadLevel } from "./overhead-operations"
 import { runPlatformLevel } from "./platform-operations"
@@ -7,7 +6,7 @@ import { Exit, FeedbackEvent, FeedbackEventEventType, GameCharacter, GameState, 
 
 
 
-const handleExits = (level: Level, player: GameCharacter, state: GameState): GameState | undefined => {
+const handleExits = (level: Level, player: GameCharacter, state: GameState, continueStateRef: { current: GameState }): GameState | undefined => {
     const playerRect = spaceToRect(player)
     const findExit = level.levelType === 'platform'
         ? (exit: Exit) => player.altitude === 0 && doRectsIntersect(spaceToRect(exit), rectMiddleSlice(playerRect))
@@ -23,7 +22,7 @@ const handleExits = (level: Level, player: GameCharacter, state: GameState): Gam
         return undefined
     }
 
-    return {
+    const newState: GameState = {
         ...state,
         mapHeight: newLevel.mapHeight,
         mapWidth: newLevel.mapWidth,
@@ -37,10 +36,13 @@ const handleExits = (level: Level, player: GameCharacter, state: GameState): Gam
             altitude: 0,
         }
     }
+
+    continueStateRef.current = structuredClone(newState);
+    return newState;
 }
 
 
-export const runCycle = (state: GameState, inputs: InputState): GameState => {
+export const runCycle = (state: GameState, inputs: InputState, continueStateRef: { current: GameState }): GameState => {
     const newEvents: FeedbackEvent[] = []
     const player = structuredClone(state.player)
     const level = structuredClone(getCurrentLevel(state))
@@ -59,13 +61,17 @@ export const runCycle = (state: GameState, inputs: InputState): GameState => {
     if (state.deathReset) {
         state.deathReset.countDown--
         if (state.deathReset?.countDown < 0) {
-            return makeInitalState()
+            const restoreState: GameState = {
+                ...structuredClone(continueStateRef.current),
+                score: state.score,
+            };
+            return restoreState;
         }
     }
 
     const { npcs } = level
 
-    const levelChangeState = handleExits(level, player, state);
+    const levelChangeState = handleExits(level, player, state, continueStateRef);
     if (levelChangeState) {
         return levelChangeState
     }

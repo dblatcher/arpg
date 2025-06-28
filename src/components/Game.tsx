@@ -24,6 +24,7 @@ interface Props {
 type GameStateAction = {
     type: 'tick'
     inputs: InputState
+    continueStateRef: { current: GameState }
 } | {
     type: 'pause',
     value: boolean,
@@ -38,7 +39,7 @@ type GameStateAction = {
 const myReducer: Reducer<GameState, GameStateAction> = (prevState: GameState, action: GameStateAction) => {
     switch (action.type) {
         case "tick": {
-            return runCycle(prevState, action.inputs)
+            return runCycle(prevState, action.inputs, action.continueStateRef)
         }
         case 'set-feedback': {
             return { ...prevState, feedbackEvents: action.events }
@@ -75,6 +76,7 @@ export const Game = ({ soundDeck, quit }: Props) => {
     const keyMapRef = useRef<Record<string, boolean>>({})
     const gamePadRef = useRef<Record<number, Gamepad>>({})
     const [initialGameState] = useState(makeInitalState())
+    const continueStateRef = useRef(makeInitalState())
     const [state, dispatch] = useReducer<Reducer<GameState, GameStateAction>>(
         myReducer,
         initialGameState,
@@ -98,6 +100,7 @@ export const Game = ({ soundDeck, quit }: Props) => {
         dispatch({
             type: 'tick',
             inputs: inputState,
+            continueStateRef,
         })
     }, 10)
 
@@ -135,7 +138,7 @@ export const Game = ({ soundDeck, quit }: Props) => {
                 viewPort={centeredViewPort(state.player, vpDims.width, vpDims.height, state)}
                 magnify={magnify}
             />
-            <header style={{ display: 'flex', position: 'absolute', top: 0, left: 0, width: '100%', gap:5, padding:3 }}>
+            <header style={{ display: 'flex', position: 'absolute', top: 0, left: 0, width: '100%', gap: 5, padding: 3 }}>
                 <button className="ui-button" onClick={togglePaused}>{state.paused ? 'resume' : 'pause'}</button>
                 <button className="ui-button" onClick={reset}>reset</button>
                 <button className="ui-button" onClick={quit}>quit</button>
@@ -143,7 +146,7 @@ export const Game = ({ soundDeck, quit }: Props) => {
                     current={state.player.health.current}
                     max={state.player.health.max} />
                 <ScoreDisplay score={state.score} />
-                <SoundToggle soundDeck={soundDeck} corner/>
+                <SoundToggle soundDeck={soundDeck} corner />
             </header>
         </WaitingBackdropProvider>
     </div>
