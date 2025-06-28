@@ -19,6 +19,7 @@ import punisherAttack from "./assets/punisher/Attack_SpriteSheet.png"
 import clouds from "./assets/clouds.png"
 import castleTiles from "./assets/Castle Tile Set Sheet.png"
 import tree from "./assets/tree.png"
+import tree2 from "./assets/tree2.png"
 import house3 from "./assets/house3.png"
 import house from "./assets/house.png"
 
@@ -72,6 +73,7 @@ const CLOUDS: AssetData = {
 }
 
 const TREE: AssetData = { src: tree }
+const TREE2: AssetData = { src: tree2 }
 const HOUSE3: AssetData = { src: house3 }
 const HOUSE: AssetData = { src: house }
 
@@ -99,7 +101,7 @@ export const assetParams = {
     PUNISHER_IDLE, PUNISHER_WALK, PUNISHER_RUN, PUNISHER_HURT, PUNISHER_ATTACK,
     CLOUDS,
     CASTLE_TILES,
-    TREE, HOUSE3, HOUSE,
+    TREE, TREE2, HOUSE3, HOUSE,
 } satisfies Record<string, AssetData>
 
 export type AssetKey = keyof typeof assetParams;

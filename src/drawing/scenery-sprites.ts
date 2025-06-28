@@ -4,7 +4,7 @@ import { ScenerySpriteKey } from "../game-state";
 import { DARK_WATER } from "./tile-frames";
 
 
-export const house: ScenerySprite = new Sprite(
+const house: ScenerySprite = new Sprite(
     'Down',
     { key: 'HOUSE3' },
     {
@@ -17,7 +17,7 @@ export const house: ScenerySprite = new Sprite(
         },
     });
 
-export const bigHouse: ScenerySprite = new Sprite(
+const bigHouse: ScenerySprite = new Sprite(
     'Down',
     { key: 'HOUSE' },
     {
@@ -30,7 +30,7 @@ export const bigHouse: ScenerySprite = new Sprite(
         },
     });
 
-export const tree: ScenerySprite = new Sprite(
+const tree: ScenerySprite = new Sprite(
     'Down',
     { key: 'TREE' },
     {
@@ -48,7 +48,27 @@ export const tree: ScenerySprite = new Sprite(
         },
     });
 
-export const rock: ScenerySprite = new Sprite(
+const tree2: ScenerySprite = new Sprite(
+    'Down',
+    { key: 'TREE2' },
+    {
+        'base': {
+            frames: {
+                Down: [
+                    { key: 'TREE2' }
+                ]
+            }
+        },
+        'active': {
+            frames: {
+                Down: [
+                    { key: 'TREE2' }
+                ]
+            }
+        },
+    });
+
+const rock: ScenerySprite = new Sprite(
     'Down',
     {
         key: 'MISC',
@@ -69,5 +89,5 @@ export const rock: ScenerySprite = new Sprite(
 
 
 export const scenerySprites: Record<ScenerySpriteKey, ScenerySprite> = {
-    house, rock, tree, bigHouse
+    house, rock, tree, bigHouse, tree2
 }

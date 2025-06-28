@@ -27,7 +27,7 @@ const tilesLevel0 = `
 
 export const overlandLevel = (): OverheadLevel => {
 
-    const mapWidth = 28 *TILE_SIZE;
+    const mapWidth = 28 * TILE_SIZE;
     const mapHeight = 26 * TILE_SIZE;
 
     return {
@@ -86,14 +86,36 @@ export const overlandLevel = (): OverheadLevel => {
             makeScenery({
                 ref: 'magic-tree',
                 spriteKey: 'tree',
-                x: TILE_SIZE * 12,
-                y: TILE_SIZE * 6,
+                x: TILE_SIZE * 9,
+                y: TILE_SIZE * 8,
                 traversabilityMap: {
                     [SceneryCondition.Active]: Traversability.Open,
                     [SceneryCondition.Base]: Traversability.Blocking,
                 },
                 drawFlat: true
-            })
+            }),
+            makeScenery({
+                spriteKey: 'tree2',
+                x: TILE_SIZE * 15.5,
+                y: TILE_SIZE * 13,
+                width: TILE_SIZE * 2,
+                height: TILE_SIZE * 3,
+                traversabilityMap: {
+                    [SceneryCondition.Active]: Traversability.Open,
+                    [SceneryCondition.Base]: Traversability.Open,
+                },
+            }),
+            makeScenery({
+                spriteKey: 'tree',
+                x: TILE_SIZE * 19,
+                y: TILE_SIZE * 20,
+                width: TILE_SIZE * 2,
+                height: TILE_SIZE * 2,
+                traversabilityMap: {
+                    [SceneryCondition.Active]: Traversability.Open,
+                    [SceneryCondition.Base]: Traversability.Open,
+                },
+            }),
         ],
         npcs: [
             standardNpc(TILE_SIZE * 3.9, TILE_SIZE * 2.1, { task: 'Guard' }, 'hue-rotate(60deg)', 'ranger'),
