@@ -29,7 +29,10 @@ export const tree: ScenerySprite = new Sprite(
         },
         'active': {
             frames: {
-                Down: [{ key: 'MISC', fx: 2, }]
+                Down: [
+                    { key: 'TILES_3', fx: 0, fy:2 },
+                    { key: 'TILES_3', fx: 1, fy:1 },
+                ]
             }
         },
     });

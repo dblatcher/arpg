@@ -8,7 +8,7 @@ import { SceneryAnimation } from "./constants-and-types";
 
 export const drawScenery = (
     sceneryItem: Scenery,
-    _state: GameState,
+    state: GameState,
     drawSprite: DrawSpriteFunction<AssetKey>,
 ) => {
 
@@ -17,8 +17,10 @@ export const drawScenery = (
     const sprite = scenerySprites[spriteKey];
     const animation:SceneryAnimation = sceneryItem.condition === SceneryCondition.Active ? 'active':'base'
 
+     const frameIndex = Math.floor(state.cycleNumber / 25) % animation.length;
+
     drawSprite({
-        ...sprite.getFrame(animation, 'Down', 0),
+        ...sprite.getFrame(animation, 'Down', frameIndex),
         x: sceneryItem.x,
         y: sceneryItem.y,
         width: sceneryItem.width,
