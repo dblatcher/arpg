@@ -1,6 +1,7 @@
 import { Sprite } from "@dblatcher/sprite-canvas";
 import { ScenerySprite } from "./constants-and-types";
 import { ScenerySpriteKey } from "../game-state";
+import { DARK_WATER } from "./tile-frames";
 
 
 export const house: ScenerySprite = new Sprite(
@@ -29,10 +30,7 @@ export const tree: ScenerySprite = new Sprite(
         },
         'active': {
             frames: {
-                Down: [
-                    { key: 'TILES_3', fx: 0, fy:2 },
-                    { key: 'TILES_3', fx: 1, fy:1 },
-                ]
+                Down: DARK_WATER
             }
         },
     });
