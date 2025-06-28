@@ -1,6 +1,6 @@
 import { EffectType, OverheadLevel, SceneryCondition, Traversability } from "../../game-state";
 import { TILE_SIZE } from "../../game-state/constants";
-import { LEVEL_IDS, makeHouseAt, makeObstaclesAndTileMap, makeScenery, safeNpc, standardNpc } from "./stuff";
+import { LEVEL_IDS, makeBigHouseAt, makeHouseAt, makeObstaclesAndTileMap, makeScenery, safeNpc, standardNpc } from "./stuff";
 
 
 const tilesLevel0 = `
@@ -17,11 +17,11 @@ const tilesLevel0 = `
    ....   r              
    ....   r  ....        
    .  .   r  ....        
-   .  .   r  ....  ....  
-          r  .  .  ....  
-          r        ....  
-          r        .  .  
-          r              
+   .  .   r  ....  ......  
+          r  .  .  ......  
+          r        ..rr..  
+          r        ..rr..  
+          r          rr  
           rrrrrrrrrrrrrrr
 `;
 
@@ -50,19 +50,19 @@ export const overlandLevel = (): OverheadLevel => {
             {
                 width: TILE_SIZE * 3,
                 height: TILE_SIZE * 1,
-                x: TILE_SIZE * 3,
-                y: TILE_SIZE * 12,
+                x: TILE_SIZE * 20,
+                y: TILE_SIZE * 15.5,
                 destination: {
                     levelId: LEVEL_IDS.House,
                     x: TILE_SIZE * 5,
-                    y: TILE_SIZE * 6,
+                    y: TILE_SIZE * 8,
                 }
             }
         ],
         scenery: [
             makeHouseAt(TILE_SIZE * 3, TILE_SIZE * 10),
             makeHouseAt(TILE_SIZE * 13, TILE_SIZE * 11),
-            makeHouseAt(TILE_SIZE * 19, TILE_SIZE * 13),
+            makeBigHouseAt(TILE_SIZE * 19, TILE_SIZE * 13),
             makeScenery({
                 spriteKey: 'rock',
                 x: TILE_SIZE * 11.5,

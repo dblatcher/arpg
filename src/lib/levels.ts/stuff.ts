@@ -78,6 +78,15 @@ export const makeHouseAt = (x: number, y: number): Scenery => makeScenery({
     traversabilityMap: makeTraversabilityMap(Traversability.Open),
 })
 
+export const makeBigHouseAt = (x: number, y: number): Scenery => makeScenery({
+    spriteKey: 'bigHouse',
+    x: x - (TILE_SIZE * .75),
+    y: y - (TILE_SIZE * 1.5),
+    width: TILE_SIZE * 7,
+    height: TILE_SIZE * 5.75,
+    traversabilityMap: makeTraversabilityMap(Traversability.Open),
+})
+
 export const makeObstaclesAndTileMap = (tiles: string, width: number, height: number, defaultTile?: Tile) => {
     const tileMap = stringToTileMap(tiles, width / TILE_SIZE, height / TILE_SIZE, defaultTile)
     const tileObstacles = tileMapToObstacles(tileMap)

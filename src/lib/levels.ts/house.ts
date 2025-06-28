@@ -38,8 +38,8 @@ export const houseLevel = (): OverheadLevel => {
                 height: TILE_SIZE * 1,
                 destination: {
                     levelId: LEVEL_IDS.Outside,
-                    x: TILE_SIZE * 4.5,
-                    y: TILE_SIZE * 14.5,
+                    x: TILE_SIZE * 21.5,
+                    y: TILE_SIZE * 17.5,
                 }
             },
         ],

@@ -111,7 +111,7 @@ type LevelBase = {
     scenery: Scenery[];
 }
 
-export type ScenerySpriteKey = 'house' | 'rock' | 'tree'
+export type ScenerySpriteKey = 'house' | 'rock' | 'tree'| 'bigHouse'
 
 export enum SceneryCondition {
     Base,

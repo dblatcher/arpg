@@ -17,6 +17,19 @@ export const house: ScenerySprite = new Sprite(
         },
     });
 
+export const bigHouse: ScenerySprite = new Sprite(
+    'Down',
+    { key: 'HOUSE' },
+    {
+        'base': {
+            frames: {
+                Down: [
+                    { key: 'HOUSE' }
+                ]
+            }
+        },
+    });
+
 export const tree: ScenerySprite = new Sprite(
     'Down',
     { key: 'TREE' },
@@ -56,5 +69,5 @@ export const rock: ScenerySprite = new Sprite(
 
 
 export const scenerySprites: Record<ScenerySpriteKey, ScenerySprite> = {
-    house, rock, tree
+    house, rock, tree, bigHouse
 }
