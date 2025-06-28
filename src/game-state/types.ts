@@ -134,6 +134,7 @@ export type OverheadLevel = LevelBase & {
     levelType: 'overhead'
     tileObstacles: Space[];
     tileMap: Tile[][];
+    defaultTerrain?: Terrain;
 }
 
 export type Platform = Space & {

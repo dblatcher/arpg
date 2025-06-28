@@ -1,6 +1,6 @@
 import { EntityType, OverheadLevel, Terrain, Traversability } from "../../game-state";
 import { TILE_SIZE } from "../../game-state/constants";
-import { LEVEL_IDS, makeObstaclesAndTileMap, makeScenery } from "./stuff";
+import { LEVEL_IDS, makeObstaclesAndTileMap, makeScenery, makeTraversabilityMap } from "./stuff";
 
 
 const tilesLevel1 = `
@@ -15,6 +15,8 @@ sr  . wwwwwwwss
 sr   wwww    ss
 sr          sss
 sss    s s  sss
+sssssssssssssss
+sssssssssssssss
 sssssssssssssss
 `;
 
@@ -36,7 +38,7 @@ export const caveLevel = (): OverheadLevel => {
                 y: TILE_SIZE * 5,
                 width: TILE_SIZE * 1,
                 height: TILE_SIZE * 2,
-                traversabilityMap: Traversability.Blocking,
+                traversabilityMap: makeTraversabilityMap(Traversability.Blocking),
             }),
             makeScenery({
                 spriteKey: 'tree',
@@ -45,7 +47,7 @@ export const caveLevel = (): OverheadLevel => {
                 y: TILE_SIZE * 5.75,
                 width: TILE_SIZE * 2,
                 height: TILE_SIZE * 2.5,
-                traversabilityMap: Traversability.Open,
+                traversabilityMap: makeTraversabilityMap(Traversability.Open),
             }),
             makeScenery({
                 spriteKey: 'rock',
@@ -85,6 +87,7 @@ export const caveLevel = (): OverheadLevel => {
             },
         ],
         npcs: [],
+        defaultTerrain: Terrain.MossyGround,
         ...makeObstaclesAndTileMap(tilesLevel1, mapWidth, mapHeight, {
             terrain: Terrain.MossyGround,
             traversability: Traversability.Open

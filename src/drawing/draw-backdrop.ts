@@ -3,7 +3,7 @@ import { AssetKey, AssetMap, assetParams } from "../assets-defs";
 import { GameState, OverheadLevel, PlatformLevel, Space, Terrain } from "../game-state";
 import { TILE_DIMS } from "./constants-and-types";
 import { getCurrentLevel } from "../game-state/helpers";
-import { GRASS, ROAD, STONE, WATER, WATERFALL, SPLASH, CAVE, MOSSY_GROUND, WOOD, LADDER, BRICKWALL, WOOD_FLOOR } from "./tile-frames";
+import { GRASS, ROAD, STONE, WATER, WATERFALL, SPLASH, CAVE, MOSSY_GROUND, WOOD, LADDER, BRICKWALL, WOOD_FLOOR, STONE_TOP_GRASS, STONE_TOP_CAVE } from "./tile-frames";
 
 
 type BackdropVariant = 0 | 1 | 2 | 3;
@@ -28,7 +28,7 @@ const drawOverheadBackdrop = (variant: BackdropVariant, level: OverheadLevel, dr
         }
     }
 
-    const { tileMap } = level
+    const { tileMap, defaultTerrain = Terrain.Grass } = level
 
     ctx.clearRect(0, 0, viewport.width, viewport.height)
     ctx.beginPath()
@@ -42,9 +42,19 @@ const drawOverheadBackdrop = (variant: BackdropVariant, level: OverheadLevel, dr
                 case Terrain.Road:
                     drawTileIfBase(ROAD, tileIndex, rowIndex);
                     break
-                case Terrain.Stone:
-                    drawTileIfBase(STONE, tileIndex, rowIndex);
+                case Terrain.Stone: {
+
+                    const isOnTop = rowIndex > 0 && tileMap[rowIndex - 1]?.[tileIndex]?.terrain !== Terrain.Stone
+
+                    const frame = isOnTop
+                        ? defaultTerrain === Terrain.Grass
+                            ? STONE_TOP_GRASS
+                            : STONE_TOP_CAVE
+                        : STONE;
+
+                    drawTileIfBase(frame, tileIndex, rowIndex);
                     break
+                }
                 case Terrain.Ladder:
                     drawTileIfBase(LADDER, tileIndex, rowIndex);
                     break
@@ -57,10 +67,10 @@ const drawOverheadBackdrop = (variant: BackdropVariant, level: OverheadLevel, dr
                 case Terrain.Splash:
                     drawTile(SPLASH[variant], tileIndex, rowIndex)
                     break;
-                case Terrain.Wall: 
+                case Terrain.Wall:
                     drawTileIfBase(BRICKWALL, tileIndex, rowIndex)
                     break;
-                case Terrain.WoodFloor: 
+                case Terrain.WoodFloor:
                     drawTileIfBase(WOOD_FLOOR, tileIndex, rowIndex)
                     break;
                 case Terrain.Cave: {
