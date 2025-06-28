@@ -1,6 +1,6 @@
 import { EffectType, OverheadLevel, SceneryCondition, Traversability } from "../../game-state";
 import { TILE_SIZE } from "../../game-state/constants";
-import { LEVEL_IDS, makeObstaclesAndTileMap, makeScenery, makeTraversabilityMap, safeNpc, standardNpc } from "./stuff";
+import { LEVEL_IDS, makeHouseAt, makeObstaclesAndTileMap, makeScenery, safeNpc, standardNpc } from "./stuff";
 
 
 const tilesLevel0 = `
@@ -8,23 +8,27 @@ const tilesLevel0 = `
  rssccsssffssss B
  r     wwFFww s
  rrrrr wwwwww s
- r   r        ssssslsssss
-  ss rrrrrr   ssssslsssss
- sss      r   ssssslsssss
- sss      r   ssssslsssss
-       B  r   ssssslsssss
+ r   r        ssssslssssssss
+  ss rrrrrr   ssssslssssssss
+ sss      r   ssssslssssssss
+ sss      r   ssssslssssssss
+       B  r   ssssslssssssss
           r              
    ....   r              
    ....   r  ....        
    .  .   r  ....        
-   .  .   r  ....        
-          r  .  .        
+   .  .   r  ....  ....  
+          r  .  .  ....  
+          r        ....  
+          r        .  .  
+          r              
+          rrrrrrrrrrrrrrr
 `;
 
 export const overlandLevel = (): OverheadLevel => {
 
-    const mapWidth = 1000;
-    const mapHeight = 800;
+    const mapWidth = 28 *TILE_SIZE;
+    const mapHeight = 26 * TILE_SIZE;
 
     return {
         id: LEVEL_IDS.Outside,
@@ -56,22 +60,9 @@ export const overlandLevel = (): OverheadLevel => {
             }
         ],
         scenery: [
-            makeScenery({
-                spriteKey: 'house',
-                x: TILE_SIZE * 2.5,
-                y: TILE_SIZE * 8.75,
-                width: TILE_SIZE * 5,
-                height: TILE_SIZE * 5.5,
-                traversabilityMap: makeTraversabilityMap(Traversability.Open),
-            }),
-            makeScenery({
-                spriteKey: 'house',
-                x: TILE_SIZE * 12.5,
-                y: TILE_SIZE * 9.75,
-                width: TILE_SIZE * 5,
-                height: TILE_SIZE * 5.5,
-                traversabilityMap: makeTraversabilityMap(Traversability.Open),
-            }),
+            makeHouseAt(TILE_SIZE * 3, TILE_SIZE * 10),
+            makeHouseAt(TILE_SIZE * 13, TILE_SIZE * 11),
+            makeHouseAt(TILE_SIZE * 19, TILE_SIZE * 13),
             makeScenery({
                 spriteKey: 'rock',
                 x: TILE_SIZE * 11.5,

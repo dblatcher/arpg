@@ -69,7 +69,7 @@ export type GameCharacter = Space & {
     mind: CharacterState;
     currentTile?: Tile;
     interaction?: Interaction;
-    drawFlat: undefined;
+    drawFlat?: undefined;
 }
 
 export type FeedbackEventEventType = 'attack' | 'npc-hit' | 'attack-end' | 'reel-end' | 'player-hit' | 'player-land' | 'death'

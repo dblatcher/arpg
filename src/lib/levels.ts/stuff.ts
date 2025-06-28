@@ -38,6 +38,7 @@ export const standardNpc = (
         },
         pointsForKilling: 25,
         mind,
+        drawFlat: undefined,
     }
 )
 
@@ -67,6 +68,15 @@ export const makeScenery = (input: Partial<Scenery> & Pick<Scenery, 'spriteKey' 
         ...input
     };
 }
+
+export const makeHouseAt = (x: number, y: number): Scenery => makeScenery({
+    spriteKey: 'house',
+    x: x - (TILE_SIZE * .5),
+    y: y - (TILE_SIZE * 1.25),
+    width: TILE_SIZE * 5,
+    height: TILE_SIZE * 5.5,
+    traversabilityMap: makeTraversabilityMap(Traversability.Open),
+})
 
 export const makeObstaclesAndTileMap = (tiles: string, width: number, height: number, defaultTile?: Tile) => {
     const tileMap = stringToTileMap(tiles, width / TILE_SIZE, height / TILE_SIZE, defaultTile)
