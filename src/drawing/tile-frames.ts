@@ -11,6 +11,7 @@ const WATER: SpriteFrame<AssetKey> = { key: 'TILES_2', fx: 6, fy: 2, }
 const MOSSY_GROUND: SpriteFrame<AssetKey> = { key: 'TILES_2', fx: 6, fy: 5 }
 const WOOD: SpriteFrame<AssetKey> = { key: 'TILES_1', fx: 2, fy: 7 }
 const LADDER: SpriteFrame<AssetKey> = { key: 'TILES_2', fx: 5, fy: 6 }
+const LADDER_TOP: SpriteFrame<AssetKey> = { key: 'TILES_2', fx: 4, fy: 5 }
 
 const CAVE = {
     topLeft: { key: 'TILES_3', fx: 4, fy: 0 },
@@ -41,4 +42,7 @@ const DARK_WATER = [
 const BRICKWALL: SpriteFrame<AssetKey> = { key: 'CASTLE_TILES', fx: 0, fy: 2 }
 const WOOD_FLOOR: SpriteFrame<AssetKey> = { key: 'CASTLE_TILES', fx: 2, fy: 7 }
 
-export { STONE, GRASS, ROAD, WATER, MOSSY_GROUND, CAVE, WATERFALL, SPLASH, WOOD, LADDER, BRICKWALL, WOOD_FLOOR, STONE_TOP_GRASS, STONE_TOP_CAVE, DARK_WATER }
+export {
+    STONE, GRASS, ROAD, WATER, MOSSY_GROUND, CAVE, WATERFALL, SPLASH, WOOD, LADDER, BRICKWALL, WOOD_FLOOR, STONE_TOP_GRASS, STONE_TOP_CAVE, DARK_WATER,
+    LADDER_TOP,
+}

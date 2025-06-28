@@ -8,7 +8,7 @@ const tilesLevel0 = `
  rssccsssffssss B
  r     wwFFww s
  rrrrr wwwwww s
- r   r        ssssslssssssss
+ r   r        sssss ssssssss
   ss rrrrrr   ssssslssssssss
  sss      r   ssssslssssssss
  sss      r   ssssslssssssss

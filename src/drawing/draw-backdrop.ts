@@ -3,7 +3,7 @@ import { AssetKey, AssetMap, assetParams } from "../assets-defs";
 import { GameState, OverheadLevel, PlatformLevel, Space, Terrain } from "../game-state";
 import { TILE_DIMS } from "./constants-and-types";
 import { getCurrentLevel } from "../game-state/helpers";
-import { GRASS, ROAD, STONE, WATER, WATERFALL, SPLASH, CAVE, MOSSY_GROUND, WOOD, LADDER, BRICKWALL, WOOD_FLOOR, STONE_TOP_GRASS, STONE_TOP_CAVE } from "./tile-frames";
+import { GRASS, ROAD, STONE, WATER, WATERFALL, SPLASH, CAVE, MOSSY_GROUND, WOOD, LADDER, BRICKWALL, WOOD_FLOOR, STONE_TOP_GRASS, STONE_TOP_CAVE, LADDER_TOP } from "./tile-frames";
 
 
 type BackdropVariant = 0 | 1 | 2 | 3;
@@ -44,7 +44,7 @@ const drawOverheadBackdrop = (variant: BackdropVariant, level: OverheadLevel, dr
                     break
                 case Terrain.Stone: {
 
-                    const isOnTop = rowIndex > 0 && tileMap[rowIndex - 1]?.[tileIndex]?.terrain !== Terrain.Stone
+                    const isOnTop = rowIndex > 0 && tileMap[rowIndex - 1]?.[tileIndex]?.terrain !== tile.terrain
 
                     const frame = isOnTop
                         ? defaultTerrain === Terrain.Grass
@@ -55,9 +55,12 @@ const drawOverheadBackdrop = (variant: BackdropVariant, level: OverheadLevel, dr
                     drawTileIfBase(frame, tileIndex, rowIndex);
                     break
                 }
-                case Terrain.Ladder:
-                    drawTileIfBase(LADDER, tileIndex, rowIndex);
+                case Terrain.Ladder: {
+                    const isOnTop = rowIndex > 0 && tileMap[rowIndex - 1]?.[tileIndex]?.terrain !== tile.terrain
+
+                    drawTileIfBase(isOnTop ? LADDER_TOP : LADDER, tileIndex, rowIndex);
                     break
+                }
                 case Terrain.Water:
                     drawTileIfBase(WATER, tileIndex, rowIndex);
                     break
