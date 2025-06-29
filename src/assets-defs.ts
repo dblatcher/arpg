@@ -22,6 +22,8 @@ import tree from "./assets/tree.png"
 import tree2 from "./assets/tree2.png"
 import house3 from "./assets/house3.png"
 import house from "./assets/house.png"
+import gate from "./assets/gate.png"
+import wall from "./assets/wall.png"
 
 const buildAsset = (src: string, cols: number, rows: number, widthScale = 1, heightScale = 1): AssetData => ({ src, sprites: { cols, rows }, frameScale: { width: widthScale, height: heightScale } })
 
@@ -76,6 +78,8 @@ const TREE: AssetData = { src: tree }
 const TREE2: AssetData = { src: tree2 }
 const HOUSE3: AssetData = { src: house3 }
 const HOUSE: AssetData = { src: house }
+const GATE: AssetData = { src: gate }
+const WALL: AssetData = { src: wall }
 
 const TILES_1 = buildAsset(tiles1, 8, 8)
 const TILES_2 = buildAsset(tiles2, 8, 8)
@@ -101,7 +105,7 @@ export const assetParams = {
     PUNISHER_IDLE, PUNISHER_WALK, PUNISHER_RUN, PUNISHER_HURT, PUNISHER_ATTACK,
     CLOUDS,
     CASTLE_TILES,
-    TREE, TREE2, HOUSE3, HOUSE,
+    TREE, TREE2, HOUSE3, HOUSE, GATE, WALL,
 } satisfies Record<string, AssetData>
 
 export type AssetKey = keyof typeof assetParams;

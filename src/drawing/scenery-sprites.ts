@@ -1,34 +1,19 @@
-import { Sprite } from "@dblatcher/sprite-canvas";
+import { Sprite, SpriteFrame } from "@dblatcher/sprite-canvas";
 import { ScenerySprite } from "./constants-and-types";
 import { ScenerySpriteKey } from "../game-state";
 import { DARK_WATER } from "./tile-frames";
+import { AssetKey } from "../assets-defs";
 
 
-const house: ScenerySprite = new Sprite(
-    'Down',
-    { key: 'HOUSE3' },
-    {
-        'base': {
-            frames: {
-                Down: [
-                    { key: 'HOUSE3' }
-                ]
-            }
-        },
-    });
+const staticSprite = (frame: SpriteFrame<AssetKey>): ScenerySprite => new Sprite(
+    'Down', frame, {}
+);
 
-const bigHouse: ScenerySprite = new Sprite(
-    'Down',
-    { key: 'HOUSE' },
-    {
-        'base': {
-            frames: {
-                Down: [
-                    { key: 'HOUSE' }
-                ]
-            }
-        },
-    });
+const house = staticSprite({ key: 'HOUSE3' });
+const bigHouse = staticSprite({ key: 'HOUSE' });
+const wall = staticSprite({ key: 'WALL' });
+const gate = staticSprite({ key: 'GATE' });
+
 
 const tree: ScenerySprite = new Sprite(
     'Down',
@@ -89,5 +74,5 @@ const rock: ScenerySprite = new Sprite(
 
 
 export const scenerySprites: Record<ScenerySpriteKey, ScenerySprite> = {
-    house, rock, tree, bigHouse, tree2
+    house, rock, tree, bigHouse, tree2, wall, gate
 }

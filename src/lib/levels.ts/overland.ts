@@ -64,6 +64,27 @@ export const overlandLevel = (): OverheadLevel => {
             makeHouseAt(TILE_SIZE * 13, TILE_SIZE * 11),
             makeBigHouseAt(TILE_SIZE * 19, TILE_SIZE * 13),
             makeScenery({
+                x: TILE_SIZE * 11,
+                y: TILE_SIZE * 20,
+                width: TILE_SIZE * 4,
+                height: 150 * (57/48),
+                spriteKey: 'gate'
+            }),
+            makeScenery({
+                x: TILE_SIZE * 7,
+                y: TILE_SIZE * 20+ 16,
+                width: TILE_SIZE * 4,
+                height: 150 * (48/48),
+                spriteKey: 'wall'
+            }),
+            makeScenery({
+                x: TILE_SIZE * 3,
+                y: TILE_SIZE * 20+ 16,
+                width: TILE_SIZE * 4,
+                height: 150 * (48/48),
+                spriteKey: 'wall'
+            }),
+            makeScenery({
                 spriteKey: 'rock',
                 x: TILE_SIZE * 11.5,
                 y: TILE_SIZE * 8,
