@@ -6,15 +6,15 @@ import { LEVEL_IDS, makeBigHouseAt, makeHouseAt, makeObstaclesAndTileMap, makeSc
 const tilesLevel0 = `
  rssccsssffssss
  rssccsssffssss B
- r     wwFFww s
- rrrrr wwwwww s
+ r     wwFFwwws
+ rrrrr wwwwwwws
  r   r        sssss ssssssss
   ss rrrrrr   ssssslssssssss
  sss      r   ssssslssssssss
- sss      r   ssssslssssssss
-       B  r   ssssslssssssss
-          r              
-   ....   r              
+ sss      r   ssssslsssfssss
+       B  r   ssssslsssfssss
+          r           wFw 
+   ....   r           www
    ....   r  ....        
    .  .   r  ....        
    .  .   r  ....  ......  

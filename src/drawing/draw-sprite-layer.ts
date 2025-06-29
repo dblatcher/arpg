@@ -8,6 +8,7 @@ import { drawScenery } from "./draw-scenery";
 
 
 const SHOW_HITBOX = true as boolean;
+const FAINT_PLAYER_OVER_SCENERY = true as boolean;
 
 enum PlotType {
     GameCharacter,
@@ -34,8 +35,6 @@ export const drawSceneFunction: DrawToCanvasFunction<GameState, AssetKey> = (sta
     ctx.beginPath()
     ctx.clearRect(0, 0, viewport.width, viewport.height)
 
-    drawCharacter(player, state, drawSprite);
-
     const toPlot: SpritePlot[] = [
         { type: PlotType.GameCharacter, item: player },
         ...level.npcs.map((item): SpritePlot => ({ type: PlotType.GameCharacter, item })),
@@ -53,6 +52,9 @@ export const drawSceneFunction: DrawToCanvasFunction<GameState, AssetKey> = (sta
         }
     })
 
+    if (FAINT_PLAYER_OVER_SCENERY) {
+        drawCharacter({ ...player, spriteFilter: 'opacity(.25)' }, state, drawSprite);
+    }
 
     if (SHOW_HITBOX) {
         level.npcs.forEach(character => {
