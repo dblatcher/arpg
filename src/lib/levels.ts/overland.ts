@@ -1,33 +1,33 @@
 import { EffectType, OverheadLevel, SceneryCondition, Traversability } from "../../game-state";
 import { TILE_SIZE } from "../../game-state/constants";
-import { LEVEL_IDS, makeBigHouseAt, makeHouseAt, makeObstaclesAndTileMap, makeScenery, safeNpc, standardNpc } from "./stuff";
+import { LEVEL_IDS, makeBigHouseAt, makeGateAt, makeHouseAt, makeObstaclesAndTileMap, makeScenery, makeWallAt, safeNpc, standardNpc } from "./stuff";
 
 
 const tilesLevel0 = `
- rssccsssffssss
- rssccsssffssss B
- r     wwFFwwws
- rrrrr wwwwwwws
- r   r        sssss ssssssss
-  ss rrrrrr   ssssslssssssss
+ rssccsssffssssssssssssssssssssss
+ rssccsssffssss B  s      sssssss 
+ r     wwFFwwws            ssss 
+ rrrrr wwwwwwws           ssss
+ r   r        sssss sssssssss
+  ss rrrrrr   ssssslssssssss 
  sss      r   ssssslssssssss
  sss      r   ssssslsssfssss
-       B  r   ssssslsssfssss
-          r           wFw 
-   ....   r           www
-   ....   r  ....        
-   .  .   r  ....        
-   .  .   r  ....  ......  
-          r  .  .  ......  
-          r        ..rr..  
-          r        ..rr..  
-          r          rr  
-          rrrrrrrrrrrrrrr
+       B  r   ssssslsssfssssrrrrrrrrrrrrrrrrrrrrr
+          r           wFw  rrrrrrrrrrrrrrrrrrrrrr
+   ....   r           www            rr
+   ....   r  ....                    rr
+   .  .   r  ....                    rr
+   .  .   r  ....  ......            rr
+          r  .  .  ......            rr
+          r        ..rr..            rr
+          r        ..rr..            rr
+          r          rr              rr
+          rrrrrrrrrrrrrrrrrrrrrrrrrrrrr
 `;
 
 export const overlandLevel = (): OverheadLevel => {
 
-    const mapWidth = 28 * TILE_SIZE;
+    const mapWidth = 48 * TILE_SIZE;
     const mapHeight = 26 * TILE_SIZE;
 
     return {
@@ -63,27 +63,12 @@ export const overlandLevel = (): OverheadLevel => {
             makeHouseAt(TILE_SIZE * 3, TILE_SIZE * 10),
             makeHouseAt(TILE_SIZE * 13, TILE_SIZE * 11),
             makeBigHouseAt(TILE_SIZE * 19, TILE_SIZE * 13),
-            makeScenery({
-                x: TILE_SIZE * 11,
-                y: TILE_SIZE * 20,
-                width: TILE_SIZE * 4,
-                height: 150 * (57/48),
-                spriteKey: 'gate'
-            }),
-            makeScenery({
-                x: TILE_SIZE * 7,
-                y: TILE_SIZE * 20+ 16,
-                width: TILE_SIZE * 4,
-                height: 150 * (48/48),
-                spriteKey: 'wall'
-            }),
-            makeScenery({
-                x: TILE_SIZE * 3,
-                y: TILE_SIZE * 20+ 16,
-                width: TILE_SIZE * 4,
-                height: 150 * (48/48),
-                spriteKey: 'wall'
-            }),
+            makeWallAt(TILE_SIZE * 28, TILE_SIZE * 5),
+            makeWallAt(TILE_SIZE * 32, TILE_SIZE * 5),
+            makeGateAt(TILE_SIZE * 36, TILE_SIZE * 5),
+            makeWallAt(TILE_SIZE * 40, TILE_SIZE * 5),
+            makeWallAt(TILE_SIZE * 44, TILE_SIZE * 5),
+            makeWallAt(TILE_SIZE * 48, TILE_SIZE * 5),
             makeScenery({
                 spriteKey: 'rock',
                 x: TILE_SIZE * 11.5,
@@ -149,6 +134,10 @@ export const overlandLevel = (): OverheadLevel => {
             {
                 ...safeNpc(550, TILE_SIZE * 15, { task: 'Guard' }, 'hue-rotate(-90deg) brightness(1.6)'),
                 interaction: { dialog: { text: 'Hello, I am standing still.' } }
+            },
+            {
+                ...safeNpc(TILE_SIZE*33, TILE_SIZE * 10, { task: 'Guard' }, 'hue-rotate(-90deg) brightness(1.6)'),
+                interaction: { dialog: { text: 'I heard there is an old tunnel in the cave to the east that leads into the castle basement... can you spare a coin?' } }
             },
             safeNpc(500, 300, {}, 'hue-rotate(-90deg) brightness(1.6)'),
             standardNpc(700, 440),
