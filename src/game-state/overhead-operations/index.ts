@@ -1,4 +1,4 @@
-import { getDistance } from "../../lib/geometry"
+import { getDistance } from "typed-geometry"
 import { progressCharacterStatus } from "../shared-operations/character-status"
 import { FeedbackEventEventType, GameCharacter, GameState, InputState, OverheadLevel } from "../types"
 import { findInteractionTarget, handleInteraction } from "./interactions"

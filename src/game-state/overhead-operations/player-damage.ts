@@ -1,6 +1,6 @@
-import { toUnitVector, getVectorFrom } from "../../lib/geometry";
+import { getVectorFrom } from "typed-geometry";
 import { REEL_DURATION } from "../constants";
-import { getDirection } from "../helpers";
+import { getDirection, toUnitVector } from "../helpers";
 import { GameCharacter, FeedbackEventEventType } from "../types";
 
 

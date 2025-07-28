@@ -1,5 +1,5 @@
 import { Direction } from "@dblatcher/sprite-canvas";
-import { Rect, XY } from "../lib/geometry";
+import { Rect, XY } from "typed-geometry";
 import { GameState, Space } from "./types";
 
 export const spaceToRect = (o: Space): Rect => ({ top: o.y, left: o.x, bottom: o.y + o.height, right: o.x + o.width })
@@ -75,3 +75,18 @@ export const lowestSpaceFirst = (spaceA: Space, spaceB: Space) => (spaceB.y + sp
 
 export const getCurrentLevel = (state: GameState) => state.levels.find(l => l.id === state.currentLevelId);
 export const getLevelType = (state: GameState) => getCurrentLevel(state)?.levelType ?? 'overhead';
+
+export const toUnitVector = (xy: XY): XY => {
+    const magnitude = Math.sqrt((xy.x ** 2) + (xy.y ** 2))
+    return {
+        x: xy.x / magnitude,
+        y: xy.y / magnitude,
+    }
+}
+
+export const toNearestCardinalUnitVector = (xy: XY): XY => {
+    if (Math.abs(xy.x) > Math.abs(xy.y)) {
+        return Math.sign(xy.x) < 0 ? { x: -1, y: 0 } : { x: 1, y: 0 }
+    }
+    return Math.sign(xy.y) < 0 ? { y: -1, x: 0 } : { y: 1, x: 0 }
+}

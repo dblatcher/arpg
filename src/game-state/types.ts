@@ -1,5 +1,5 @@
 import { BaseGameState, Direction } from "@dblatcher/sprite-canvas"
-import { XY } from "../lib/geometry"
+import { XY } from "typed-geometry"
 import { AssetKey } from "../assets-defs"
 import { SongKey } from "../lib/songs"
 import { Interaction } from "./interactions"

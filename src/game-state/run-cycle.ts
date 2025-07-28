@@ -1,4 +1,4 @@
-import { doRectsIntersect } from "../lib/geometry"
+import { doRectsIntersect } from "typed-geometry"
 import { getCurrentLevel, rectMiddleSlice, spaceToRect } from "./helpers"
 import { runOverheadLevel } from "./overhead-operations"
 import { runPlatformLevel } from "./platform-operations"

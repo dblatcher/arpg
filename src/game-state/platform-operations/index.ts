@@ -1,4 +1,4 @@
-import { getVectorFrom } from "../../lib/geometry";
+import { getVectorFrom } from "typed-geometry";
 import { ATTACK_DURATION } from "../constants";
 import { findNpcsHitByPlayerAttack, getAttackZone, handlePlayerAttackHits } from "../overhead-operations/player-attacks";
 import { progressCharacterStatus } from "../shared-operations/character-status";

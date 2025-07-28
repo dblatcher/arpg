@@ -1,4 +1,4 @@
-import { Rect, XY, doRectsIntersect, getDistance } from "../../lib/geometry";
+import { Rect, XY, doRectsIntersect, getDistance } from "typed-geometry";
 import { REEL_DURATION } from "../constants";
 import { directionToUnitVector, getCurrentLevel, spaceToRect } from "../helpers";
 import { GameCharacter, GameState } from "../types";

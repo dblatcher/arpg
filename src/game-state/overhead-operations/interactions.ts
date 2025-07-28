@@ -1,4 +1,4 @@
-import { doRectsIntersect } from "../../lib/geometry";
+import { doRectsIntersect } from "typed-geometry";
 import { spaceToRect } from "../helpers";
 import { EffectType } from "../interactions";
 import { EntityType, GameCharacter, GameState, Level, Scenery, SceneryCondition } from "../types";

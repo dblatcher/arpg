@@ -14,7 +14,8 @@
     "@dblatcher/sprite-canvas": "^0.3.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "sound-deck": "^1.1.1"
+    "sound-deck": "^1.1.1",
+    "typed-geometry": "^0.1.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",

@@ -1,4 +1,4 @@
-import { translate, doRectsIntersect, XY } from "../../lib/geometry";
+import { translate, doRectsIntersect, XY } from "typed-geometry";
 import { BASE_REEL_SPEED, TILE_SIZE } from "../constants";
 import { spaceToRect } from "../helpers";
 import { detectCharacterCollision } from "../shared-operations/character-collisions";
