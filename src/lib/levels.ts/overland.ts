@@ -32,6 +32,7 @@ export const overlandLevel = (): OverheadLevel => {
 
     return {
         id: LEVEL_IDS.Outside,
+        bgm: 'irish-ballad',
         mapWidth,
         mapHeight,
         levelType: 'overhead',

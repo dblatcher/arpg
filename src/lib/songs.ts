@@ -6,17 +6,27 @@ type Stave = {
     volume?: number;
 };
 
-export const BOING: Instrument = {
+const BOING: Instrument = {
     soundType: 'tone',
     ...presetTones.SPRINGY_BOUNCE
 }
 
-export const BELL: Instrument = {
+const BELL: Instrument = {
     soundType: 'tone',
     ...presetTones.NEUTRAL_BELL
 }
 
-export const SNARE: Instrument = {
+const DRONE: Instrument = {
+    soundType: 'tone',
+    type: 'sawtooth',
+    playPattern: [
+        { time: 0.01, vol: 1, },
+        { time: 0.5, vol: 1, },
+        { time: 0.9, vol: .5, },
+    ]
+}
+
+const SNARE: Instrument = {
     soundType: 'noise',
     ...presetNoises.TAP,
 }
@@ -36,7 +46,19 @@ const drunkenSailorBaseHigher = parseStaveNotes(drunkenSailorBaseString.replace(
 const caveMusicTreble = parseStaveNotes(' B4.C5#.F# G.F#.C#   | A4#.C5#.F#. G.F#.C#. | B4.C5#.F# G.F#.C# | G.F#.-F# D.B4.B4.');
 const caveMusicBase = parseStaveNotes(' B2.. D3#.F#.D.|'.repeat(4));
 
-export type SongKey = 'cave-song' | 'main-theme'
+const irishBalladTreble = parseStaveNotes(`
+-.......-.A3. |D4... D. D.E.F.  |E... D. D... A3.|D4.E.F. G.A.Bb.|
+A......... A. |D5... D. D.C.Bb4.|A... A. A... F. |A... A. G.F.E. |
+F... D. D...E.|F...F.G.A.Bb.    |A...A.D5....... |-.....D4.E.    | 
+F.G.F.E.D.C.  |D......... D.    |E.........E.    |F.G.F.E.D.C.   |D.....`
+)
+const irishBalladBase = parseStaveNotes(`
+D3.FG-.D.FG-. |D3...D.D...D.|D3...D.D...D. |D3...D.D...D.|
+D3...D.D...D. | E...G.D...G.| F...A.D...A. | D...A.C...G.|
+D...F.A2...C3.| D...A.G...B.| D...F.G.Bb.G.|Bb.G.-.......|
+D...D. C... C.| D...D.D...D.| C...C.C... C.|D...D.C...C. |
+D.FG-.C.EG-.`)
+export type SongKey = 'cave-song' | 'main-theme' | 'irish-ballad'
 
 export const songs: Record<SongKey, { staves: Stave[], tempo?: number }> = {
     'cave-song': {
@@ -53,6 +75,13 @@ export const songs: Record<SongKey, { staves: Stave[], tempo?: number }> = {
             { instrument: SNARE, notes: beat, volume: .03 }
         ],
         tempo: 1.5
+    },
+    'irish-ballad': {
+        staves: [
+            { instrument: DRONE, notes: irishBalladTreble, volume: .05 },
+            { instrument: DRONE, notes: irishBalladBase, volume: .04 },
+        ],
+        tempo: 4
     }
 }
 
